@@ -1,0 +1,11 @@
+# Do we want blending enabled?
+BLENDING=yes
+
+# Define serial port
+SERIAL=/dev/ttyS0
+
+# Define joystick device name
+JOYSTICK=/dev/js0
+
+# Set framerate
+FRAMERATE=60
