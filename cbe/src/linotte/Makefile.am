@@ -19,7 +19,7 @@
 
 # `AUTOMAKE_OPTIONS = foreign
 
-AM_CXXFLAGS=-Wall -DDATADIR=\"@datadir@\" -DPREFIX=\"@prefix@\"
+AM_CXXFLAGS=-Wall -g -DDATADIR=\"@datadir@\" -DPREFIX=\"@prefix@\"
 
 noinst_LIBRARIES = liblinotte.a
 
