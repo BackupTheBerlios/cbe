@@ -67,6 +67,10 @@ Car* car1; Car* car2;
 
 // Main program
 int main(int argc, char *argv[]) {
+#if macintosh
+	argc = macinit( &argv );
+#endif
+
   string prefsFile = "";      // Path to the cbe preferences file
   int c = 0, option_index = 0;
   extern char *optarg;
@@ -138,7 +142,7 @@ int main(int argc, char *argv[]) {
     else
       prefsFile = (string)"/home/" + (string)getpwuid(getuid())->pw_name + (string)"/.cbe";
   }
-
+  
   try {
     // Try reading the cbe preferences file
     pref::Preferences prefs(prefsFile);
