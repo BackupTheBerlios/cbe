@@ -25,6 +25,11 @@
 #ifndef __GLUT_MASTER_H__
 #define __GLUT_MASTER_H__
 
+#ifdef _WIN32
+#include <GL/glaux.h>
+#endif
+
+#include <GL/gl.h>
 #include <GL/glut.h>
 #include "glutWindow.h"
 

@@ -19,12 +19,15 @@
 
 #include <cmath>
 #include <iostream>
+extern "C" {
+#include <stdlib.h>
 
-extern "C"
-{
-  #include <stdlib.h>
-  #include <GL/gl.h>
-  #include <GL/glut.h>
+#ifdef _WIN32
+#include <GL/glaux.h>
+#endif
+
+#include <GL/gl.h>
+#include <GL/glut.h>
 }
 #include "config.h"
 #include "common.h"
@@ -94,28 +97,28 @@ GLuint Street::getStreet()
   glNewList(list, GL_COMPILE);
   
   glBegin(GL_TRIANGLE_STRIP);
-    glColor3f(.3,.3,.3);
-
-    for (long i=1;i<999;i++)
-      {
-	GLfloat vx,vz,nx,nz;
-	//claculate normal of street
-	vx=points[i+1].x-points[i-1].x;
-	vz=points[i+1].z-points[i-1].z;
-	nx=-vz/sqrt(vx*vx+vz*vz);
-	nz=vx/sqrt(vx*vx+vz*vz);
-	//draw street out of triangles
-	glVertex3f(points[i].x+nx*broadness/2,
-		   points[i].y,
-		   points[i].z+nz*broadness/2);
-	glVertex3f(points[i].x-nx*broadness/2,
-		   points[i].y,
-		   points[i].z-nz*broadness/2);
-      }
+  glColor3f(.3,.3,.3);
+  long i;
+  for (i=1;i<999;i++)
+	{
+		GLfloat vx,vz,nx,nz;
+		//claculate normal of street
+		vx=points[i+1].x-points[i-1].x;
+		vz=points[i+1].z-points[i-1].z;
+		nx=-vz/sqrt(vx*vx+vz*vz);
+		nz=vx/sqrt(vx*vx+vz*vz);
+		//draw street out of triangles
+		glVertex3f(points[i].x+nx*broadness/2,
+			   points[i].y,
+			   points[i].z+nz*broadness/2);
+		glVertex3f(points[i].x-nx*broadness/2,
+			   points[i].y,
+			   points[i].z-nz*broadness/2);
+	}
   glEnd();
 
   // Draw the TingsNextToStreet
-  for (long i=1;i<999;i+=20)
+  for (i=1;i<999;i+=20)
     {
       GLfloat vx,vz,nx,nz;
       

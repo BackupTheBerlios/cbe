@@ -18,7 +18,15 @@
 // USA.
 
 extern "C" {
+
+#ifndef _WIN32
 #include <GL/gl.h>    // OpenGL
+#endif
+
+#ifdef _WIN32
+#include <GL/glaux.h>
+#endif
+
 #include <GL/glut.h>  // GLUT
 }
 

@@ -17,13 +17,17 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 // USA.
 
-
-#include <iostream>
-
 extern "C" {
+#ifdef _WIN32
+#include <GL/glaux.h>
+#endif
+
 #include <GL/gl.h>    // OpenGL
 #include <GL/glut.h>  // GLUT
 }
+
+#include <iostream>
+
 #include "common.h"
 #include "config.h"
 #include "cbe.hh"
@@ -53,7 +57,11 @@ int main(int argc, char *argv[]) {
     secondWindow = new DemoWindow(glutMaster,
 				  500, 500,         // height, width
 				  200, 400,         // initPosition (x,y)
+#ifndef _WIN32
 				  (string)PACKAGE + (string)" " + (string)VERSION);   // title
+#else
+				  "Second window");   // title
+#endif
     cout << "created DemoWindow secondWindow in cbe.cc\n";
     s=new Street(-50,0,0,2);
   }

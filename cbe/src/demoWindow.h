@@ -28,6 +28,11 @@
 #include <string>
 #include "glutMaster.h"
 
+#ifdef _WIN32
+#include <iostream>
+using namespace std;
+#endif
+
 class DemoWindow : public GlutWindow{
 public:
 
