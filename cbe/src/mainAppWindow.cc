@@ -117,7 +117,7 @@ namespace mainApp {
     joystick = new JoystickDriver();
 
     // Initialize SerialPort
-    serialclient = new SerialClient("/dev/ttyS1"); // Open com2
+    serialclient = new SerialClient("/dev/ttyS0"); // Open com2
     isSerial=false; // Disable serialport by default
   }
 

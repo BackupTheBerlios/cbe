@@ -1,5 +1,9 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
+Mon Jul 16 17:10:07 CEST 2001  Labor (Holger Urbanek)
+
+ * Again Changed SerialClient.cc according to MS-DOS machine
+	
 Sun Jul 15 16:57:49 CEST 2001  Holger Urbanek
 
  * Connected Disappear/Show of moveable objects to blink-signals

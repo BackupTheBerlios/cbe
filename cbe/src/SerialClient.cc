@@ -45,16 +45,22 @@ void SerialClient::requestData() {
 
 // only requests data (for ues with onlyGetData() ONLY!!! -- you HAVE to pair them!!!)
 void SerialClient::onlyRequestData() {
-  if (isAvailable) 
+  if (isAvailable) {
+    tcflush(devptr,TCIOFLUSH);
     write(devptr,"r",1); // request data
+  }
 }
 
 void SerialClient::onlyGetData() {
   char buffer[20];
   if (isAvailable) {
-    read(devptr,buffer,10); // read 10 chars, blocking
+    read(devptr,buffer,9); // read 10 chars, blocking
                             // 4 chars x, 4 chars y, 1 status, 1 '\n'
     // Ok, data is here ...
+    buffer[9]='\0';
+    for (int i=0; i<10;i++)
+      if (buffer[i]==' ')
+	buffer[i]='0';
     x=(buffer[0]-48)*1000+(buffer[1]-48)*100+(buffer[2]-48)*10+(buffer[3]-48);
     y=(buffer[4]-48)*1000+(buffer[5]-48)*100+(buffer[6]-48)*10+(buffer[7]-48);
     if ((buffer[8]-48)%2==1)
