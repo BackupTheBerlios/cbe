@@ -32,6 +32,9 @@
 using namespace std;
 
 mainAppWindow::mainAppWindow(GlutMaster * glutMaster, int setWidth, int setHeight, int setInitPositionX, int setInitPositionY, string title) {
+  // Set default rotation speed
+  xRotationSpeed = 0.25;
+
   cout << "Entered mainAppWindow::mainAppWindow in mainAppWindow.cc" << endl;
   width  = setWidth;               
   height = setHeight;
@@ -90,8 +93,8 @@ void mainAppWindow::CallBackReshapeFunc(int w, int h) {
 
 // Call back function for idle state
 void mainAppWindow::CallBackIdleFunc(void) {
-   glRotatef(0.25, 1, 1, 2);
-   CallBackDisplayFunc();
+  glRotatef(xRotationSpeed, 1, 1, 2);
+  CallBackDisplayFunc();
 }
 
 
@@ -99,11 +102,19 @@ void mainAppWindow::CallBackIdleFunc(void) {
 void mainAppWindow::CallBackKeyboardFunc(unsigned char key, int x, int y) {
   // Determine key
   switch (key) {
-  case 113:
-  case 81:
+  case 'Q':
+  case 'q':
   case 27:
     cout << "Exit key was pressed. Bye bye." << endl;
-    exit(0);
+    exit(0);  // exit is not like return - we need a nicer way to exit the program and call all destructors!
+    break;
+  case 'U':
+  case 'u':
+    xRotationSpeed += 0.1;
+    break;
+  case 'D':
+  case 'd':
+    xRotationSpeed -= 0.1;
     break;
   default:
     cout << "A normal key was pressed. Hurra!" << endl;
