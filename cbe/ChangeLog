@@ -1,6 +1,22 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Sat Jan  5 17:50:18 GMT 2002   Bernhard Liebl, Andreas Bauer
+
+ * Added various textures
+
+ * Added sky dome
+
+ * Added complex car model
+
+ * Added second car
+
+ * Cars are driving back and forth on the road
+
+ * Fixed up car movement
+
+ * Resolved some byte order issues
+
 Sun Dec 16 09:36:42 GMT 2001   Andreas Bauer, Bernhard Liebl
 
  * Added tree pixmap

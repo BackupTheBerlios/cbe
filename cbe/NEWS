@@ -3,6 +3,16 @@ CBE NEWS
 
 cbe 0.0.2 (still in development)  [development release]
 
+ - Added sky dome
+
+ - Added proper cars (yes, two of them)
+
+ - Added various textures to the world's objects
+
+ - Resolved some byte-order issues
+
+ - Updated existing documentation
+
  - Added trees right and left of the road
 
  - Added linotte internal library to handle complex 3D object (-files)
