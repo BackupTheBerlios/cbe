@@ -57,7 +57,6 @@ void SerialClient::onlyGetData() {
     read(devptr,buffer,9); // read 10 chars, blocking
                             // 4 chars x, 4 chars y, 1 status, 1 '\n'
     // Ok, data is here ...
-    buffer[9]='\0';
     for (int i=0; i<10;i++)
       if (buffer[i]==' ')
 	buffer[i]='0';
