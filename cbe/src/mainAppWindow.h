@@ -39,7 +39,7 @@ using namespace std;
 #include "Point.h"
 #include "Bitmap.h"
 #include "JoystickDriver.hh"
-#include "PPortDriver.hh"
+#include "SerialClient.hh"
 
 namespace mainApp {
   typedef list<GObject*> GObjectList;
@@ -58,8 +58,9 @@ namespace mainApp {
     double getTimePassed();         // Reports seconds since last call
     Bitmap cockpitIMG;              // Cockpit image
     JoystickDriver *joystick;       // Joystick-Object
-    PPortDriver *pport;             // Parallelport-Object
-    
+    SerialClient *serialclient;     // Serial-Object
+    bool isSerial;                  // Flag for use of serialport
+
   public:
     int height, width;
     int initPositionX, initPositionY;

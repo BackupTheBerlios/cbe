@@ -1,5 +1,13 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
+
+Die Jun 26 22:54:18 CEST 2001 Holger Urbanek
+
+ * Kicked parallel port code
+
+ * Inserted serial port code (It is able to transmit required data
+	in about 10ms!!!)
+	
 Fri Jun 22 13:22:47 CEST 2001  Labor
 
  * New TODO list, please check out!

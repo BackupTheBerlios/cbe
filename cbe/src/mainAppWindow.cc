@@ -112,15 +112,16 @@ namespace mainApp {
     // Initialize Joystick
     joystick = new JoystickDriver();
 
-    // Initialize Parallelport
-    pport = new PPortDriver("random");
+    // Initialize SerialPort
+    serialclient = new SerialClient("/dev/ttyS1"); // Open com2
+    isSerial=false; // Disable serialport by default
   }
 
 
   mainAppWindow::~mainAppWindow() {
     delete movementVector;
     delete joystick;
-    delete pport;
+    delete serialclient;
     glutDestroyWindow(windowID);
     cout << "Destructor of mainAppWindow called." << endl;
   }
@@ -165,10 +166,12 @@ namespace mainApp {
   void mainAppWindow::CallBackIdleFunc(void) {
     GLfloat latenz = getTimePassed(); // save passed time
 
-    // Make blink-detection
-    pport->refreshData();
-    if (pport->isBlink())
-      cout << "Blink" << endl;
+    // Make blink-detection (only if serialport is activated)
+    if (isSerial) {
+      serialclient->requestNewData();
+      if (serialclient->isBlink())
+	cout << "Blink" << endl;
+    }
     
     // Make Joysick-Calls
     joystick->refreshJoystick();
@@ -288,6 +291,13 @@ namespace mainApp {
     case 'S':
       for( itr = graphicObjectsList.begin(); itr != graphicObjectsList.end(); itr++ )
 	(*itr)->unhide();
+      break;
+    case 'e':
+    case 'E':
+      if (isSerial)
+	isSerial=false;
+      else
+	isSerial=true;
       break;
     default:
       cout << "A normal key was pressed. Hurra!" << endl;
