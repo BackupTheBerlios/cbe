@@ -19,12 +19,9 @@
 
 AM_CXXFLAGS=-Wall -DDATADIR=\"@datadir@\" -DPREFIX=\"@prefix@\"
 
+SUBDIRS = linotte
+
 bin_PROGRAMS = cbe 
-
-LINOTTE_SUBDIR = linotte
-LINOTTE_INCLUDES = -I$(top_srcdir)/src/linotte -I$(top_srcdir)/src
-
-SUBDIRS = $(LINOTTE_SUBDIR) 
 
 INCLUDES = -I$(includedir) -I$(top_srcdir)/src/linotte -I$(top_srcdir)/src @X_CFLAGS@ @GLUT_CFLAGS@ @GL_CFLAGS@
 

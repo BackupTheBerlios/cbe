@@ -1,6 +1,10 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Mon Nov 12 22:40:14 GMT 2001   Andreas Bauer  <baueran@users.berlios.de>
+
+ * Makefile magic to make linotte compile and link as independent library
+
 Wed Oct 31 15:32:04 GMT 2001   Andreas Bauer  <baueran@users.berlios.de>
 
  * Added Bernhard's sources to src/linotte and fondled around with the

@@ -3,7 +3,9 @@ CBE NEWS
 
 cbe 0.0.2 (still in development)  [development release]
 
- - (Indirect) support for 3D-Studio object files
+ - Added linotte internal library to handle complex 3D object (-files)
+
+ - (Indirect) support for 3D-Studio object files (import/display)
 
  - Slightly improved scenery and fullscreen mode
 
