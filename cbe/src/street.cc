@@ -234,7 +234,7 @@ void street::draw()
   glEnable(GL_BLEND);
 
   //mTreeMaterial->submit();
-  //glCallList( mTreeList );
+  glCallList( mTreeList );
   //makeTreeList();
 
   glDisable( GL_TEXTURE_2D );
