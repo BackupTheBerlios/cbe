@@ -131,7 +131,8 @@ namespace mainApp {
     glTranslatef(0.0, -1.5, 0.0);
 
     // set background color
-    glClearColor(0.3, 0.3, 1,0);
+    //glClearColor(0.3, 0.3, 1,0);
+	glClearColor( 0.23, 0.35, 0.78, 1.0 );
 
     // Save ProjectionMatrix (for futher use in Idle-Function)
     glPushMatrix();

@@ -38,6 +38,17 @@ Plane::Plane(Point p1, Point p2) {
   string path = (string)DATADIR + "/pixmaps/cbe/grass.tif";
   mGrassMaterial = new linotte::texture_material_t( "grass", path.c_str() );
 
+  glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+  path = (string)DATADIR + "/pixmaps/cbe/tree.tif";
+  mCloudsMaterial = new linotte::texture_material_t( "clouds", path.c_str() );
+  mCloudMotion = 0;
+  glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+  glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST );
+  
+  mQuadratic = gluNewQuadric();
+  gluQuadricNormals( mQuadratic, GLU_SMOOTH );
+  gluQuadricTexture( mQuadratic, GL_TRUE );
+
   a.x=p1.x; a.y=p1.y; a.z=p1.z;
   b.x=p2.x; b.y=p2.y; b.z=p2.z;
   makeList(); // Create the GL list for drawing the object
@@ -46,6 +57,8 @@ Plane::Plane(Point p1, Point p2) {
 
 Plane::~Plane() {
 	delete mGrassMaterial;
+	delete mCloudsMaterial;
+	gluDeleteQuadric( mQuadratic );
 }
 
 
@@ -67,6 +80,40 @@ void Plane::writeList() {
 
 void Plane::submit()
 {
+	drawSky();
 	mGrassMaterial->submit();
 	GListObject::submit();
+}
+
+void Plane::drawSky()
+{
+	static const GLdouble gClipPlane[] = { 0, 1, 0, 0 };
+
+	glBlendFunc( GL_SRC_ALPHA, GL_DST_ALPHA );
+	glColor4f( 1.0, 1.0, 1.0, 0.5 );
+	glEnable( GL_BLEND );
+
+	glPushMatrix();
+	
+	//glTranslatef( 0, 0, 0 );
+	
+	mCloudMotion = clock() * ( 1 / (float)CLOCKS_PER_SEC );
+	
+	glClipPlane( GL_CLIP_PLANE0, gClipPlane );
+	glEnable( GL_CLIP_PLANE0 );
+	
+	glRotatef( mCloudMotion, 0, 1, 0 );
+	glRotatef( 90, 1, 0, 0 );
+	mCloudsMaterial->submit();
+	gluSphere( mQuadratic, 90, 15, 15 );
+	
+	glDisable( GL_CLIP_PLANE0 );
+	
+	glPopMatrix();
+	
+	// animate
+	//mCloudMotion += 0.5;
+	
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDisable( GL_BLEND );
 }

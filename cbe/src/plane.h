@@ -19,11 +19,17 @@
 
 #include "GListObject.h"
 #include "linotte/texture_material_t.h"
+#include <GL/glu.h>
 
 class Plane : public GListObject
 {
   Point a,b;
   linotte::texture_material_t* mGrassMaterial;
+  linotte::texture_material_t* mCloudsMaterial;
+  GLfloat mCloudMotion;
+  GLUquadricObj* mQuadratic;
+  
+  void drawSky();
 
 public:
   Plane(Point,Point);
