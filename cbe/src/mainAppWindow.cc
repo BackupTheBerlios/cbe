@@ -177,13 +177,21 @@ namespace mainApp {
     // Make blink-detection (only if serialport is activated)
     if (isSerial) {
       serialclient->requestData();
-      if (serialclient->isBlink())
-	cout << "Blink" << endl;
+      if (serialclient->isBlink()) {
+	cout << "blink" << endl;
+	GObjectList::iterator itr=graphicObjectsList.begin();
+	if ((*itr)->isHidden())
+	  for( itr = graphicObjectsList.begin(); itr != graphicObjectsList.end(); itr++ )
+	    (*itr)->unhide();
+	else
+	  for( itr = graphicObjectsList.begin(); itr != graphicObjectsList.end(); itr++ )
+	    (*itr)->hide();
+      }
     }
     
     // Make Joysick-Calls
     joystick->refreshJoystick();
-    viewingAngle+= joystick->getXaxis() * 200 * latenz;
+    viewingAngle+= joystick->getXaxis() * 100 * latenz;
     
     // Keep viewingAngle in -180<x<180
     if (viewingAngle<-180)
@@ -191,7 +199,7 @@ namespace mainApp {
     if (viewingAngle>=180)
       viewingAngle-=360;
   
-    speed -= joystick->getYaxis() * 200 * latenz;
+    speed -= joystick->getYaxis() * 100 * latenz;
   
     // recalculate the new movementVector
     movementVector->x=cos(viewingAngle*M_PI/180);

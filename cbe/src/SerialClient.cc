@@ -50,13 +50,14 @@ void SerialClient::onlyRequestData() {
 }
 
 void SerialClient::onlyGetData() {
-  char buffer[10];
+  char buffer[20];
   if (isAvailable) {
-    read(devptr,buffer,4); //read 4 chars, blocking
+    read(devptr,buffer,10); // read 10 chars, blocking
+                            // 4 chars x, 4 chars y, 1 status, 1 '\n'
     // Ok, data is here ...
-    x=buffer[0]*32+buffer[1]/4;
-    y=(buffer[1]%4)*1024+buffer[2]*8+buffer[3]/16;
-    if ((buffer[3]/8)%2==1)
+    x=(buffer[0]-48)*1000+(buffer[1]-48)*100+(buffer[2]-48)*10+(buffer[3]-48);
+    y=(buffer[4]-48)*1000+(buffer[5]-48)*100+(buffer[6]-48)*10+(buffer[7]-48);
+    if ((buffer[8]-48)%2==1)
       blink=true;
     else
       blink=false;
