@@ -17,6 +17,12 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 // USA.
 
+extern "C" {
+#ifdef _WIN32
+#include <GL/glaux.h>
+#endif
+#include <GL/gl.h>    // OpenGL
+}
 #include "GMovableObject.h"
 
 
@@ -63,9 +69,3 @@ void GMovableObject::draw() {
     glPopMatrix();
   }
 }
-
-
-
-
-
-

@@ -53,12 +53,14 @@ bool Bitmap::load(void) {
 
     if (data != NULL) {
       if (!TIFFReadRGBAImage(pic, sizeX, sizeY, data, 0)) {
-	cout << "Error opening TIF picture." << endl;
+	cerr << "Error opening TIF picture." << endl;
 	TIFFClose(pic);
 	return false;
       }
       else {
+#ifdef DEBUG
 	cout << "TIF picture successfully loaded." << endl;
+#endif
 	TIFFClose(pic);
 	return true;
       }
@@ -72,8 +74,10 @@ bool Bitmap::load(void) {
 Bitmap::~Bitmap() {
   if (data != NULL)
     _TIFFfree(data);
-  
+
+#ifdef DEBUG  
   cout << "Destructor of Bitmap object called." << endl;
+#endif
 }
 
 

@@ -9,6 +9,8 @@ extern "C" {
 #include <iostream>
 #include "SerialClient.hh"
 
+using namespace std;
+
 SerialClient::SerialClient(const char * dev_name) {
   isAvailable=false;
   stillBlink=false;
@@ -18,7 +20,7 @@ SerialClient::SerialClient(const char * dev_name) {
   bzero(&newtio, sizeof(newtio)); // Make everything in newtio -> 0
   devptr=open(dev_name, O_RDWR | O_NOCTTY); // Open the device for read-write mode in no CTTY-mode RTFM
   if (devptr<0) {
-    cout << "Unable to open " << dev_name << endl;
+    cerr << "Unable to open " << dev_name << endl;
   }
   else {
     newtio.c_cflag = BAUDRATE | CRTSCTS | CS7 | CLOCAL | CREAD;

@@ -35,9 +35,14 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-, root, root)
 %doc AUTHORS COPYING ChangeLog INSTALL NEWS README TODO
+%{_datadir}/pixmaps/cbe/cockpit.tif
 %{_bindir}/cbe
 
 %changelog
+* Wed Jul 25 2001 Andreas Bauer <baueran@users.berlios.de>
+
+- Added pixmaps
+
 * Thu Jan 25 2001 Andreas Bauer <baueran@users.berlios.de>
 
 - Changed my own e-mail address to BerliOS

@@ -22,7 +22,7 @@
 extern "C" {
 #include <stdlib.h>
 #ifdef _WIN32
-  #include <GL/glaux.h>
+#include <GL/glaux.h>
 #endif
 #include <GL/gl.h>
 #include <GL/glut.h>
@@ -58,85 +58,85 @@ void Street::writeList() {
   int a;
 
   for (long n=2;n<length;n+=50) {
-      int r;
-      r=rand()%100;
-      a=0;
-      if (r<80)
-	    for (long i=n;i<n+50;i++) {
-	      points[i].x=points[i-1].x+step;
-	      points[i].z=points[i-1].z;
-	      points[i].y=starty;
-		}
-	
+    int r;
+    r=rand()%100;
+    a=0;
+    if (r<80)
+      for (long i=n;i<n+50;i++) {
+	points[i].x=points[i-1].x+step;
+	points[i].z=points[i-1].z;
+	points[i].y=starty;
+      }
+    
     if (r>=80 && r<90)
-	  for (int i=n;i<n+50;i++) {
-	      points[i].x=points[i-1].x+step;
-	      points[i].z=points[i-1].z+step*sin((double)a/17);
-	      points[i].y=starty;
-	      a++;
-	  }
-	
+      for (int i=n;i<n+50;i++) {
+	points[i].x=points[i-1].x+step;
+	points[i].z=points[i-1].z+step*sin((double)a/17);
+	points[i].y=starty;
+	a++;
+      }
+    
     if (r>=90)
-	  for (int i=n;i<n+50;i++) {
- 	      points[i].x=points[i-1].x+step;
-	      points[i].z=points[i-1].z-step*sin((double)a/17);
-	      points[i].y=starty;
-	      a++;
-	  }
+      for (int i=n;i<n+50;i++) {
+	points[i].x=points[i-1].x+step;
+	points[i].z=points[i-1].z-step*sin((double)a/17);
+	points[i].y=starty;
+	a++;
+      }
   }
   
   glBegin(GL_QUAD_STRIP);
-    glColor3f(.3,.3,.3);
-    long i;
-    for (i=1;i<999;i++) {
-		GLfloat vx,vz,nx,nz;
-		//claculate normal of street
-		vx=points[i+1].x-points[i].x;
-		vz=points[i+1].z-points[i].z;
-		nx=-vz/sqrt(vx*vx+vz*vz);
-		nz=vx/sqrt(vx*vx+vz*vz);
-		//draw street out of triangles
-		glVertex3f(points[i].x,
-			   points[i].y,
-			   points[i].z+broadness/2);
-		glVertex3f(points[i].x,
-			   points[i].y,
-			   points[i].z-broadness/2);
-	}
+  glColor3f(.3,.3,.3);
+  long i;
+  for (i=1;i<999;i++) {
+    GLfloat vx,vz,nx,nz;
+    //claculate normal of street
+    vx=points[i+1].x-points[i].x;
+    vz=points[i+1].z-points[i].z;
+    nx=-vz/sqrt(vx*vx+vz*vz);
+    nz=vx/sqrt(vx*vx+vz*vz);
+    //draw street out of triangles
+    glVertex3f(points[i].x,
+	       points[i].y,
+	       points[i].z+broadness/2);
+    glVertex3f(points[i].x,
+	       points[i].y,
+	       points[i].z-broadness/2);
+  }
   glEnd();
-
+  
   // Draw the poles
   for (i=1;i<999;i+=20) {
-      GLfloat vx,vz,nx,nz;
-      
-      // Calculate the normal to the street
-      vx=points[i+1].x-points[i].x;
-      vz=points[i+1].z-points[i].z;
-      nx=-vz/sqrt(vx*vx+vz*vz);
-      nz=vx/sqrt(vx*vx+vz*vz);
-      
-      createPoles(1,points[i].x,points[i].y,points[i].z+broadness/2+.5);
-      createPoles(1,points[i].x,points[i].y,points[i].z-broadness/2-.5);
+    GLfloat vx,vz,nx,nz;
+    
+    // Calculate the normal to the street
+    vx=points[i+1].x-points[i].x;
+    vz=points[i+1].z-points[i].z;
+    nx=-vz/sqrt(vx*vx+vz*vz);
+    nz=vx/sqrt(vx*vx+vz*vz);
+    
+    createPoles(1,points[i].x,points[i].y,points[i].z+broadness/2+.5);
+    createPoles(1,points[i].x,points[i].y,points[i].z-broadness/2-.5);
   }
   
- // Draw Middlelines
- glColor3f(.9,.9,.9);
- for (i=1;i<999;i+=10){
- 	glBegin(GL_POLYGON);
-		glVertex3f(points[i].x,
-			   points[i].y+.01,
-			   points[i].z+broadness/30);
-		glVertex3f(points[i].x,
-			   points[i].y+.01,
-			   points[i].z-broadness/30);
-		glVertex3f(points[i+6].x,
-			   points[i+6].y+.01,
-			   points[i+6].z-broadness/30);
-		glVertex3f(points[i+6].x,
-			   points[i+6].y+.01,
-			   points[i+6].z+broadness/30);
-	glEnd();
- } 
+  // Draw Middlelines
+  glColor3f(.9,.9,.9);
+  for (i=1;i<999;i+=10){
+    glBegin(GL_POLYGON);
+    glVertex3f(points[i].x,
+	       points[i].y+.01,
+	       points[i].z+broadness/30);
+    glVertex3f(points[i].x,
+	       points[i].y+.01,
+	       points[i].z-broadness/30);
+    glVertex3f(points[i+6].x,
+	       points[i+6].y+.01,
+	       points[i+6].z-broadness/30);
+    glVertex3f(points[i+6].x,
+	       points[i+6].y+.01,
+	       points[i+6].z+broadness/30);
+    glEnd();
+  } 
   
 }
 
@@ -145,7 +145,7 @@ void Street::writeList() {
 // centre-point of street
 Point Street::getPointOfStreet(GLfloat t) {
   Point p;
-
+  
   if (t<0 || t>1)
     p=points[0];
   else

@@ -60,10 +60,13 @@ namespace mainApp {
     cockpitIMG.setPath( (string)DATADIR + "/pixmaps/cbe/cockpit.tif" );  // Size: 717 x 538 pixels
     
     // Load the cockpit
-    if (cockpitIMG.load())
+    if (cockpitIMG.load()) {
+#ifdef DEBUG
       cout << "Cockpit image loaded." << endl;
+#endif
+    }
     else
-      cout << "ERROR: Cockpit image not loaded. Did you forget 'make install'?" << endl;
+      cerr << "ERROR: Cockpit image not loaded. Did you forget 'make install'?" << endl;
     
     // Set default viewing and movement vectors
     movementVector = new Point(1,0,0);
@@ -133,7 +136,9 @@ namespace mainApp {
     delete joystick;
     delete serialclient;
     glutDestroyWindow(windowID);
+#ifdef DEBUG
     cout << "Destructor of mainAppWindow called." << endl;
+#endif
   }
 
 

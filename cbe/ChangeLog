@@ -1,6 +1,18 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Wed Jul 25 08:47:21 CEST 2001  Andreas Bauer
+
+ * Changed cbe.spec to cbe.spec.in and added pixmaps/ to it
+ 
+ * Updated INSTALL to reflect the latest program changes
+
+ * Updated README
+
+ * Source code clean-ups and rewrites to get ready for initial release
+
+ * Added '#ifdef DEBUG /.../ #endif' to all kinds of status outputs
+ 
 Tue Jul 24 19:52:12 CEST 2001  Andreas Bauer
 
  * Updated pixmaps/Makefile.am

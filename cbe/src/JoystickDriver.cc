@@ -26,6 +26,8 @@ extern "C" {
 #include "JoystickDriver.hh"
 #include <iostream>
 
+using namespace std;
+
 // Constructor
 JoystickDriver::JoystickDriver() {
   // Initialize Values
@@ -52,7 +54,7 @@ void JoystickDriver::refreshJoystick() {
   struct JS_DATA_TYPE js;
   if (joystickAvailable==true) {
     if (read(joydev, &js, JS_RETURN)!=JS_RETURN)
-      cout << "Problem reading joystick device!" << endl;
+      cerr << "Problem reading joystick device!" << endl;
     buttons=js.buttons;
     xAxis=js.x;
     yAxis=js.y;

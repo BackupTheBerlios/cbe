@@ -10,13 +10,15 @@ are installed (e.g. Cygwin, MinGW or DJGPP).
 Compiling CBE from scratch requires you to have the following packages on your
 system:
 
-- Mesa library 3.4.1
+- Mesa library 3.4.1 (or a later version)
 
-- GNU C++ compiler 2.95.x (or higher)
+- GNU C++ compiler 2.95.x (or a later version)
 
 - GNU autoconf
 
 - GNU automake
+
+- libtiff
 
 
 1. CONFIGURE
@@ -52,6 +54,18 @@ will be installed in /usr/local/bin. Become 'root' now and run
 
 
 3. SET-UP CBE
+
+You need to have a preferences file in your home directory. Either you place
+a file called '.cbe' in /home/<username> or set the environment variable HOME
+to point to your home directory. The file currently looks like this:
+
+# CBE Preferences
+
+# Choose blending: 'yes' or 'no'
+BLENDING=yes
+
+You can copy and paste the above in order to create a valid preferences file.
+
 
 4. RUN CBE
 
