@@ -15,8 +15,8 @@ Source: %{name}-%{version}.tar.gz
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root
 URL: http://cbe.berlios.de/
 Packager: Andreas Bauer <baueran@users.berlios.de>
-Requires: GL
-Requires: glut
+Requires: libGL.so.1
+Requires: libglut.so.3
 Requires: libtiff
 
 %description
