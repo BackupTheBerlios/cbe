@@ -1,6 +1,11 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Don Jul  5 17:24:28 EDT 2001  Holger Urbanek	
+
+ * Changed serial protocoll according to email to 
+	CBE-Developer-Emaillist from Jul. 5. 2001
+	
 Wed Jun 27 17:12:20 CEST 2001 Holger Urbanek
 
  * Changed SerialClient::requestNewData() to SerialClient::reuestData()

@@ -12,6 +12,7 @@ extern "C" {
 SerialClient::SerialClient(const char * dev_name) {
   isAvailable=false;
   stillBlink=false;
+  blink=false;
   x=0;
   y=0;
   bzero(&newtio, sizeof(newtio)); // Make everything in newtio -> 0
@@ -38,14 +39,8 @@ SerialClient::~SerialClient() {
 
 // wrires "r" to the serialport as request for new data and waits for 4 chars (7 bit each)
 void SerialClient::requestData() {
-  char buffer[4];
-  if (isAvailable) {
-    write(devptr,"r",1); // request data
-    read(devptr,buffer,4); //read 4 chars, blocking
-    // Ok, data is here ...
-    x=buffer[0]*128+buffer[1];
-    y=buffer[2]*128+buffer[3];
-  }
+  onlyRequestData();
+  onlyGetData();
 }
 
 // only requests data (for ues with onlyGetData() ONLY!!! -- you HAVE to pair them!!!)
@@ -55,17 +50,23 @@ void SerialClient::onlyRequestData() {
 }
 
 void SerialClient::onlyGetData() {
-  char buffer[4];
+  char buffer[10];
   if (isAvailable) {
     read(devptr,buffer,4); //read 4 chars, blocking
     // Ok, data is here ...
-    x=buffer[0]*128+buffer[1];
-    y=buffer[2]*128+buffer[3];
+    x=buffer[0]*32+buffer[1]/4;
+    y=(buffer[1]%4)*1024+buffer[2]*8+buffer[3]/16;
+    if ((buffer[3]/8)%2==1)
+      blink=true;
+    else
+      blink=false;
   }
 }
 
 bool SerialClient::isBlink() {
-  if (x==0 || y==0) {
+  if (!isAvailable)
+    blink=rand()%100;
+  if (blink==0) {
     if (stillBlink==false) { // first detection of new blink
       stillBlink=true;
       return true;

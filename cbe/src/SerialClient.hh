@@ -17,7 +17,8 @@ public:
   // Position of eye (x and y values)
   int x;
   int y;
-  
+  bool blink;
+
   // Serial-Device is available
   bool isAvailable;
 
