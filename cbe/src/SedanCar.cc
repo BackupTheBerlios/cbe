@@ -40,10 +40,10 @@ SedanCar::SedanCar()
 void
 SedanCar::submit()
 {
-	if( mSpeed > 0 )
+	/*if( mSpeed > 0 )
 	  glTranslatef( 0, 0, -1.75 );
   	else
-	  glTranslatef( 0, 0, 1.75 );  		
+	  glTranslatef( 0, 0, 1.75 );*/
   	
   glRotatef( -mRotation, 0, 1, 0 );
   
