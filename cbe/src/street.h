@@ -33,7 +33,7 @@ class Street
   GLuint getStreet(); // Gets list of polygons which describes the street
   Point getPointOfStreet(GLfloat); // Gets Point near location (0<=location<=1)
   Point getNormalOfStreet(GLfloat); // Gets the normal near location
-  void createThingsNextToStreet(GLfloat size, GLfloat x, GLfloat y, GLfloat z);
+  void createPoles(GLfloat size, GLfloat x, GLfloat y, GLfloat z);
 
   Street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad);
   ~Street();

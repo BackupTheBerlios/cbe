@@ -35,7 +35,8 @@ class mainAppWindow : public GlutWindow{
  private:
   GLuint *plane;          // holds the plane
   GLuint *street;         // holds the street
-  float xRotationSpeed;   // Speed for the x-rotation
+  GLfloat speed;          // Speed for the x-rotation
+  bool isFog;             // Flag for fog
 
  public:
   int height, width;

@@ -36,22 +36,20 @@ using namespace std;
 
 mainAppWindow::mainAppWindow(GlutMaster * glutMaster, int setWidth, int setHeight, int setInitPositionX, int setInitPositionY, string title) {
   // Set default rotation speed
-  xRotationSpeed = 0.25;
+  speed = -0.1;
 
-  cout << "Entered mainAppWindow::mainAppWindow in mainAppWindow.cc" << endl;
+  // Disable fog by default
+  isFog = false;
+
   width  = setWidth;               
   height = setHeight;
   initPositionX = setInitPositionX;
   initPositionY = setInitPositionY;
   
   glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
-  cout << "  InitDisplayMode" << endl;
   glutInitWindowSize(width, height);
-  cout << "  InitWindowSize" << endl;
   glutInitWindowPosition(initPositionX, initPositionY);
-  cout << "  InitWindowPosition" << endl;
   glViewport(0, 0,(GLint) width,(GLint) height); 
-  cout << "  glViewport" << endl;
   
   glutMaster->CallGlutCreateWindow(title.c_str(), this);
   
@@ -61,21 +59,19 @@ mainAppWindow::mainAppWindow(GlutMaster * glutMaster, int setWidth, int setHeigh
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
-	//old Version
-  //glOrtho(-80.0, 80.0, -80.0, 80.0, -500.0, 500.0);
- 	//glRotatef(60.0,1.0,1.0,1.0);
-	
-	//perspective
-	gluPerspective(120.0,1.0,0.1,100.0);
-	
-	//viewing direction
-	glRotatef(90.0, 0.0, 1.0, 0.0);
-	
-	//point of view
-	glTranslatef(5.0,-2.0,0.0);
+  //perspective
+  gluPerspective(120.0,1.0,0.1,100.0);
+  
+  //viewing direction
+  glRotatef(90.0, 0.0, 1.0, 0.0);
+  
+  //point of view
+  glTranslatef(5.0,-1.5,0.0);
 
-	glMatrixMode(GL_MODELVIEW);
-	
+  // set background color
+  glClearColor(0.3,0.3,1,0);
+  
+  glMatrixMode(GL_MODELVIEW);
 }
 
 
@@ -87,7 +83,6 @@ mainAppWindow::~mainAppWindow() {
 
 void mainAppWindow::CallBackDisplayFunc(void) {
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-   glColor4f(1.0, 1.0, 0.0, 1.0);
    glCallList(*plane);
    glCallList(*street);
    glutSwapBuffers();
@@ -106,8 +101,7 @@ void mainAppWindow::CallBackReshapeFunc(int w, int h) {
 
 // Call back function for idle state
 void mainAppWindow::CallBackIdleFunc(void) {
-  //glRotatef(xRotationSpeed, 1, 1, 2);
-	glTranslatef(-0.1,0.0,0.0);
+  glTranslatef(speed, 0, 0);
   CallBackDisplayFunc();
 }
 
@@ -124,11 +118,23 @@ void mainAppWindow::CallBackKeyboardFunc(unsigned char key, int x, int y) {
     break;
   case 'U':
   case 'u':
-    xRotationSpeed += 0.1;
+    speed -= 0.05;
     break;
   case 'D':
   case 'd':
-    xRotationSpeed -= 0.1;
+    speed += 0.05;
+    break;
+  case 'F':
+  case 'f':
+    if (!isFog) {
+      glEnable(GL_FOG);
+      cout << "Fog enabled." << endl;
+      isFog = true;
+    }
+    else {
+      glDisable(GL_FOG);
+      isFog = false;
+    }
     break;
   default:
     cout << "A normal key was pressed. Hurra!" << endl;

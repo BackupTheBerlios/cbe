@@ -1,6 +1,22 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Mit Mai 16 14:36:55 CEST 2001   Holger Urbanek, Andreas Bauer
+
+ * Added blue horizon
+
+ * Modified street, poles, etc.
+
+ * ThingsNextToStreets are now Poles
+
+ * Added keyboard shortcuts to speed up, slow down and for fog
+
+ * Deleted old code
+
+?????????????????????????????   Marco Loh
+
+ * Moved point of view right on top of the street
+
 Mon May 14 15:44:25 CEST 2001   Andreas Bauer <baueran@in.tum.de>
 
  * Documented some things in various header files

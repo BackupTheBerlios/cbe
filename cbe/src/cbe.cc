@@ -46,12 +46,15 @@ int main(int argc, char *argv[]) {
   Plane *p;
   Street *s;
 
-  cout << "Entering main in cbe.cc" << endl;
+  cout << endl;
+  cout << "Keyboardfunctions:" << endl;
+  cout << "  u: Increase speed" << endl;
+  cout << "  d: Decrease speed" << endl;
+  cout << "  f: Toggles fog (quite useless until now, find out for yourself)" << endl;
+  cout << "  q / ESC: Exits program" << endl << endl;
   
   try {
     glutMaster   = new GlutMaster(&argc, argv);  
-    cout << "created GlutMaster in cbe.cc" << endl;
-
     secondWindow = new mainAppWindow(glutMaster,
 				     500, 500,         // height, width
 				     200, 400,         // initPosition (x,y)
@@ -62,7 +65,7 @@ int main(int argc, char *argv[]) {
 					 "Second window" ); // title
 #endif
     cout << "created mainAppWindow secondWindow in cbe.cc" << endl;
-    s=new Street(-50,0,0,2);
+    s=new Street(-50,0,0,4);
   }
   catch (...) {
     return -1;
@@ -73,7 +76,7 @@ int main(int argc, char *argv[]) {
   Point a,b;
 
   a.x=-60; a.y=-0.1; a.z=-60;
-  b.x=60; b.y=-0.1; b.z=60;
+  b.x=160; b.y=-0.1; b.z=60;
   try {
     p=new Plane(a,b);
   }
@@ -85,10 +88,8 @@ int main(int argc, char *argv[]) {
   secondWindow->setPlane(&Planelist);
   
   secondWindow->StartSpinning(glutMaster);        // enable idle function
-  cout << "Started Spinning in secondWindow in cbe.cc" << endl;
   glutMaster->CallGlutMainLoop();
-  cout << "CallGlutMainLoop() success" << endl;
-
+  
   // Clean up street and plane
   delete s;
   delete p;
