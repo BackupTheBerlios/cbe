@@ -60,6 +60,9 @@ namespace mainApp {
     JoystickDriver *joystick;       // Joystick-Object
     SerialClient *serialclient;     // Serial-Object
     bool isSerial;                  // Flag for use of serialport
+    int frameCount;                 // Used to compute frames/sec
+    GLfloat latenz;                 // stores frames/sec for computig correct movement-speed
+    bool showFramerate;             // Used to decide wether framerate is shown or not
 
   public:
     int height, width;

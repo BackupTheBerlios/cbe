@@ -1,6 +1,14 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Fri Jul 13 15:02:59 CEST 2001  Labor (All)
+
+ * Disappear/Show moveable objects works now
+
+ * Objects show up properly now
+
+ * Show frame rates implemented
+
 Thu Jul 12 22:50:05 CEST 2001  Andreas Bauer
 
  * Make use of libtiff now to display cockpit

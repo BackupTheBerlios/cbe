@@ -63,3 +63,9 @@ void GMovableObject::draw() {
     glPopMatrix();
   }
 }
+
+
+
+
+
+

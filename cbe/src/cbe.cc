@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
     // Create street, plane and car
     street = new Street(-50, 0, 0, 4);
     plane = new Plane(x, y);
-    car1 = new TestCar( -1, 0 );
+    car1 = new TestCar( 0, 30 );
     car1->setPos( -20, 2, 10 );
     car1->rotate( -90 );
     car2 = new TestCar( -1, 0 );

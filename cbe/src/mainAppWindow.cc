@@ -68,6 +68,10 @@ namespace mainApp {
     oldTime=clock();
 
     // Set some defaults
+    frameCount=0;
+    latenz=1/60; // Default to 60 frames/second
+    showFramerate=false; // Default to don't display framerate
+
     isFog = false;
     blend = 1;
 
@@ -162,7 +166,13 @@ namespace mainApp {
 
   // Call back function for idle state
   void mainAppWindow::CallBackIdleFunc(void) {
-    GLfloat latenz = getTimePassed(); // save passed time
+    frameCount++;
+    if (frameCount==10) { // recalculate framerate every 10 frames and set latenz according      
+      latenz = getTimePassed()/10; // save passed time
+      frameCount=0;
+      if (showFramerate) 
+	cout << 1/latenz << endl;
+    }
 
     // Make blink-detection (only if serialport is activated)
     if (isSerial) {
@@ -290,6 +300,13 @@ namespace mainApp {
       for( itr = graphicObjectsList.begin(); itr != graphicObjectsList.end(); itr++ )
 	(*itr)->unhide();
       break;
+    case 'r':
+    case 'R':
+      if (showFramerate)
+	showFramerate=false;
+      else
+	showFramerate=true;
+      break;
     case 'e':
     case 'E':
       if (isSerial)
@@ -336,3 +353,9 @@ namespace mainApp {
   }
 
 }
+
+
+
+
+
+

@@ -59,10 +59,12 @@ Car::Car() {
   frontWheelx = x1Front - 0.6;
   backWheelx = x1Back + 0.6;
 
+  gl_wheelList = glGenLists( 1 );
   makeList();
 }
 
 Car::~Car() {
+  glDeleteLists( gl_wheelList, 1 );
 }
 
 void Car::makeList() {
