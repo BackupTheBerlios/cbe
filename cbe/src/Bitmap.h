@@ -21,33 +21,31 @@
 #ifndef __BITMAP_H_
 #define __BITMAP_H_
 
+#include <iostream>
 #include <string>
 extern "C" {
 #include <stdio.h>
+#include <tiffio.h>
 }
 #include "config.h"
-#ifdef _WIN32
-#include <iostream>
+
 using namespace std;
-#endif
 
 class Bitmap {
  private:
-  string path;          // Path to image
-  char* data;           // The image itself
-  unsigned long sizeX;  // Image size
-  unsigned long sizeY;  // Image size
+  string path;   // Path to image
+  uint32* data;  // The image itself
+  TIFF* pic;     // File handle to picture 
+  uint32 sizeX;  // Image size
+  uint32 sizeY;  // Image size
   
-  unsigned int getint(FILE*);
-  unsigned int getshort(FILE*);
-
  public:
   Bitmap();
   Bitmap(string);
   ~Bitmap();
   bool load(void);
   void setPath(string);
-  char* getData(void);
+  uint32* getData(void);
 };
 
 #endif

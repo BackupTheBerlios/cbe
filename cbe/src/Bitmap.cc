@@ -22,9 +22,11 @@
 extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
+#include <tiffio.h>
 }
 #include "Bitmap.h"
 
+using namespace std;
 
 Bitmap::Bitmap(string newPath) {
   path = newPath;
@@ -38,78 +40,40 @@ Bitmap::Bitmap() {
 }
 
 
-// Code to load 24bit BMP files, shamelessly copied from:
-//
-// http://nehe.gamedev.net/opengl.asp
-//
-// Modified and changed into C++ style by Andreas Bauer.
-//
-// See http://www.dcs.ed.ac.uk/~mxr/gfx/2d/BMP.txt for more information.
 bool Bitmap::load(void) {
-  FILE* file;                         //  file handle for the image
-  unsigned long size;                 //  size of the image in bytes.
-  unsigned long i;                    //  standard counter.
-  unsigned short int planes;          //  number of planes in image (must be 1)
-  unsigned short int bpp;             //  number of bits per pixel (must be 24)
-  char temp;                          //  used to convert bgr to rgb color.
+  pic = TIFFOpen(path.c_str(), "r");
   
-  if (path.length() == 0)
-    return false;                     // User has to specify valid path first
-  else {
-    if ((file = fopen(path.c_str(), "rb")) == NULL)
-      return false;                   // File 'filename' not found
-    else {
-      //  seek through the bmp header, up to the width/height
-      fseek(file, 18, SEEK_CUR);
-      
-      //  read the width
-      sizeX = getint(file);
-      
-      //  read the height
-      sizeY = getint(file);
-      
-      //  calculate the size (assuming 24 bits or 3 bytes per pixel).
-      size = sizeX * sizeY * 3;
-      
-      //  read the planes
-      planes = getshort(file);
-      if (planes != 1)
-	return false;           // Planes error
+  if (pic) {
+    size_t npixels;
 
-      //  read the bpp
-      bpp = getshort(file);
-      if (bpp != 24)
-	return false;           // Image is not a 24bit BMP file
-      
-      //  seek past the rest of the bitmap header.
-      fseek(file, 24, SEEK_CUR);
-      
-      //  read the data.
-      data = (char*)malloc(size);
-      if (data == NULL)
-	return false;           // Memory allocation error
-      
-      if ((i = fread(data, size, 1, file)) != 1)
-	return false;           // Read error
-      
-      for (i = 0; i < size; i += 3) { //  reverse all of the colors. (bgr -> rgb)
-	temp = data[i];
-	data[i] = data[i+2];
-	data[i+2] = temp;
+    TIFFGetField(pic, TIFFTAG_IMAGEWIDTH, &sizeX);
+    TIFFGetField(pic, TIFFTAG_IMAGELENGTH, &sizeY);
+    npixels = sizeX * sizeY;
+    data = (uint32*) _TIFFmalloc(npixels * sizeof(uint32));
+
+    if (data != NULL) {
+      if (!TIFFReadRGBAImage(pic, sizeX, sizeY, data, 0)) {
+	cout << "Error opening TIF picture." << endl;
+	TIFFClose(pic);
+	return false;
       }
-      
-      //  we're done.
-      return true;
+      else {
+	cout << "TIF picture successfully loaded." << endl;
+	TIFFClose(pic);
+	return true;
+      }
     }
   }
+  
+  return false;
 }
 
 
 Bitmap::~Bitmap() {
   if (data != NULL)
-    free(data);
-
-  std::cout << "Destructor of Bitmap object called." << std::endl;
+    _TIFFfree(data);
+  
+  cout << "Destructor of Bitmap object called." << endl;
 }
 
 
@@ -118,37 +82,6 @@ void Bitmap::setPath(string newPath) {
 }
 
 
-char* Bitmap::getData(void) {
+uint32* Bitmap::getData(void) {
   return data;
-}
-
-
-// getint and getshort arehelp functions to load the bitmap byte by byte on 
-// SPARC platform.
-// I've got them from xv bitmap load routinebecause the original bmp loader didn't work
-// I've tried to change as less code as possible.
-unsigned int Bitmap::getint(FILE* fp) {
-  int c, c1, c2, c3;
-
-  //  get 4 bytes
-  c = getc(fp);  
-  c1 = getc(fp);  
-  c2 = getc(fp);  
-  c3 = getc(fp);
-  
-  return((unsigned int) c) +   
-    (((unsigned int) c1) << 8) + 
-    (((unsigned int) c2) << 16) +
-    (((unsigned int) c3) << 24);
-}
-
-
-unsigned int Bitmap::getshort(FILE* fp) {
-  int c, c1;
-  
-  // get 2 bytes
-  c = getc(fp);  
-  c1 = getc(fp);
-
-  return((unsigned int) c) + (((unsigned int) c1) << 8);
 }

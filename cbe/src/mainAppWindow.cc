@@ -49,7 +49,7 @@ namespace mainApp {
 
   mainAppWindow::mainAppWindow(GlutMaster* glutMaster, int setWidth, int setHeight, int setInitPositionX, int setInitPositionY, string title) {
     // Where is the cockpit?
-    cockpitIMG.setPath( (string)DATADIR + "/pixmaps/cbe/cockpit.bmp" );  // Size: 717 x 538 pixels
+    cockpitIMG.setPath( (string)DATADIR + "/pixmaps/cbe/cockpit.tif" );  // Size: 717 x 538 pixels
     
     // Load the cockpit
     if (cockpitIMG.load())
@@ -137,13 +137,11 @@ namespace mainApp {
       (*itr)->draw();
     
     // Blend cockpit
-    glBlendColor(1.0f, 1.0f, 1.0f, 0.0);
-    glBlendFunc(GL_ZERO, GL_SRC_COLOR);
-    glBlendFunc(GL_SRC_COLOR,GL_SRC_COLOR);
-    
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     // Draw cockpit
-    glDrawPixels(717, 538, GL_RGB, GL_UNSIGNED_BYTE, cockpitIMG.getData());
-    
+    glDrawPixels(717, 538, GL_RGBA, GL_UNSIGNED_BYTE, cockpitIMG.getData());
+
     // Finally draw everything on the screen that we just created and constructed
     glutSwapBuffers();   
   }

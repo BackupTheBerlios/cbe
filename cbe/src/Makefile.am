@@ -23,7 +23,7 @@ bin_PROGRAMS = cbe
 
 INCLUDES = @X_CFLAGS@ @GLUT_CFLAGS@ @GL_CFLAGS@
 
-cbe_LDADD = @X_LDFLAGS@ @GLUT_LDFLAGS@ @GL_LDFLAGS@ @X_LIBS@ @GLUT_LIBS@ @GL_LIBS@
+cbe_LDADD = @LIBTIFF@ @X_LDFLAGS@ @GLUT_LDFLAGS@ @GL_LDFLAGS@ @X_LIBS@ @GLUT_LIBS@ @GL_LIBS@
 
 # Don't forget to update NEWS and ChangeLog
 cbe_SOURCES = 	cbe.cc glutMaster.cc glutWindow.cc mainAppWindow.cc \

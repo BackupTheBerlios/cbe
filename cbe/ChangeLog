@@ -1,6 +1,19 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Thu Jul 12 22:50:05 CEST 2001  Andreas Bauer
+
+ * Make use of libtiff now to display cockpit
+
+ * Cockpit is now a tiff-image, but gets displayed properly. Changed
+   Bitmap-class
+
+ * Blending of bitmap works, too
+
+ * Added cockpit.tiff to pixmaps/
+
+ * Updated automake/autoconf stuff
+
 Don Jul  5 17:24:28 EDT 2001  Holger Urbanek	
 
  * Changed serial protocoll according to email to 
