@@ -205,6 +205,33 @@ namespace mainApp {
     glutSwapBuffers();   
   }
 
+  void mainAppWindow::HandleEyeTrackerEvent(int event) {
+    Car* car;
+
+    cout << "EYE TRACKER EVENT: " << event << endl;
+
+    switch(event) {
+    case CHANGE_TOGGLE_CARCOLOR:
+      car = pickCar();
+      if( car )
+	    car->change( Car::change_nextColor );
+      break;
+    case CHANGE_TOGGLE_BRAKELIGHTS:
+       car = pickCar();
+       if( car )
+	 car->change( Car::change_toggleBrakeLight );
+      break;
+    case CHANGE_HIDE_CAR:
+      car = pickCar();
+      if( car )
+	car->toggleVisibility();
+      break;
+    case CHANGE_TOGGLE_MIDDLELINE:
+      ( (street*)curStreet )->toggleMiddleline();
+      break;
+    }  
+  }
+
 
   // Call back function for reshape state
   void mainAppWindow::CallBackReshapeFunc(int w, int h) {
@@ -229,21 +256,8 @@ namespace mainApp {
     // Make blink-detection (only if serialport is activated)
     if (isSerial) {
       serialclient->requestData();
-      
-      switch ( serialclient->getChange() ) {
-      case CHANGE_HIDE_CAR: 
-	for(GObjectVector::iterator itr = graphicObjects.begin(); itr != graphicObjects.end(); itr++ )
-	  (*itr)->toggleVisibility();
-	
-	break;
-      case CHANGE_TOGGLE_BREAKLIGHTS:
-	for(GObjectVector::iterator itr = graphicObjects.begin(); itr != graphicObjects.end(); itr++ )
-	  (*itr)->change( Car::change_toggleBrakeLight );
-	
-	break;
-      default:
-	break;
-      }
+
+      HandleEyeTrackerEvent( serialclient->getChange() );
     }
     
     // Make Joysick-Calls
@@ -433,19 +447,17 @@ namespace mainApp {
       }
       break;
     case '1':
-      car = pickCar();
-      if( car )
-	    car->change( Car::change_nextColor );
+      HandleEyeTrackerEvent(CHANGE_TOGGLE_CARCOLOR);
       break;
     case '2':
-      carVector[ rndInt( carVector.size() ) ]->change( Car::change_toggleBrakeLight );
+      HandleEyeTrackerEvent(CHANGE_TOGGLE_BRAKELIGHTS);
       break;
     case '3':
-      carVector[ rndInt( carVector.size() ) ]->toggleVisibility();
+      HandleEyeTrackerEvent(CHANGE_HIDE_CAR);
       break;
     case '4':
-      ( (street*)curStreet )->toggleMiddleline();
-   	  break;
+      HandleEyeTrackerEvent(CHANGE_TOGGLE_MIDDLELINE);
+      break;
     default:
 #ifdef DEBUG
       cout << "A normal key was pressed. Hurra!" << endl;

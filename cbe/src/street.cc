@@ -375,5 +375,5 @@ glVertex3f( x, y, z );
 
 void street::toggleMiddleline()
 {
-  mMiddlelineToggle = not mMiddlelineToggle;
+  mMiddlelineToggle = !mMiddlelineToggle;
 }

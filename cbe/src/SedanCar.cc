@@ -67,7 +67,7 @@ SedanCar::change( int changeNum )
 	{
 		case Car::change_toggleBrakeLight:
 		{
-			m_brake_lights = not m_brake_lights;
+			m_brake_lights = !m_brake_lights;
 			update_brake_lights();
 			break;
 		}

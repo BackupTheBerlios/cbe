@@ -83,6 +83,8 @@ namespace mainApp {
     mainAppWindow(GlutMaster*, pref::Preferences*, int, int, int, int, string);
     ~mainAppWindow();
     
+    void HandleEyeTrackerEvent(int event);
+
     // Some call back functions
     void CallBackDisplayFunc(void);
     void CallBackReshapeFunc(int, int);   
