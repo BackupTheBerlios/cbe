@@ -35,11 +35,11 @@ class Street: public GObject
   
   Point getPointOfStreet(GLfloat); // Gets Point near location (0<=location<=1)
   Point getNormalOfStreet(GLfloat); // Gets the normal near location
-  virtual void makeList();
+  void writeList();
   void createPoles(GLfloat size, GLfloat x, GLfloat y, GLfloat z);
   
   Street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad);
-  virtual ~Street();
+  ~Street();
 };
 
 #endif

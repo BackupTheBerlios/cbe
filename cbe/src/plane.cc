@@ -39,16 +39,12 @@ Plane::~Plane() {
 }
 
 
-void Plane::makeList() {
-  glNewList(getList(), GL_COMPILE);
- 
+void Plane::writeList() {
   glBegin(GL_QUADS);
-  glColor3f(0,1,0);
-  glVertex3f(a.x,a.y,a.z);
-  glVertex3f(a.x,a.y,b.z);
-  glVertex3f(b.x,b.y,b.z);
-  glVertex3f(b.x,a.y,a.z);
+    glColor3f(0,1,0);
+    glVertex3f(a.x,a.y,a.z);
+    glVertex3f(a.x,a.y,b.z);
+    glVertex3f(b.x,b.y,b.z);
+    glVertex3f(b.x,a.y,a.z);
   glEnd();
-
-  glEndList();
 }

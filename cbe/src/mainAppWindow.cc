@@ -27,7 +27,7 @@
 #include <cmath>
 extern "C" {
 #ifdef _WIN32
-#include <GL/glaux.h>
+  #include <GL/glaux.h>
 #endif
 #include <GL/glut.h>
 #include <time.h>

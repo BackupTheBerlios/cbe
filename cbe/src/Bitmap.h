@@ -25,6 +25,10 @@
 extern "C" {
 #include <stdio.h>
 }
+#include "config.h"
+#ifdef _WIN32
+  using namespace std;
+#endif
 
 class Bitmap {
  private:

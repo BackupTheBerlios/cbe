@@ -57,17 +57,10 @@ int main(int argc, char *argv[]) {
   try {
     glutMaster = new GlutMaster(&argc, argv);  
 
-#ifndef _WIN32
     driversWindow = new mainAppWindow(glutMaster,
 				     500, 500,                                           // height, width
 				     200, 100,                                           // initPosition (x,y)
 				     (string)PACKAGE + (string)" " + (string)VERSION);   // title
-#else
-    driversWindow = new mainAppWindow(glutMaster,
-				     500, 500,            // height, width
-				     200, 400,            // initPosition (x,y)
-				     "Driver's Window" ); // title
-#endif
 
     // Create street and plane
     street = new Street(-50, 0, 0, 4);

@@ -43,12 +43,34 @@ class GObject {
   virtual inline GLuint getList() {
     return gl_list;
   }
-  // Creates the graphic representation of the object. It
-  // writes the graphic operations to the GL list with the
+
+  // Creates the graphic representation of the object. 
+  // It creates an new Open GL list an calls writeList() to
+  // write the Open GL operations to the GL list with the
   // number gl_list created in the constructor.
-  // This procedure must be overwritten in each class derived
+  // This procedure does not have to, but it may be overwritten.
+  // If it is overwritten, it must preserve the structure:
+  //   ...
+  //   glNewList(getList(), GL_COMPILE);
+  //   writeList();
+  //   glEndList();
+  virtual void makeList();
+
+  // Writes the Open GL operations to the list.
+  // It is called by makeList() after initializing the Open GL 
+  // list for the current graphic object.
+  // This procedure must be overwritten in each classe derived
   // from GObject.
-  virtual void makeList() = 0;
+  // You may also enhance the graphical representation of an
+  // object by deriving from its class and expanding its
+  // writeList() procedure. The new procedure would look like:
+  //   UpperClass::writeList(); // Write the graphical representation
+  //                            // of the upper class
+  //   ... // add new graphical operations
+  // As the list is not closed by glEndList() in the writeList()
+  // procedure, this expanding will work.
+  virtual void writeList() = 0;
+
   // Sets the hidden flag to true. The object will not be
   // displayed by the next draw().
   virtual inline void hide() {

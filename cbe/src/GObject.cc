@@ -40,8 +40,13 @@ void GObject::draw() {
   }
 }
 
+void GObject::makeList() {
+  glNewList(getList(), GL_COMPILE); // Initialize the list
+  writeList(); // Save the GL operations to the list
+  glEndList(); // Finish the list
+}
+
 // The procedure is empty in this class, but this empty 
 // implementation may not be removed from here, because 
 // it would produce a link error.
-void GObject::makeList() {
-}
+void GObject::writeList() {}

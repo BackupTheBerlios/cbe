@@ -47,8 +47,7 @@ Street::~Street() {
   // as the destructors are declared virtual.
 }
 
-
-void Street::makeList() {
+void Street::writeList() {
   points[0].x=startx;
   points[0].y=starty;
   points[0].z=startz;
@@ -57,43 +56,35 @@ void Street::makeList() {
   points[1].y=starty;
   points[1].z=startz;
 
-  for (long n=2;n<length;n+=10)
-    {
+  for (long n=2;n<length;n+=10) {
       int r;
       r=rand()%100;
       if (r<80)
-	for (long i=n;i<n+10;i++)
-	  {
-	    points[i].x=points[i-1].x+step;
-	    points[i].z=points[i-1].z;
-	    points[i].y=starty;
-	  }
+	    for (long i=n;i<n+10;i++) {
+	      points[i].x=points[i-1].x+step;
+	      points[i].z=points[i-1].z;
+	      points[i].y=starty;
+		}
 	
-      if (r>=80 && r<90)
-	for (int i=n;i<n+10;i++)
-	    {
+    if (r>=80 && r<90)
+	  for (int i=n;i<n+10;i++) {
 	      points[i].x=points[i-1].x+step;
 	      points[i].z=points[i-1].z+step*2;
 	      points[i].y=starty;
-	    }
+	  }
 	
-      if (r>=90)
-	for (int i=n;i<n+10;i++)
-	    {
+    if (r>=90)
+	  for (int i=n;i<n+10;i++) {
  	      points[i].x=points[i-1].x+step;
 	      points[i].z=points[i-1].z-step*2;
 	      points[i].y=starty;
-	    }
-	
-    }
-
-  glNewList(getList(), GL_COMPILE);
+	  }
+  }
   
   glBegin(GL_TRIANGLE_STRIP);
-  glColor3f(.3,.3,.3);
-  long i;
-  for (i=1;i<999;i++)
-	{
+    glColor3f(.3,.3,.3);
+    long i;
+    for (i=1;i<999;i++) {
 		GLfloat vx,vz,nx,nz;
 		//claculate normal of street
 		vx=points[i+1].x-points[i].x;
@@ -111,8 +102,7 @@ void Street::makeList() {
   glEnd();
 
   // Draw the poles
-  for (i=1;i<999;i+=20)
-    {
+  for (i=1;i<999;i+=20) {
       GLfloat vx,vz,nx,nz;
       
       // Calculate the normal to the street
@@ -123,8 +113,7 @@ void Street::makeList() {
       
       createPoles(1,points[i].x+nx*broadness/2,points[i].y,points[i].z+nz*broadness/2+0.2);
       createPoles(1,points[i].x-nx*broadness/2,points[i].y,points[i].z-nz*broadness/2-0.2);
-    }
-  glEndList();
+  }
 }
 
 

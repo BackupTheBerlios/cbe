@@ -26,5 +26,5 @@ class Plane : public GObject
 public:
   Plane(Point,Point);
   ~Plane();
-  virtual void makeList();
+  void writeList();
 };
