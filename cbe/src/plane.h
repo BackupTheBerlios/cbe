@@ -17,9 +17,9 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 // USA.
 
-#include "GObject.h"
+#include "GListObject.h"
 
-class Plane : public GObject
+class Plane : public GListObject
 {
   Point a,b;
 

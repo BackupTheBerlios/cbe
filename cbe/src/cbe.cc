@@ -35,8 +35,10 @@ extern "C" {
 #include "mainAppWindow.h"
 #include "street.h"
 #include "plane.h"
-#include "Car.h"
+#include "GMovableObject.h"
 #include "Point.h"
+
+#include "SedanCar.h"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +65,8 @@ GlutMaster* glutMaster;
 mainApp::mainAppWindow* driversWindow;
 Plane* plane;
 Street* street;
-Car* car1; Car* car2;
+Car* car1;
+Car* car2;
 
 // Main program
 int main(int argc, char *argv[]) {
@@ -158,12 +161,18 @@ int main(int argc, char *argv[]) {
     // Create street, plane and car
     street = new Street( -490, 0, 0, 4 );
     plane = new Plane( x, y );
-    car1 = new TestCar( 0, 30 );
+    
+    /*car1 = new TestCar( 0, 30 );
     car1->setPos( -20, 2, 10 );
     car1->rotate( -90 );
-    car2 = new TestCar( -1, 0 );
+
+	car2 = new TestCar( -1, 0 );
     car2->setPos( -3, 0, -5 );
-    car2->rotate( -90 );
+    car2->rotate( -90 );*/
+    
+    car1 = new SedanCar;
+    car1->setPos( -3, 0, -5 );
+    car1->rotate( 180 );
   }
   catch(pref::IOException) {
     cerr << "ERROR: Could not read cbe preferences file." << endl;
@@ -178,8 +187,10 @@ int main(int argc, char *argv[]) {
   driversWindow->setStreet( street );
   driversWindow->setPlane( plane );
   driversWindow->addCar( car1 );
-  driversWindow->addCar( car2 );
+  //driversWindow->addCar( car2 );
   atexit(cleanUp);
+
+  double oldTime = 0;
 
   try {
     // Enable event loops

@@ -30,6 +30,9 @@ class GMovableObject : public GObject {
   Point position;
   GLfloat angle;
  
+ protected:
+  virtual void submit();
+ 
  public:
   GMovableObject();
   ~GMovableObject();

@@ -1,4 +1,4 @@
-// Car.cc - source file for the CBE project
+// SedanCar.cc - source file for the CBE project
 // Copyright (c) 2001  Ludwig-Maximilian-Universitaet Muenchen
 //                     http://www.uni-muenchen.de/
 //
@@ -17,39 +17,32 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 // USA.
 
-#include "config.h"
-#include <cmath>
-#include <iostream>
-extern "C" {
-#include <stdlib.h>
-#include <GL/gl.h>
-#include <GL/glut.h>
-}
-#include "Point.h"
-#include "Car.h"
-#include "Street.h"
+#include <glu.h>
 
-Car::Car()
+#include "SedanCar.h"
+
+SedanCar::SedanCar()
 {
-	mRotation = 0;
+	load( "models/sedan.csp" );
 }
 
-void Car::move( Street* street, double time )
+void
+SedanCar::submit()
 {
-	GLfloat location[ 3 ];
+	glTranslatef( 0, 0, -1.75 );
 
-	//time = 0.01;
+    glRotatef( -mRotation, 0, 1, 0 );
 
-	street->getStreetLocation( time * 0.005, location );
-	setPos( location[ 0 ], location[ 1 ], location[ 2 ] );
-	
-	GLfloat p[ 3 ];
-	GLfloat v[ 3 ];
-	street->getStreetLocation( time * 0.005 + 0.001, p );
-	v[ 0 ] = p[ 0 ] - location[ 0 ];
-	v[ 1 ] = p[ 1 ] - location[ 1 ];
-	v[ 2 ] = p[ 2 ] - location[ 2 ];
-	
-	mRotation = atan2( v[ 2 ], v[ 0 ] ) * ( 180 / 3.1415 );
+    glRotatef( -90, 1, 0, 0 );
+
+	glScalef( 0.6, 0.6, 1.0 );
+
+	GLinotteObject::submit();
+
+	/*static GLUquadricObj* q = 0;
+	if( q == 0 )
+		q = gluNewQuadric();
+
+	gluSphere( q, 1, 8, 8 );*/
 }
 

@@ -20,6 +20,7 @@
 extern "C" {
 #include <GL/gl.h>
 }
+
 #include "GMovableObject.h"
 
 
@@ -28,7 +29,12 @@ GMovableObject::GMovableObject() {
   angle = 0;
 }
 
-GMovableObject::~GMovableObject() {}
+GMovableObject::~GMovableObject()  {
+}
+
+void GMovableObject::submit()
+{
+}
 
 void GMovableObject::move( Point p ) {
   position.move( p );
@@ -58,14 +64,14 @@ void GMovableObject::draw() {
   if ( !isHidden() ) {
     glPushMatrix();
 
+    // Rotate the object by the object angle around the vertical axis
+    //glRotatef( angle, 0, 1, 0 );
+
     // Move the object to its position
     glTranslatef( position.x, position.y, position.z );
-
-    // Rotate the object by the object angle around the vertical axis
-    glRotatef( angle, 0, 1, 0 );
-
+    
     // Draw the object
-    drawObjectLists();
+	submit();
 
     glPopMatrix();
   }

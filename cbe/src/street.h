@@ -21,10 +21,10 @@
 #define __STREET_H_
 
 #include "Point.h"
-#include "GObject.h" // The base class for graphic objects
+#include "GListObject.h" // The base class for graphic objects
 #include "linotte/texture_material_t.h"
 
-class Street: public GObject
+class Street: public GListObject
 {
  private:
   Point points[5050];
@@ -44,6 +44,7 @@ public:
   virtual void draw();
   void createPoles(GLfloat size, GLfloat x, GLfloat y, GLfloat z);
   void createTree(GLfloat, GLfloat, GLfloat, GLfloat);
+  void getStreetLocation( double alpha, GLfloat* location );
   
   Street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad);
   ~Street();

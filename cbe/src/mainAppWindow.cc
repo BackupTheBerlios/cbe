@@ -36,6 +36,7 @@ extern "C" {
 #include "glutWindow.h"
 #include "Point.h"
 #include "Bitmap.h"
+#include "Street.h"
 
 #ifndef M_PI
 #define M_PI 3.1415926535
@@ -83,6 +84,7 @@ namespace mainApp {
     
     // Set current clock-value to oldTime
     oldTime = clock();
+    zeroClock = clock();
 
     // Set some defaults concerning framerate
     frameCount = 0;
@@ -107,12 +109,20 @@ namespace mainApp {
 
     glEnable(GL_DEPTH_TEST);  
     
+    // testcode fuer die beleuchtung
+    /*GLfloat light_position[ 3 ] = { 1, 1, 1 };
+    
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glShadeModel (GL_SMOOTH);*/
+    
     // Switch to camera matrix
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
     // perspective
-    gluPerspective(90/*120.0*/, 1.0, 0.1, 100.0);
+    gluPerspective(45/*120.0*/, 1.0, 0.1, 100.0);
   
     // Set viewing direction from z-Axis to x-axis
     glRotatef(90.0, 0, -1, 0);
@@ -121,7 +131,7 @@ namespace mainApp {
     glTranslatef(0.0, -1.5, 0.0);
 
     // set background color
-    glClearColor(0.3, 0.3, 1.0, 0.0);
+    glClearColor(0.3, 0.3, 1,0);
 
     // Save ProjectionMatrix (for futher use in Idle-Function)
     glPushMatrix();
@@ -174,12 +184,8 @@ namespace mainApp {
     if (prefs->useBlending()) {
       glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
       glDrawPixels(717, 538, GL_RGBA, GL_UNSIGNED_BYTE, cockpitIMG.getData());
-      //glEnable(GL_BLEND);
+      glEnable(GL_BLEND);
     }
-
-    // Mesa transparency work around
-      glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
 
     // Finally draw everything on the screen that we just created and constructed
     glutSwapBuffers();   
@@ -276,6 +282,14 @@ namespace mainApp {
     glTranslatef(movementVector->x * latenz * speed, 
 		 movementVector->y * latenz * speed, 
 		 movementVector->z * latenz * speed);
+    
+    // advance cars
+    double time = ( clock() - zeroClock ) / (double)CLOCKS_PER_SEC;
+    for( CarVector::iterator itr = carVector.begin(); itr != carVector.end(); ++itr )
+    {
+    	(*itr)->move( (Street*)street, time );
+	}
+
     
     // Finished with "camera-actions" advance to draw the world
     CallBackDisplayFunc();
@@ -417,6 +431,11 @@ namespace mainApp {
 
   void mainAppWindow::setStreet(GObject* s) {
     street = s;
+    GLfloat loc[ 3 ];
+    ((Street*)s)->getStreetLocation( 0, loc );
+    
+    glLoadIdentity();
+  	glTranslatef( -loc[ 0 ], -loc[ 1 ], -loc[ 2 ] );
   }
 
 

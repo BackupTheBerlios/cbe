@@ -74,6 +74,7 @@ namespace mainApp {
     int frameCount;                 // Used to compute frames/sec
     GLfloat latenz;                 // stores frames/sec for computig correct movement-speed
     bool showFramerate;             // Used to decide wether framerate is shown or not
+	long zeroClock;
 
   public:
     int height, width;

@@ -40,22 +40,23 @@ simple_material_t::submit()
 
 	// FIXME
 
-	glDisable( GL_TEXTURE_2D );
-
+	/*glDisable( GL_TEXTURE_2D );
+	glEnable(GL_COLOR_MATERIAL);
 
 
 	glColor3fv( m_color );
 
+	glEnable( GL_LIGHTING );
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, m_color);
+    glMaterialfv(GL_BACK, GL_DIFFUSE, m_color);*/
+    
+   glDisable( GL_TEXTURE_2D );
+   glColor3fv( m_color );
+    
+   /*glMaterialfv(GL_FRONT, GL_DIFFUSE, m_color);
 
-
-	
-
-	/*GLfloat mat_shininess[] = { 0.0 };
-
-	
-
-   glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, m_color);*/
-
+   glColorMaterial(GL_FRONT, GL_DIFFUSE);
+   glEnable(GL_COLOR_MATERIAL);*/
  }
 
 

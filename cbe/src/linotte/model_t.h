@@ -50,6 +50,10 @@ public:
 
 protected:
 
+	void				load_materials(
+							input_stream_t&			stream,
+							material_manager_t*		matmgr );
+
 	void				clear();
 
 	

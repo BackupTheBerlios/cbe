@@ -1,4 +1,4 @@
-// Car.cc - source file for the CBE project
+// SedanCar.h - source file for the CBE project
 // Copyright (c) 2001  Ludwig-Maximilian-Universitaet Muenchen
 //                     http://www.uni-muenchen.de/
 //
@@ -17,39 +17,16 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 // USA.
 
-#include "config.h"
-#include <cmath>
-#include <iostream>
-extern "C" {
-#include <stdlib.h>
-#include <GL/gl.h>
-#include <GL/glut.h>
-}
-#include "Point.h"
+#ifndef __SEDANCAR_H
+#define __SEDANCAR_H
+
 #include "Car.h"
-#include "Street.h"
 
-Car::Car()
-{
-	mRotation = 0;
-}
+class SedanCar : public Car {
+public:
+  SedanCar();
+  
+  virtual void submit();
+};
 
-void Car::move( Street* street, double time )
-{
-	GLfloat location[ 3 ];
-
-	//time = 0.01;
-
-	street->getStreetLocation( time * 0.005, location );
-	setPos( location[ 0 ], location[ 1 ], location[ 2 ] );
-	
-	GLfloat p[ 3 ];
-	GLfloat v[ 3 ];
-	street->getStreetLocation( time * 0.005 + 0.001, p );
-	v[ 0 ] = p[ 0 ] - location[ 0 ];
-	v[ 1 ] = p[ 1 ] - location[ 1 ];
-	v[ 2 ] = p[ 2 ] - location[ 2 ];
-	
-	mRotation = atan2( v[ 2 ], v[ 0 ] ) * ( 180 / 3.1415 );
-}
-
+#endif

@@ -40,8 +40,8 @@ Street::Street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad) {
 
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -63,6 +63,31 @@ Street::~Street() {
   // as the destructors are declared virtual.
   glDeleteLists( mTreeList, 1 );
   delete mTreeMaterial;
+}
+
+void Street::getStreetLocation( double alpha, GLfloat* location )
+{
+	alpha = 1 - fmod( alpha, 1 );
+
+	double index = alpha * length;
+	long intindex = index;
+	
+	double delta = index - intindex;
+	double v0, v1;
+	
+	v0 = points[ intindex ].x;
+	v1 = points[ intindex + 1 ].x;
+	location[ 0 ] = v0 + ( v1 - v0 ) * delta;
+
+	v0 = points[ intindex ].y;
+	v1 = points[ intindex + 1 ].y;
+	location[ 1 ] = v0 + ( v1 - v0 ) * delta;
+
+	v0 = points[ intindex ].z;
+	v1 = points[ intindex + 1 ].z;
+	location[ 2 ] = v0 + ( v1 - v0 ) * delta;
+	
+	//printf( "%f %f %f\n", location[ 0 ], location[ 1 ], location[ 2 ] );
 }
 
 void Street::writeList() {
@@ -138,8 +163,8 @@ void Street::writeList() {
     nx=-vz/sqrt(vx*vx+vz*vz);
     nz=vx/sqrt(vx*vx+vz*vz);
     
-    createPoles(1,points[i].x,points[i].y,points[i].z+broadness/2+.5);
-    createPoles(1,points[i].x,points[i].y,points[i].z-broadness/2-.5);
+    createPoles(0.6,points[i].x,points[i].y,points[i].z+broadness/2+.5);
+    createPoles(0.6,points[i].x,points[i].y,points[i].z-broadness/2-.5);
   }
 
   // Draw Middlelines
@@ -165,8 +190,9 @@ void Street::writeList() {
 
 void Street::makeTreeList()
 {
-  //mTreeList = glGenLists( 1 );
-  //glNewList( mTreeList, GL_COMPILE );
+  mTreeList = glGenLists( 1 );
+  glNewList( mTreeList, GL_COMPILE );
+  
   srandom( 1234 );
 
   // Draw the trees
@@ -189,7 +215,7 @@ void Street::makeTreeList()
     createTree(1,points[i].x + dx, points[i].y, points[i].z-broadness/2-.5 - 2 - dz);
   }
 
-  //glEndList();
+  glEndList();
 }
 
 void Street::draw()
@@ -198,13 +224,13 @@ void Street::draw()
   glEnable( GL_TEXTURE_2D );
   glEnable(GL_BLEND);
 
-  mTreeMaterial->submit();
-  //glCallList( mTreeList );
-  makeTreeList();
+  //mTreeMaterial->submit();
+  glCallList( mTreeList );
+  //makeTreeList();
 
   glDisable( GL_TEXTURE_2D );
 
-  GObject::draw();
+  GListObject::draw();
 }
 
 // getPointOfStreet takes the parameter 0<=t<=1 and returns the equivalent

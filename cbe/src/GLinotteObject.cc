@@ -1,4 +1,4 @@
-// Car.cc - source file for the CBE project
+// GLinotteObject.cc - source file for the CBE project
 // Copyright (c) 2001  Ludwig-Maximilian-Universitaet Muenchen
 //                     http://www.uni-muenchen.de/
 //
@@ -17,39 +17,42 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 // USA.
 
-#include "config.h"
-#include <cmath>
-#include <iostream>
-extern "C" {
-#include <stdlib.h>
-#include <GL/gl.h>
-#include <GL/glut.h>
-}
-#include "Point.h"
-#include "Car.h"
-#include "Street.h"
+#include "GLinotteObject.h"
+#include "linotte/material_manager_t.h"
+#include "linotte/file_input_stream_t.h"
 
-Car::Car()
+GLinotteObject::GLinotteObject() :
+	m_model( 0 )
 {
-	mRotation = 0;
+	m_matmgr = new linotte::material_manager_t;
 }
 
-void Car::move( Street* street, double time )
+GLinotteObject::~GLinotteObject()
 {
-	GLfloat location[ 3 ];
-
-	//time = 0.01;
-
-	street->getStreetLocation( time * 0.005, location );
-	setPos( location[ 0 ], location[ 1 ], location[ 2 ] );
+	delete m_model;
 	
-	GLfloat p[ 3 ];
-	GLfloat v[ 3 ];
-	street->getStreetLocation( time * 0.005 + 0.001, p );
-	v[ 0 ] = p[ 0 ] - location[ 0 ];
-	v[ 1 ] = p[ 1 ] - location[ 1 ];
-	v[ 2 ] = p[ 2 ] - location[ 2 ];
-	
-	mRotation = atan2( v[ 2 ], v[ 0 ] ) * ( 180 / 3.1415 );
+	delete m_matmgr;
 }
 
+void GLinotteObject::submit()
+{
+	m_model->draw();
+}
+
+void GLinotteObject::load( const char* path )
+{
+	if( m_model )
+	{
+		delete m_model;
+		m_model = 0;
+	}
+
+	linotte::file_input_stream_t stream( path );
+	
+	m_model = new linotte::model_t( stream, m_matmgr );
+}
+
+void GLinotteObject::add_material( linotte::material_t* material )
+{
+	m_matmgr->add_material( material );
+}

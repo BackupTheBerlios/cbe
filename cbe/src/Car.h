@@ -20,11 +20,14 @@
 #ifndef __CAR_H
 #define __CAR_H
 
-#include "GMovableObject.h"
-#include "Point.h"
+#include "GLinotteObject.h"
 
-class Car: public GMovableObject {
+class Street;
+
+class Car : public GLinotteObject {
  public:
+ 	Car();
+ 
 	// Change constants
 	enum { change_brakeLightOn = 0, change_brakeLightOff, change_toggleBrakeLight,
 		   change_color0, change_color1, change_nextColor };
@@ -33,95 +36,11 @@ class Car: public GMovableObject {
 		   change_maxColor = change_color1 };
 	enum { change_minChange = change_brakeLightOn,
 		   change_maxChange = change_nextColor };
-
- private:
-  GLuint gl_wheelList;
-  GLuint gl_brakeLightList;
-  static const GLfloat color0[];
-  static const GLfloat color1[];
-  static const GLfloat* colors[];
-
-  static const GLfloat brakeLightColors[2][3];
-
-  int currColorNumber; // The array index of the current color
-  int currBrakeLightNumber; // 0 for brake light off, 1 for brake light on
-
-  GLfloat width; // The car width
-  GLfloat length; // The car length
-  // See the scheme for meaning of the following variables
-  GLfloat x1Front, x2Front, x3Front, x4Front;
-  GLfloat x1Back, x2Back, x3Back, x4Back;
-
-  GLfloat h1Front, h2Front, h3Front, h4Front;
-  GLfloat h1Back, h2Back, h3Back, h4Back;
+		   
+	virtual void move( Street* street, double time );
 	
-  GLfloat frontWheelx; // The distance from the front of the
-  // car to the front wheel axis
-  GLfloat backWheelx; // The distance from the front of the
-  // car to the back wheel axis
-  GLfloat wheelRadius1; // The radius of the wheels
-  GLfloat wheelRadius2; // The inner radius of the wheels (Felgen)
-  GLfloat wheelWidth1; // The width of the wheels
-  GLfloat wheelWidth2; // The inner width of the wheels (is a bit leaner)
-
-  GLfloat brakeLightWidth; // The width of a brake light
-  GLfloat brakeLightHeight; // The height of a brake light
-  GLfloat brakeLighty; // The brake light distance from the floor
-  GLfloat brakeLightx; // The brake light distance from the car middle
- 
-/*
-
-
- h4Back            _____________________                h4Front
- h3back           /                     \               h3Front
- h2back  ______--/                       \----____      h2Front
-        /   __                              __    \
- h1Back |__-  -____________________________-  -____\    h1Front
-           -__-                            -__-
-
-
-                  x4Back               x4Front
-                x3Back                   x3Front
-        x2Back                                   x2Front
-       x1Back                                      x1Front
-*/
-
- 
- public:
-  Car();
-  ~Car();
-  void writeList();
-  void makeList();
-  // Return the number of the GL list for a wheel
-  GLuint inline getWheelList() {
-    return gl_wheelList;
-  }
-  GLuint inline getBrakeLightList() {
-	  return gl_brakeLightList;
-  }
-  void change( int changeNum );
-  void changeColor( int changeNum );
-
- protected:
-  void drawCoachwork(); // Karosserie zeichnen
-  // Make a GL list for a wheel, used by drawCoachwork().
-  virtual void writeWheelList();
-  // GL list for brake lights
-  virtual void writeBrakeLightList();
-  void drawObjectLists();
-};
-
-// A test of the GMovableObject class and the Car class
-class TestCar: public Car {
- private:
-  double oldTime;
-  double deltaX, deltaAngle;
-
- public:
-  TestCar();
-  TestCar( double dx, double dr );
-  ~TestCar();
-  void draw();
+protected:
+	float mRotation;
 };
 
 #endif
