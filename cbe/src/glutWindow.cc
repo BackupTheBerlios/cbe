@@ -51,7 +51,7 @@ void GlutWindow::CallBackPassiveMotionFunc(int x, int y){
 void  GlutWindow::CallBackReshapeFunc(int w, int h){
 }
    
-void GlutWindow::CallBackSpecialFunc(int key, int x, int y){
+void GlutWindow::CallBackSpecialKeyboardFunc(int key, int x, int y){
 }   
 
 void GlutWindow::CallBackVisibilityFunc(int visible){

@@ -46,7 +46,7 @@ private:
    static void CallBackMouseFunc(int button, int state, int x, int y);
    static void CallBackPassiveMotionFunc(int x, int y);
    static void CallBackReshapeFunc(int w, int h); 
-   static void CallBackSpecialFunc(int key, int x, int y);   
+   static void CallBackSpecialKeyboardFunc(int key, int x, int y);   
    static void CallBackVisibilityFunc(int visible);
 
    static int currentIdleWindow;

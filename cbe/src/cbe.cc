@@ -21,7 +21,6 @@ extern "C" {
 #ifdef _WIN32
 #include <GL/glaux.h>
 #endif
-
 #include <GL/gl.h>    // OpenGL
 #include <GL/glut.h>  // GLUT
 }
@@ -33,36 +32,31 @@ extern "C" {
 #include "cbe.hh"
 #include "glutMaster.h"
 #include "glutWindow.h"
-#include "demoWindow.h"
+#include "mainAppWindow.h"
 #include "street.h"
 #include "plane.h"
 
 using namespace std;
 
 GlutMaster* glutMaster;
-DemoWindow* secondWindow = 0;
-
+mainAppWindow* secondWindow = 0;
 
 
 int main(int argc, char *argv[]) {
   Plane *p;
   Street *s;
 
-  cout << "Entering main in cbe.cc\n";
+  cout << "Entering main in cbe.cc" << endl;
   
   try {
     glutMaster   = new GlutMaster(&argc, argv);  
-    cout << "created GlutMaster in cbe.cc\n";
+    cout << "created GlutMaster in cbe.cc" << endl;
 
-    secondWindow = new DemoWindow(glutMaster,
-				  500, 500,         // height, width
-				  200, 400,         // initPosition (x,y)
-#ifndef _WIN32
-				  (string)PACKAGE + (string)" " + (string)VERSION);   // title
-#else
-				  "Second window");   // title
-#endif
-    cout << "created DemoWindow secondWindow in cbe.cc\n";
+    secondWindow = new mainAppWindow(glutMaster,
+				     500, 500,         // height, width
+				     200, 400,         // initPosition (x,y)
+				     (string)PACKAGE + (string)" " + (string)VERSION);   // title
+    cout << "created mainAppWindow secondWindow in cbe.cc" << endl;
     s=new Street(-50,0,0,2);
   }
   catch (...) {
@@ -86,11 +80,13 @@ int main(int argc, char *argv[]) {
   secondWindow->setPlane(&Planelist);
   
   secondWindow->StartSpinning(glutMaster);        // enable idle function
-  cout << "Started Spinning in secondWindow in cbe.cc\n";
+  cout << "Started Spinning in secondWindow in cbe.cc" << endl;
   glutMaster->CallGlutMainLoop();
-  cout << "CallGlutMainLoop() success\n";
-  
+  cout << "CallGlutMainLoop() success" << endl;
+
+  // Clean up street and plane
   delete s;
   delete p;
+
   return 0;
 }

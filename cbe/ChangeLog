@@ -1,7 +1,21 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
-Son Mai 13 18:15:00 CEST 2001   David Trachtenherz
 
+Mon May 14 15:44:25 CEST 2001   Andreas Bauer <baueran@in.tum.de>
+
+ * Documented some things in various header files
+ 
+ * Replaced all '\n' with 'endl'
+
+ * Added wrapper for special keyboard events
+
+ * Added call back function for keyboard events
+   (Program can be exited on key event -Q/Esc- now.)
+
+ * Renamed demoWindow.* to mainAppWindow.*
+ 
+Son Mai 13 18:15:00 CEST 2001   David Trachtenherz
+ 
  * Program adjusted for Win 95
 
 Sam Mai 12 21:51:02 CEST 2001   Holger Urbanek
@@ -9,7 +23,7 @@ Sam Mai 12 21:51:02 CEST 2001   Holger Urbanek
  * static objects next to street
 
  * fixed bug in Street::getPointOfStreet
-	
+
 Mit Mai  9 11:58:54 CEST 2001   Holger Urbanek, Andreas Bauer
 
  * All news do have deletes and are wrapped in try-catch clause

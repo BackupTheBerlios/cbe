@@ -26,8 +26,8 @@ INCLUDES = @X_CFLAGS@ @GLUT_CFLAGS@ @GL_CFLAGS@
 cbe_LDADD = @X_LDFLAGS@ @GLUT_LDFLAGS@ @GL_LDFLAGS@ @X_LIBS@ @GLUT_LIBS@ @GL_LIBS@
 
 # Don't forget to update NEWS and ChangeLog
-cbe_SOURCES = 	cbe.cc glutMaster.cc glutWindow.cc demoWindow.cc \
-		cbe.hh glutMaster.h  glutWindow.h  demoWindow.h \
+cbe_SOURCES = 	cbe.cc glutMaster.cc glutWindow.cc mainAppWindow.cc \
+		cbe.hh glutMaster.h  glutWindow.h  mainAppWindow.h \
 		street.cc plane.cc \
 		street.h  plane.h \
 		common.h

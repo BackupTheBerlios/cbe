@@ -42,11 +42,11 @@ public:
    virtual void CallBackMouseFunc(int button, int state, int x, int y);
    virtual void CallBackPassiveMotionFunc(int x, int y);
    virtual void CallBackReshapeFunc(int w, int h);   
-   virtual void CallBackSpecialFunc(int key, int x, int y);   
+   virtual void CallBackSpecialKeyboardFunc(int key, int x, int y);   
    virtual void CallBackVisibilityFunc(int visible);
 
-   void    SetWindowID(int newWindowID);
-   int     GetWindowID(void);
+           void SetWindowID(int newWindowID);
+           int  GetWindowID(void);
 
 };
 
