@@ -106,11 +106,15 @@ namespace mainApp {
 
     // Switch to scenery matrix
     glMatrixMode(GL_MODELVIEW);
+
+    // Initialize Joystick
+    joystick=new JoystickDriver();
   }
 
 
   mainAppWindow::~mainAppWindow() {
     delete movementVector;
+    delete joystick;
     glutDestroyWindow(windowID);
     cout << "Destructor of mainAppWindow called." << endl;
   }
@@ -152,6 +156,24 @@ namespace mainApp {
 
   // Call back function for idle state
   void mainAppWindow::CallBackIdleFunc(void) {
+    GLfloat latenz = getTimePassed(); // save passed time
+
+    // Make Joysick-Calls
+    joystick->refreshJoystick();
+    viewingAngle+= joystick->getXaxis() * 200 * latenz;
+    
+    // Keep viewingAngle in -180<x<180
+    if (viewingAngle<-180)
+      viewingAngle+=360;
+    if (viewingAngle>=180)
+      viewingAngle-=360;
+  
+    speed-= joystick->getYaxis() * 200 * latenz;
+  
+    // recalculate the new movementVecto
+    movementVector->x=cos(viewingAngle*M_PI/180);
+    movementVector->z=sin(viewingAngle*M_PI/180);
+
     // Switch to camera matrix
     glMatrixMode(GL_PROJECTION);
 
@@ -165,10 +187,8 @@ namespace mainApp {
     // Switch back to world matrix
     glMatrixMode(GL_MODELVIEW);
   
-    GLfloat latenz = (double)speed * getTimePassed();
-  
     // Now move the world according to our viewing direction
-    glTranslatef(movementVector->x * latenz, movementVector->y * latenz, movementVector->z * latenz);
+    glTranslatef(movementVector->x * latenz * speed , movementVector->y * latenz * speed, movementVector->z * latenz * speed);
 
     // Finished with "camera-actions" advance to draw the world
     CallBackDisplayFunc();
@@ -224,8 +244,6 @@ namespace mainApp {
       if (viewingAngle>180)
 	viewingAngle-=360;
 
-      movementVector->x=cos(viewingAngle*M_PI/180);
-      movementVector->z=sin(viewingAngle*M_PI/180);
       break;
     case 'J': // right
     case 'j':
@@ -233,9 +251,6 @@ namespace mainApp {
 
       if (viewingAngle<-180)
 	viewingAngle+=360;
-
-      movementVector->x=cos(viewingAngle*M_PI/180);
-      movementVector->z=sin(viewingAngle*M_PI/180);
       break;
     case 'F':
     case 'f':
