@@ -1,0 +1,11 @@
+3ds2cbs README
+-=-=-=-=-=-=-=
+
+3ds2cbs is a utility converting 3D studio model files into a more efficient
+proprietary file format called csp. It basically takes a 3ds file, computes
+smoothed normals for the meshes, and decomposites all the meshes into
+triangle strips.  All data from the 3ds file except for the mesh and the
+needed texture data is ignored.
+
+This utility is distributed with CBE, the Change Blindness
+Experiment/Environment developed at the Ludwig-Maximilian-University Munich.
