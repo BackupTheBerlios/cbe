@@ -3,6 +3,8 @@ CBE ChangeLog
 
 Fri Oct 19 20:39:06 GMT 2001   Andreas Bauer  <baueran@users.berlios.de>
 
+ * Added full screen mode
+
  * Chucked out all old _WIN32 definitions and code (no use for it anymore)
 
  * Fixed up command line options, switch -r works correctly now

@@ -35,6 +35,7 @@ namespace pref {
     int lineCount;
     string curLine;
     bool blending;
+    bool fscreen;
     int framerate;
     string joystick, serial;
     list<string> getPrefValues(string);
@@ -51,6 +52,8 @@ namespace pref {
     string getJoystick(void);
     void setSerial(string);
     string getSerial(void);
+    bool fullscreen(void);
+    void setFullscreen(bool);
   };
   
   // Exceptions

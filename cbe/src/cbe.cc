@@ -105,7 +105,7 @@ int main(int argc, char *argv[]) {
       cout << "  j  Turn right         2  Toggle brake lights randomly" << endl;
       cout << "  f  Toggle fog         3  Hide/unhide car randomly" << endl;
       cout << "  b  Toggle blending    e  Toggle eye-position-server communication" << endl;
-      cout << "  q  (Escape) Exit" << endl;
+      cout << "  q  (Escape) Exit      w  Use whole screen (fullscreen mode)" << endl;
       cout << endl;
       cout << "Report bugs to <cbe-development@lists.berlios.de>" << endl;
       return 0;

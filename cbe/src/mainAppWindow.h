@@ -25,6 +25,12 @@
 #ifndef __MAINAPPWINDOW_WINDOW_H__
 #define __MAINAPPWINDOW_WINDOW_H__
 
+#define WINDOW_HEIGHT 538
+#define WINDOW_WIDTH 717
+
+#define COCKPIT_HEIGHT 161
+#define COCKPIT_WIDTH 717
+
 extern "C" {
 #include <GL/gl.h>
 #include <time.h>
@@ -64,6 +70,7 @@ namespace mainApp {
     JoystickDriver *joystick;       // Joystick-Object
     SerialClient *serialclient;     // Serial-Object
     bool isSerial;                  // Flag for use of serialport
+    bool fullscreen;                // Flag to determine screen mode
     int frameCount;                 // Used to compute frames/sec
     GLfloat latenz;                 // stores frames/sec for computig correct movement-speed
     bool showFramerate;             // Used to decide wether framerate is shown or not

@@ -40,6 +40,7 @@ namespace pref {
     framerate = 60;               // Some default frame rate if none was specified
     serial = "/dev/ttyS0";        // Default serial port
     joystick = "/dev/js0";        // Default joystick device
+    fscreen = false;              // Fullscreen is off by default
     lineCount = 0;
     
     if (prefsFile) {
@@ -58,6 +59,16 @@ namespace pref {
 	    else {
 	      showErrorParameter(file, "BLENDING", *(getPrefValues(curLine)).begin());
 	      throw MalformedPrefsFile();	      
+	    }
+	  }
+	  else if (curLine.find("FULLSCREEN=", 0) == 0) {
+	    if (*(getPrefValues(curLine)).begin() == "no")
+	      setFullscreen(false);
+	    else if (*(getPrefValues(curLine)).begin() == "yes")
+	      setFullscreen(true);
+	    else {
+	      showErrorParameter(file, "FULLSCREEN", *(getPrefValues(curLine)).begin());
+	      throw MalformedPrefsFile();
 	    }
 	  }
 	  else if (curLine.find("FRAMERATE=", 0) == 0)
@@ -164,6 +175,16 @@ namespace pref {
   
   string Preferences::getSerial(void) {
     return serial;
+  }
+
+
+  bool Preferences::fullscreen(void) {
+    return fscreen;
+  }
+
+  
+  void Preferences::setFullscreen(bool screen) {
+    fscreen = screen;
   }
 
 }

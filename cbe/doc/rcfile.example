@@ -1,10 +1,5 @@
-# ---------------------------------------------------------------------
-# You can copy this file into $HOME/.cbe
-# or use the --rcfile switch on the command line.
-# ---------------------------------------------------------------------
-
 # Do we want blending enabled?
-BLENDING=yes
+BLENDING=no
 
 # Define serial port
 SERIAL=/dev/ttyS0
@@ -15,4 +10,5 @@ JOYSTICK=/dev/js0
 # Set framerate
 FRAMERATE=60
 
-# ---------------------------------------------------------------------
+# Fullscreen?
+FULLSCREEN=yes

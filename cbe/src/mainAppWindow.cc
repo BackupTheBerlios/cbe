@@ -89,8 +89,9 @@ namespace mainApp {
     latenz = 1/prefs->getFramerate();
     showFramerate=false;
 
+    fullscreen = false;
     isFog = false;
-    width  = setWidth;               
+    width = setWidth;               
     height = setHeight;
     initPositionX = setInitPositionX;
     initPositionY = setInitPositionY;
@@ -100,7 +101,7 @@ namespace mainApp {
     glutInitWindowPosition(initPositionX, initPositionY);
 
     // Set viewport to 0, cockpit height, cockpit width, driver's window height
-    glViewport(0, 161, (GLint)width, 377);
+    glViewport((GLint)0, (GLint)COCKPIT_HEIGHT, (GLint)width, (GLint)height);
 
     glutMaster->CallGlutCreateWindow(title.c_str(), this);
 
@@ -127,6 +128,13 @@ namespace mainApp {
 
     // Switch to scenery matrix
     glMatrixMode(GL_MODELVIEW);
+
+    if (!prefs->fullscreen())
+      fullscreen = false;
+    else {
+      glutFullScreen();
+      fullscreen = true;
+    }
 
     try {
       joystick = new JoystickDriver(prefs->getJoystick().c_str());           // Initialize Joystick
@@ -176,13 +184,8 @@ namespace mainApp {
 
   // Call back function for reshape state
   void mainAppWindow::CallBackReshapeFunc(int w, int h) {
-    int cockpitHeight = 377;
-
-    width  = w;                   // Full window width
-    height = h - cockpitHeight;   // Window height - cockpit height
-    
     // 0, cockpit height, cockpit width, driver's window height
-    glViewport(0, height, width, cockpitHeight); 
+    glViewport((GLint)0, (GLint)COCKPIT_HEIGHT, (GLint)w, (GLint)(h - COCKPIT_HEIGHT));
     CallBackDisplayFunc();
   }
 
@@ -297,7 +300,6 @@ namespace mainApp {
 	glEnable(GL_BLEND);
 	prefs->setBlending(true);
       }
-
       break;
     case 'U':                   // faster
     case 'u':
@@ -308,7 +310,6 @@ namespace mainApp {
 	if (speed > 0 )         // started reverse movement while braking
 	  speed = 0;            // brake only untill stopping
       }
-      
       break;
     case 'N':                   // slower
     case 'n':
@@ -316,27 +317,21 @@ namespace mainApp {
 	speed -= 0.05;
       else {                    // Braking
 	speed -= 0.2;           // brake
-	
 	if (speed < 0 )         // started reverse movement while braking
 	  speed = 0;            // brake only untill stopping
       }
-      
       break;
     case 'H':                   // left
     case 'h':
       viewingAngle--;
-
       if (viewingAngle>180)
 	viewingAngle-=360;
-
       break;
     case 'J':                   // right
     case 'j':
       viewingAngle++;
-      
       if (viewingAngle<-180)
 	viewingAngle+=360;
-
       break;
     case 'F':
     case 'f':
@@ -348,23 +343,18 @@ namespace mainApp {
 	glDisable(GL_FOG);
 	isFog = false;
       }
-      
       break;
     case 'd':
     case 'D':
       listEnd = graphicObjects.end();
-      
       for( itr = graphicObjects.begin(); itr != listEnd; ++itr )
 	(*itr)->hide();
-
       break;
     case 's':
     case 'S':
       listEnd = graphicObjects.end();
-      
       for( itr = graphicObjects.begin(); itr != listEnd; ++itr )
 	(*itr)->unhide();
-
       break;
     case 'r':
     case 'R':
@@ -372,15 +362,24 @@ namespace mainApp {
 	showFramerate=false;
       else
 	showFramerate=true;
-
       break;
-    case 'e':
+    case 'e': 
     case 'E':
       if (isSerial)
 	isSerial=false;
       else
 	isSerial=true;
-
+      break;
+    case 'w':
+    case 'W':
+      if (!fullscreen) {
+	glutFullScreen();
+	fullscreen = true;
+      }
+      else {
+	glutReshapeWindow(width, height);
+	fullscreen = false;
+      }
       break;
     case '1':
       carVector[ rndInt( carVector.size() ) ]->changeColor( Car::change_nextColor );
@@ -426,6 +425,7 @@ namespace mainApp {
     // Append the passed graphic object pointer to the list
     graphicObjects.push_back( obj );
   }
+
 
   void mainAppWindow::addCar( Car* c ) {
     carVector.push_back( c );
