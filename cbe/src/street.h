@@ -26,7 +26,7 @@
 class Street: public GObject
 {
  private:
-  Point points[1010];
+  Point points[5050];
   long length;
   GLfloat step;
  public:

@@ -29,7 +29,7 @@ extern "C" {
 #include "street.h"
 
 Street::Street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad) {
-  length=1000L;
+  length=2500L;
   step=0.2;
   startx=x;
   starty=y;
@@ -85,7 +85,7 @@ void Street::writeList() {
   glBegin(GL_QUAD_STRIP);
   glColor3f(.3,.3,.3);
   long i;
-  for (i=1;i<999;i++) {
+  for (i=1;i<2449;i++) {
     GLfloat vx,vz,nx,nz;
     //claculate normal of street
     vx=points[i+1].x-points[i].x;
@@ -103,7 +103,7 @@ void Street::writeList() {
   glEnd();
   
   // Draw the poles
-  for (i=1;i<999;i+=20) {
+  for (i=1;i<2449;i+=20) {
     GLfloat vx,vz,nx,nz;
     
     // Calculate the normal to the street
@@ -118,7 +118,7 @@ void Street::writeList() {
   
   // Draw Middlelines
   glColor3f(.9,.9,.9);
-  for (i=1;i<999;i+=10){
+  for (i=1;i<2449;i+=10){
     glBegin(GL_POLYGON);
     glVertex3f(points[i].x,
 	       points[i].y+.01,

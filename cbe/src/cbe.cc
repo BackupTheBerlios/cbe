@@ -78,8 +78,8 @@ int main(int argc, char *argv[]) {
   };
   
   // Set the size of the plane
-  Point x(-60.0, -0.01, -60.0);
-  Point y(160.0, -0.01, 60.0);
+  Point x(-500.0, -0.01, -60.0);
+  Point y(0.0, -0.01, 60.0);
   
   // Scan command line parameters and options
   while ( (c = getopt_long(argc, argv, "hr:V", long_options, &option_index)) != -1 ) {
@@ -152,7 +152,7 @@ int main(int argc, char *argv[]) {
 					       (string)PACKAGE + (string)" " + (string)VERSION);   // title
 
     // Create street, plane and car
-    street = new Street( -50, 0, 0, 4 );
+    street = new Street( -490, 0, 0, 4 );
     plane = new Plane( x, y );
     car1 = new TestCar( 0, 30 );
     car1->setPos( -20, 2, 10 );
