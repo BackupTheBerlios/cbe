@@ -46,7 +46,8 @@ public:
 
 	void				draw();
 
-
+	void				get_bsphere(
+							bsphere_t&				sphere );
 
 protected:
 

@@ -80,6 +80,11 @@ inline u16 cond_swap_endian16( u16 x )
 
 #define throw_linotte_error(x) throw std::runtime_error( x )
 
+struct bsphere_t {
+	GLfloat				radius;
+	void				add( const GLfloat* p );
+};
+
 END_LINOTTE_NAMESPACE
 
 #endif // LINOTTE_HH

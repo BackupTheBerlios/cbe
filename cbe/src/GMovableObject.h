@@ -42,6 +42,7 @@ class GMovableObject : public GObject {
   // Set new object position
   void setPos( Point p );
   void setPos( GLfloat x, GLfloat y, GLfloat z );
+  void getPos( Point& p );
   // Set object rotation angle around the vertical axis
   void setAngle( GLfloat r );
   // Rotate object around the vertical axis relatively to the current angle

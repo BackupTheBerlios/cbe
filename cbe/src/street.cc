@@ -49,6 +49,8 @@ street::street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad) {
   string path = (string)DATADIR + "/pixmaps/cbe/tree.tif";
   mTreeMaterial = new linotte::texture_material_t( "tree", path.c_str() );
 
+  mMiddlelineToggle = true;
+
   int err = glGetError();
   cout << "gl error: " << err << endl;
 
@@ -59,6 +61,8 @@ street::street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad) {
   glEnable(GL_BLEND);*/
 
   makeTreeList();
+  
+  makeMiddlelineLists();
 }
 
 
@@ -95,48 +99,11 @@ void street::getstreetLocation( double alpha, GLfloat* location )
 	v0 = points[ intindex ].z;
 	v1 = points[ intindex + 1 ].z;
 	location[ 2 ] = v0 + ( v1 - v0 ) * delta;
-	
-	//printf( "%f %f %f\n", location[ 0 ], location[ 1 ], location[ 2 ] );
 }
 
-void street::writeList() {
-  /*points[0].x=startx;
-  points[0].y=starty;
-  points[0].z=startz;
+const GLfloat dy0 = 0.05;
 
-  points[1].x=startx+step;
-  points[1].y=starty;
-  points[1].z=startz;
-  int a;
-
-  for (long n=2;n<length;n+=50) {
-    int r;
-    r=rand()%100;
-    a=0;
-    if (r<80)
-      for (long i=n;i<n+50;i++) {
-	points[i].x=points[i-1].x+step;
-	points[i].z=points[i-1].z;
-	points[i].y=starty;
-      }
-    
-    if (r>=80 && r<90)
-      for (int i=n;i<n+50;i++) {
-	points[i].x=points[i-1].x+step;
-	points[i].z=points[i-1].z+step*sin((double)a/17);
-	points[i].y=starty;
-	a++;
-      }
-    
-    if (r>=90)
-      for (int i=n;i<n+50;i++) {
-	points[i].x=points[i-1].x+step;
-	points[i].z=points[i-1].z-step*sin((double)a/17);
-	points[i].y=starty;
-	a++;
-      }
-  }*/
-  
+void street::writeList() {  
   float xradius = 1000;
   float yradius = 200;
   const int pointcount = length;
@@ -149,7 +116,6 @@ void street::writeList() {
       points[ i ].y = starty;
   }
 
-  GLfloat dy0 = 0.05;
   // introduced this parameter to elevate the
   // street over the landscape due to Z buffer
   // precision problems on my ATI rage (BL101901)
@@ -194,10 +160,15 @@ void street::writeList() {
     createPoles(0.6,points[i].x+nx,points[i].y,points[i].z+nz);
     createPoles(0.6,points[i].x-nx,points[i].y,points[i].z-nz);
   }
+}
+
+void street::makeMiddlelineHalf()
+{
+  const GLfloat dy1 = dy0 + 0.01;
 
   // Draw Middlelines
   glColor3f(.9,.9,.9);
-  for (i=1;i<2449;i+=10){
+  for (int i=1;i<2449;i+=10){
 
     GLfloat vx,vz,nx,nz;
     
@@ -212,20 +183,69 @@ void street::writeList() {
 
     glBegin(GL_POLYGON);
     glVertex3f(points[i].x+nx,
-	       points[i].y+dy0+.01,
+	       points[i].y+dy1+.01,
 	       points[i].z+nz);
     glVertex3f(points[i].x-nx,
-	       points[i].y+dy0+.01,
+	       points[i].y+dy1+.01,
 	       points[i].z-nz);
     glVertex3f(points[i+6].x-nx,
-	       points[i+6].y+dy0+.01,
+	       points[i+6].y+dy1+.01,
 	       points[i+6].z-nz);
     glVertex3f(points[i+6].x+nx,
-	       points[i+6].y+dy0+.01,
+	       points[i+6].y+dy1+.01,
 	       points[i+6].z+nz);
     glEnd();
   } 
-  
+}
+
+void street::makeMiddlelineThrough()
+{
+  int step = 10;
+  const GLfloat dy1 = dy0 + 0.05;
+
+  // Draw Middlelines
+  glColor3f(.9,.9,.9);
+  for (int i=1;i<2449;i+=step){
+
+    GLfloat vx,vz,nx,nz;
+    
+    // Calculate the normal to the street
+    vx=points[i+1].x-points[i].x;
+    vz=points[i+1].z-points[i].z;
+    nx=-vz/sqrt(vx*vx+vz*vz);
+    nz=vx/sqrt(vx*vx+vz*vz);
+
+	nx *= broadness/50;
+	nz *= broadness/50;
+
+    glBegin(GL_POLYGON);
+    glVertex3f(points[i].x+nx,
+	       points[i].y+dy1+.01,
+	       points[i].z+nz);
+    glVertex3f(points[i].x-nx,
+	       points[i].y+dy1+.01,
+	       points[i].z-nz);
+    glVertex3f(points[i+step].x-nx,
+	       points[i+step].y+dy1+.01,
+	       points[i+step].z-nz);
+    glVertex3f(points[i+step].x+nx,
+	       points[i+step].y+dy1+.01,
+	       points[i+step].z+nz);
+    glEnd();
+  } 
+}
+
+void street::makeMiddlelineLists()
+{
+  mMiddlelineHalf = glGenLists( 1 );
+  glNewList( mMiddlelineHalf, GL_COMPILE );
+  makeMiddlelineHalf();
+  glEndList();  
+
+  mMiddlelineThrough = glGenLists( 1 );
+  glNewList( mMiddlelineThrough, GL_COMPILE );
+  makeMiddlelineThrough();
+  glEndList();  
 }
 
 void street::makeTreeList()
@@ -275,6 +295,11 @@ void street::draw()
   glDisable( GL_TEXTURE_2D );
 
   GListObject::draw();
+
+  if( mMiddlelineToggle )
+	glCallList( mMiddlelineHalf );
+  else
+	glCallList( mMiddlelineThrough );
 }
 
 // getPointOfstreet takes the parameter 0<=t<=1 and returns the equivalent
@@ -346,4 +371,9 @@ glVertex3f( x, y, z );
   glTexCoord2f( 0, 1 );  
   glVertex3f( x, y + height, z );
   glEnd();
+}
+
+void street::toggleMiddleline()
+{
+  mMiddlelineToggle = not mMiddlelineToggle;
 }

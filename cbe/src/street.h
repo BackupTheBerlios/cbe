@@ -32,8 +32,14 @@ class street: public GListObject
   GLfloat step;
   linotte::texture_material_t* mTreeMaterial;
   GLuint mTreeList;
+  GLuint mMiddlelineHalf;
+  GLuint mMiddlelineThrough;
+  bool mMiddlelineToggle;
  
   void makeTreeList();
+  void makeMiddlelineLists();
+  void makeMiddlelineHalf();
+  void makeMiddlelineThrough();
 public:
   GLfloat startx, starty, startz;
   GLfloat broadness;
@@ -45,6 +51,7 @@ public:
   void createPoles(GLfloat size, GLfloat x, GLfloat y, GLfloat z);
   void createTree(GLfloat, GLfloat, GLfloat, GLfloat);
   void getstreetLocation( double alpha, GLfloat* location );
+  void toggleMiddleline();
   
   street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad);
   ~street();

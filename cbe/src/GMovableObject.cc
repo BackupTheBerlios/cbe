@@ -52,6 +52,10 @@ void GMovableObject::setPos( GLfloat x, GLfloat y, GLfloat z ) {
   position.set( x, y, z );
 }
 
+void GMovableObject::getPos( Point& p ) {
+  p = position;
+}
+
 void GMovableObject::setAngle( GLfloat r ) {
   angle = r;
 }

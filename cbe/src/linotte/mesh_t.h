@@ -20,8 +20,6 @@
 
 BEGIN_LINOTTE_NAMESPACE
 
-
-
 struct tristrip_t {
 
 	GLushort*			indices;
@@ -59,6 +57,10 @@ public:
 
 
 	void				draw();
+	
+	
+	void				get_bsphere(
+							bsphere_t&				sphere );
 
 
 
@@ -75,6 +77,8 @@ protected:
 	tristrip_t*			m_strips;
 
 	u32					m_strip_count;
+	
+	u32					m_vertex_count;
 
 };
 

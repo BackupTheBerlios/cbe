@@ -34,11 +34,15 @@ class GLinotteObject : public GMovableObject {
   void add_material( linotte::material_t* material );
   linotte::material_t* get_material( const char* name );
 
+  linotte::bsphere_t m_bsphere;
+
  public:
   GLinotteObject();
   virtual ~GLinotteObject();
   
   virtual void submit();
+  
+  float radius() const;
 };
 
 #endif // __GLINOTTEOBJECT_H

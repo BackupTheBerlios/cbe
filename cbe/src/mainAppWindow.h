@@ -96,6 +96,7 @@ namespace mainApp {
     void setPlane(GObject*);         // ???
     void addGraphicObject(GObject*); // ???
     void addCar(Car*);               // ???
+    Car* pickCar();
   };
   
   // Exceptions

@@ -251,6 +251,13 @@ model_t::clear()
 
 }
 
+void
+model_t::get_bsphere(
+	bsphere_t&				sphere )
+{
+	for( long i = 0; i < m_mesh_count; i++ )
+		m_meshes[ i ]->get_bsphere( sphere );
+}
 
 
 END_LINOTTE_NAMESPACE

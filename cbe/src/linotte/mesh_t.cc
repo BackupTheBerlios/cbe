@@ -18,6 +18,32 @@ BEGIN_LINOTTE_NAMESPACE
 
 
 
+void
+
+bsphere_t::add( const GLfloat* p )
+
+{
+
+	GLfloat x = p[ 0 ];
+
+	GLfloat y = p[ 1 ];
+
+	GLfloat z = p[ 2 ];
+
+
+
+	GLfloat r = sqrt( x * x + y * y + z * z );
+
+
+
+	if( r > radius )
+
+		radius = r;
+
+}
+
+
+
 static void
 
 read_vertices(
@@ -158,7 +184,7 @@ mesh_t::mesh_t(
 
 		read_vertices( stream, m_vertices, elem_count );
 
-		
+						
 
 		u32					strip_count;
 
@@ -181,6 +207,10 @@ mesh_t::mesh_t(
 		for( long i = 0; i < (long)strip_count; i++ )
 
 			read_tri_strip( stream, &m_strips[ i ] );
+
+			
+
+		m_vertex_count = vertex_count;
 
 	}
 
@@ -283,6 +313,22 @@ mesh_t::clear()
 	std::free( m_strips );
 
 	m_strips = 0;
+
+}
+
+
+
+void
+
+mesh_t::get_bsphere(
+
+	bsphere_t&				sphere )
+
+{
+
+	for( long i = 0; i < m_vertex_count; i += 2 + 3 + 3 )
+
+		sphere.add( &m_vertices[ i + 2 + 3 ] );
 
 }
 

@@ -49,6 +49,9 @@ void GLinotteObject::load( const char* path )
 	linotte::file_input_stream_t stream( path );
 	
 	m_model = new linotte::model_t( stream, m_matmgr );
+	
+	m_bsphere.radius = 0;
+	m_model->get_bsphere( m_bsphere );
 }
 
 void GLinotteObject::add_material( linotte::material_t* material )
@@ -59,4 +62,9 @@ void GLinotteObject::add_material( linotte::material_t* material )
 linotte::material_t* GLinotteObject::get_material( const char* name )
 {
 	return m_matmgr->material_by_name( name );
+}
+
+float GLinotteObject::radius() const
+{
+	return m_bsphere.radius;
 }
