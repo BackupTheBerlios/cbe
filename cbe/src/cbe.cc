@@ -62,7 +62,8 @@ int main(int argc, char *argv[]) {
   cout <<         "  j          Turn right" << endl;
   cout <<         "  d          Hide moving objects" << endl;
   cout <<         "  s          Show moving objects" << endl;
-  cout <<         "  f          Toggles fog (currently pretty useless)" << endl;
+  cout <<         "  f          Toggle fog (currently pretty useless)" << endl;
+  cout <<         "  b          Toggle blending (blend function needs fixing!!)" << endl;
   cout <<         "  q / ESC    Exits program" << endl << endl;
   
   try {
@@ -70,24 +71,25 @@ int main(int argc, char *argv[]) {
 
 #ifndef _WIN32
     driversWindow = new mainApp::mainAppWindow(glutMaster,
-					       500, 500,                                           // height, width
-					       200, 100,                                           // initPosition (x,y)
+					       WINDOW_WIDTH, WINDOW_HEIGHT,                        // height, width
+					       10, 10,                                             // initPosition (x,y)
 					       (string)PACKAGE + (string)" " + (string)VERSION);   // title
 #else
     driversWindow = new mainApp::mainAppWindow(glutMaster,
-					       500, 500,            // height, width
-					       200, 400,            // initPosition (x,y)
-					       "Driver's Window" ); // title
+					       WINDOW_WITH, WINDOW_HEIGHT,       // height, width
+					       10, 10,                           // initPosition (x,y)
+					       "Driver's Window" );              // title
 #endif
     
-    // Create street and plane
+    // Create street, plane and car
     street = new Street(-50, 0, 0, 4);
     plane = new Plane(x, y);
-	car1 = new TestCar( 0, 30 );
-	car1->setPos( -20, 2, 10 );
-	car2 = new TestCar( -1, 0 );
-	car2->setPos( -3, 0, -5 );
-	car2->rotate( -90 );
+    car1 = new TestCar( -1, 0 );
+    car1->setPos( -20, 2, 10 );
+    car1->rotate( -90 );
+    car2 = new TestCar( -1, 0 );
+    car2->setPos( -3, 0, -5 );
+    car2->rotate( -90 );
   }
   catch (...) {
     cout << "Exception was thrown on program initialization. Not enough memory?!" << endl;
@@ -107,10 +109,10 @@ int main(int argc, char *argv[]) {
     glutMaster->CallGlutMainLoop();
   }
   catch (mainApp::ExitKeyPressed) {
-    cout << "Exit key was pressed. CBE now cleans up and waves good-bye." << endl;
+    cout << "Exit key was pressed. CBE now cleans up and waves good-bye." << endl;  // Can this ever happen?
   }
   catch (...) {
-    cout << "Exception was thrown during the event loop. CBE aborted." << endl;
+    cout << "Exception was thrown during the event loop. CBE aborted." << endl;     // Can this ever happen? Suppose not, mainLoop just crashes instead..
     return -1;
   }
 

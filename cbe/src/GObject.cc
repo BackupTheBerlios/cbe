@@ -1,11 +1,6 @@
 // GObject.cc - source file for the CBE project
-//
-// Original code by George Stetten and Korin Crawford
-// Copyright given to the public domain
-// Please email comments to stetten@acpub.duke.edu
-//
-// Modifications are copyright (c) 2001  Ludwig-Maximilian-Universitaet Muenchen
-//                                       http://www.uni-muenchen.de/
+// Copyright (c) 2001  Ludwig-Maximilian-Universitaet Muenchen
+//                     http://www.uni-muenchen.de/
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by

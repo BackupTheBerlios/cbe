@@ -32,6 +32,7 @@ extern "C" {
 #include <GL/glut.h>
 #include <time.h>
 }
+#include "cbe.hh"
 #include "mainAppWindow.h"
 #include "glutMaster.h"
 #include "glutWindow.h"
@@ -45,12 +46,14 @@ using namespace std;
 namespace mainApp {
 
   mainAppWindow::mainAppWindow(GlutMaster* glutMaster, int setWidth, int setHeight, int setInitPositionX, int setInitPositionY, string title) {
-    static Bitmap cockpitIMG( (string)DATADIR + "/pixmaps/cbe/cockpit.bmp" );
-
+    // Where is the cockpit?
+    cockpitIMG.setPath( (string)DATADIR + "/pixmaps/cbe/cockpit.bmp" );  // Size: 717 x 538 pixels
+    
+    // Load the cockpit
     if (cockpitIMG.load())
-      cout << "Img loaded." << endl;
+      cout << "Cockpit image loaded." << endl;
     else
-      cout << "Img not loaded. Error." << endl;
+      cout << "ERROR: Cockpit image not loaded. Did you forget 'make install'?" << endl;
 
     // Set default viewing and movement vectors
     movementVector = new Point(1,0,0);
@@ -62,8 +65,9 @@ namespace mainApp {
     // Set current clock-value to oldTime
     oldTime=clock();
 
-    // Disable fog by default
+    // Set some defaults
     isFog = false;
+    blend = 1;
 
     width  = setWidth;               
     height = setHeight;
@@ -73,12 +77,14 @@ namespace mainApp {
     glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
     glutInitWindowSize(width, height);
     glutInitWindowPosition(initPositionX, initPositionY);
-    glViewport(0, 0,(GLint) width,(GLint) height); 
-  
+
+    // Set viewport to 0, cockpit height, cockpit width, driver's window height
+    glViewport(0, 161, (GLint)width, 377);
+
     glutMaster->CallGlutCreateWindow(title.c_str(), this);
   
     glEnable(GL_DEPTH_TEST);  
-	
+    
     // Switch to camera matrix
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -114,22 +120,32 @@ namespace mainApp {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     plane->draw();
     street->draw();
-	// Draw all graphic objects in the list
-	for( GObjectList::iterator itr = graphicObjectsList.begin();
-		 itr != graphicObjectsList.end(); itr++ ) {
-		(*itr)->draw();
-	}
+    
+    // Draw all graphic objects in the list
+    for( GObjectList::iterator itr = graphicObjectsList.begin(); itr != graphicObjectsList.end(); itr++ )
+      (*itr)->draw();
+    
+    // Draw cockpit
+    glDrawPixels(717, 538, GL_RGB, GL_UNSIGNED_BYTE, cockpitIMG.getData());
 
+    // Finally draw everything on the screen that we just created and constructed
     glutSwapBuffers();
+
+    // Blend cockpit
+    glBlendColor(1.0f, 1.0f, 1.0f, 0.0);
+    glBlendFunc(GL_ZERO, GL_SRC_COLOR);
   }
 
 
   // Call back function for reshape state
   void mainAppWindow::CallBackReshapeFunc(int w, int h) {
-    width = w;
-    height= h;
+    int cockpitHeight = 377;
 
-    glViewport(0,0,width,height); 
+    width  = w;                   // Full window width
+    height = h - cockpitHeight;   // Window height - cockpit height
+
+    // 0, cockpit height, cockpit width, driver's window height
+    glViewport(0, height, width, cockpitHeight); 
     CallBackDisplayFunc();
   }
 
@@ -161,78 +177,89 @@ namespace mainApp {
 
   // Call back function for keyboard events
   void mainAppWindow::CallBackKeyboardFunc(unsigned char key, int x, int y) {
-	GObjectList::iterator itr;
-	// Determine key
-	switch (key) {
+    GObjectList::iterator itr;
+    // Determine key
+    switch (key) {
     case 'Q':
     case 'q':
     case 27:
       exit(0);
       // throw ExitKeyPressed();
       break;
+    case 'B':
+    case 'b':
+      blend = blend ? 0 : 1;
+      if (blend) {
+	glDisable(GL_BLEND);
+      }
+      else {
+	glEnable(GL_BLEND);
+      }
+      break;
     case 'U':  // faster
     case 'u':
-	  if ( speed >= 0 )  // Acceleration in forward movement
-		speed += 0.05;
-	  else { // Braking
-	    speed += 0.2; // brake
-		if (speed > 0 ) // started reverse movement while braking
-		  speed = 0; // brake only untill stopping
-	  }
+      if ( speed >= 0 )  // Acceleration in forward movement
+	speed += 0.05;
+      else { // Braking
+	speed += 0.2; // brake
+	if (speed > 0 ) // started reverse movement while braking
+	  speed = 0; // brake only untill stopping
+      }
       break;
     case 'N': // slower
     case 'n':
-	  if ( speed <= 0 )  // Acceleration in backward movement
-		speed -= 0.05;
-	  else { // Braking
-	    speed -= 0.2; // brake
-		if (speed < 0 ) // started reverse movement while braking
-		  speed = 0; // brake only untill stopping
-	  }
+      if ( speed <= 0 )  // Acceleration in backward movement
+	speed -= 0.05;
+      else { // Braking
+	speed -= 0.2; // brake
+	
+	if (speed < 0 ) // started reverse movement while braking
+	  speed = 0; // brake only untill stopping
+      }
       break;
     case 'H': // left
     case 'h':
       viewingAngle--;
+
       if (viewingAngle>180)
-		viewingAngle-=360;
-	  movementVector->x=cos(viewingAngle*M_PI/180);
-	  movementVector->z=sin(viewingAngle*M_PI/180);
-	  break;
+	viewingAngle-=360;
+
+      movementVector->x=cos(viewingAngle*M_PI/180);
+      movementVector->z=sin(viewingAngle*M_PI/180);
+      break;
     case 'J': // right
     case 'j':
       viewingAngle++;
+
       if (viewingAngle<-180)
-		viewingAngle+=360;
+	viewingAngle+=360;
+
       movementVector->x=cos(viewingAngle*M_PI/180);
       movementVector->z=sin(viewingAngle*M_PI/180);
       break;
     case 'F':
     case 'f':
       if (!isFog) {
-		glEnable(GL_FOG);
-		cout << "Fog enabled." << endl;
-		isFog = true;
+	glEnable(GL_FOG);
+	cout << "Fog enabled." << endl;
+	isFog = true;
       }
       else {
-		glDisable(GL_FOG);
-		cout << "Fog disabled." << endl;
-		isFog = false;
+	glDisable(GL_FOG);
+	cout << "Fog disabled." << endl;
+	isFog = false;
       }
       break;
 	case 'd':
-	case 'D':
-		for( itr = graphicObjectsList.begin();
-			 itr != graphicObjectsList.end(); itr++ ) {
-			(*itr)->hide();
-		}
-		break;
-	case 's':
-	case 'S':
-		for( itr = graphicObjectsList.begin();
-			 itr != graphicObjectsList.end(); itr++ ) {
-			(*itr)->unhide();
-		}
-		break;
+    case 'D':
+      for( itr = graphicObjectsList.begin(); itr != graphicObjectsList.end(); itr++ )
+	(*itr)->hide();
+      break;
+    case 's':
+    case 'S':
+      for( itr = graphicObjectsList.begin(); itr != graphicObjectsList.end(); itr++ )
+	(*itr)->unhide();
+      break;
     default:
       cout << "A normal key was pressed. Hurra!" << endl;
       break;

@@ -27,7 +27,8 @@ extern "C" {
 }
 #include "config.h"
 #ifdef _WIN32
-  using namespace std;
+#include <iostream>
+using namespace std;
 #endif
 
 class Bitmap {
@@ -36,7 +37,7 @@ class Bitmap {
   char* data;           // The image itself
   unsigned long sizeX;  // Image size
   unsigned long sizeY;  // Image size
-
+  
   unsigned int getint(FILE*);
   unsigned int getshort(FILE*);
 
@@ -46,6 +47,7 @@ class Bitmap {
   ~Bitmap();
   bool load(void);
   void setPath(string);
+  char* getData(void);
 };
 
 #endif

@@ -1,10 +1,6 @@
 // GMovableObject.h - source file for the CBE project
-//
-// Copyright given to the public domain
-// Please email comments to stetten@acpub.duke.edu
-//
-// Modifications are copyright (c) 2001  Ludwig-Maximilian-Universitaet Muenchen
-//                                       http://www.uni-muenchen.de/
+// Copyright (c) 2001  Ludwig-Maximilian-Universitaet Muenchen
+//                     http://www.uni-muenchen.de/
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -25,33 +21,33 @@
 #define __G_MOVABLE_OBJECT_H
 
 #ifdef _WIN32
-  #include <GL/glaux.h>
+#include <GL/glaux.h>
 #endif
-
 #include <GL/gl.h>
 #include "Point.h"
 #include "GObject.h"
 #include "time.h"
 
 class GMovableObject : public GObject {
-private:
-	Point position;
-	GLfloat angle;
-public:
-	GMovableObject();
-	~GMovableObject();
-	// Move relatively to the given coordinates
-	void move( Point p ); 
-	void move( GLfloat x, GLfloat y, GLfloat z );
-	// Set new object position
-	void setPos( Point p );
-	void setPos( GLfloat x, GLfloat y, GLfloat z );
-	// Set object rotation angle around the vertical axis
-	void setAngle( GLfloat r );
-	// Rotate object around the vertical axis relatively to the current angle
-	void rotate( GLfloat r );
-	// The draw() procedure must be adjusted for object movements
-	void draw();
+ private:
+  Point position;
+  GLfloat angle;
+ 
+ public:
+  GMovableObject();
+  ~GMovableObject();
+  // Move relatively to the given coordinates
+  void move( Point p ); 
+  void move( GLfloat x, GLfloat y, GLfloat z );
+  // Set new object position
+  void setPos( Point p );
+  void setPos( GLfloat x, GLfloat y, GLfloat z );
+  // Set object rotation angle around the vertical axis
+  void setAngle( GLfloat r );
+  // Rotate object around the vertical axis relatively to the current angle
+  void rotate( GLfloat r );
+  // The draw() procedure must be adjusted for object movements
+  void draw();
 };
 
 #endif

@@ -1,5 +1,16 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
+
+Tue Jun  5 19:48:53 CEST 2001   Andreas Bauer
+
+ * Cleaned up sources, Makefile, etc.
+
+ * Cockpit gets displayed now, even though only in b/w
+
+ * Fixed up minor glitches in header files (comments, etc.)
+
+ * Implemented blending (though the Blend function is still broken!!)
+ 
 Sam Jun 02 16:40:00 CEST 2001   David Trachtenherz
 
  * Base class GMovableObject for movable objects created.

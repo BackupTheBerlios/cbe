@@ -30,57 +30,59 @@ extern "C" {
 #include <time.h>
 }
 #include <string>
+#include <list>
 #ifdef _WIN32
-  using namespace std;
+using namespace std;
 #endif
 #include "glutMaster.h"
 #include "GObject.h"
 #include "Point.h"
-#include <list>
+#include "Bitmap.h"
 
 namespace mainApp {
-	typedef list<GObject*> GObjectList;
+  typedef list<GObject*> GObjectList;
+  
+  class mainAppWindow : public GlutWindow{
+  private:
+    GObject *plane;                 // holds the plane
+    GObject *street;                // holds the street
+    GObjectList graphicObjectsList; // Objects to be drawn
+    GLfloat speed;                  // Speed of movement
+    bool isFog;                     // Flag for fog
+    int blend;                      // Flag for blending
+    Point *movementVector;          // Movement direction
+    GLfloat viewingAngle;           // Indicates the angle of view in the x-z-plane
+    clock_t oldTime;                // Used to determine the Frames/s (also for constant movement speed)
+    double getTimePassed();         // Reports seconds since last call
+    Bitmap cockpitIMG;              // Cockpit image
 
-    class mainAppWindow : public GlutWindow{
-    private:
-      GObject *plane;         // holds the plane
-      GObject *street;        // holds the street
-	  GObjectList graphicObjectsList; // Objects to be drawn
-      GLfloat speed;          // Speed of movement
-      bool isFog;             // Flag for fog
-      Point *movementVector;  // Movement direction
-      GLfloat viewingAngle;   // Indicates the angle of view in the x-z-plane
-      clock_t oldTime;        // Used to determine the Frames/s (also for constant movement speed)
-      
-      double getTimePassed();       // Reports seconds since last call
-      
-    public:
-      int height, width;
-      int initPositionX, initPositionY;
-      
-      mainAppWindow(GlutMaster* glutMaster,
-		    int setWidth, int setHeight,
-		    int setInitPositionX, int setInitPositionY,
-		    string title);
-      ~mainAppWindow();
-      
-      // Some call back functions
-      void CallBackDisplayFunc(void);
-      void CallBackReshapeFunc(int, int);   
-      void CallBackIdleFunc(void);
-      void CallBackKeyboardFunc(unsigned char, int, int);
-      void CallBackSpecialKeyboardFunc(unsigned char, int, int);
-      
-      // Window functionality functions
-      void StartSpinning(GlutMaster*);                // ???
-      void setStreet(GObject*);        // used to alter the polygonList
-      void setPlane(GObject*);         // ???
-	  void addGraphicObject( GObject* obj);
-    };
+  public:
+    int height, width;
+    int initPositionX, initPositionY;
     
-    // Exceptions
-    class ExitKeyPressed { };
+    mainAppWindow(GlutMaster* glutMaster,
+		  int setWidth, int setHeight,
+		  int setInitPositionX, int setInitPositionY,
+		  string title);
+    ~mainAppWindow();
     
+    // Some call back functions
+    void CallBackDisplayFunc(void);
+    void CallBackReshapeFunc(int, int);   
+    void CallBackIdleFunc(void);
+    void CallBackKeyboardFunc(unsigned char, int, int);
+    void CallBackSpecialKeyboardFunc(unsigned char, int, int);
+    
+    // Window functionality functions
+    void StartSpinning(GlutMaster*); // ???
+    void setStreet(GObject*);        // used to alter the polygonList
+    void setPlane(GObject*);         // ???
+    void addGraphicObject( GObject* obj);
+  };
+  
+  // Exceptions
+  class ExitKeyPressed { };
+  
 }
 
 #endif

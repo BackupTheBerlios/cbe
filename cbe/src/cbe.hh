@@ -20,6 +20,10 @@
 #ifndef CBE_HH
 #define CBE_HH
 
+// Window size
+#define WINDOW_WIDTH 717
+#define WINDOW_HEIGHT 538
+
 #include "config.h"
 
 #endif

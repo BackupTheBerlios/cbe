@@ -118,6 +118,11 @@ void Bitmap::setPath(string newPath) {
 }
 
 
+char* Bitmap::getData(void) {
+  return data;
+}
+
+
 // getint and getshort arehelp functions to load the bitmap byte by byte on 
 // SPARC platform.
 // I've got them from xv bitmap load routinebecause the original bmp loader didn't work

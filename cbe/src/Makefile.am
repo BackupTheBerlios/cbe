@@ -30,6 +30,5 @@ cbe_SOURCES = 	cbe.cc glutMaster.cc glutWindow.cc mainAppWindow.cc \
 		GObject.cc Bitmap.cc \
 		cbe.hh glutMaster.h  glutWindow.h  mainAppWindow.h \
 		GObject.h  Bitmap.h \
-		street.cc plane.cc Point.cc \
-		street.h  plane.h  Point.h \
-		Car.cc  Car.h  GMovableObject.cc  GMovableObject.h
+		street.cc plane.cc Point.cc Car.cc GMovableObject.cc \
+		street.h  plane.h  Point.h  Car.h  GMovableObject.h

@@ -1,11 +1,6 @@
 // GMovableObject.cc - source file for the CBE project
-//
-// Original code by George Stetten and Korin Crawford
-// Copyright given to the public domain
-// Please email comments to stetten@acpub.duke.edu
-//
-// Modifications are copyright (c) 2001  Ludwig-Maximilian-Universitaet Muenchen
-//                                       http://www.uni-muenchen.de/
+// Copyright (c) 2001  Ludwig-Maximilian-Universitaet Muenchen
+//                     http://www.uni-muenchen.de/
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -26,45 +21,45 @@
 
 
 GMovableObject::GMovableObject() {
-	move( 0, 0, 0 );
-	angle = 0;
+  move( 0, 0, 0 );
+  angle = 0;
 }
 
 GMovableObject::~GMovableObject() {}
 
 void GMovableObject::move( Point p ) {
-	position.move( p );
+  position.move( p );
 }
 
 void GMovableObject::move( GLfloat x, GLfloat y, GLfloat z ) {
-	position.move( x, y, z );
+  position.move( x, y, z );
 }
 
 void GMovableObject::setPos( Point p ) {
-	position.set( p );
+  position.set( p );
 }
 
 void GMovableObject::setPos( GLfloat x, GLfloat y, GLfloat z ) {
-	position.set( x, y, z );
+  position.set( x, y, z );
 }
 
 void GMovableObject::setAngle( GLfloat r ) {
-	angle = r;
+  angle = r;
 }
 
 void GMovableObject::rotate( GLfloat r ) {
-	angle += r;
+  angle += r;
 }
 
 void GMovableObject::draw() {
-	if ( !isHidden() ) {
-		glPushMatrix();
-			// Move the object to its position
-			glTranslatef( position.x, position.y, position.z );
-			// Rotate the object by the object angle around the vertical axis
-			glRotatef( angle, 0, 1, 0 );
-			// Draw the object
-			glCallList( getList() );
-		glPopMatrix();
-	}
+  if ( !isHidden() ) {
+    glPushMatrix();
+    // Move the object to its position
+    glTranslatef( position.x, position.y, position.z );
+    // Rotate the object by the object angle around the vertical axis
+    glRotatef( angle, 0, 1, 0 );
+    // Draw the object
+    glCallList( getList() );
+    glPopMatrix();
+  }
 }
