@@ -9,6 +9,7 @@
 #include "texture_material_t.h"
 
 #include "Bitmap.h"
+#include <GL/glu.h>
 
 
 
@@ -98,11 +99,16 @@ texture_material_t::texture_material_t(
 		//glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 
 
-		glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, bmp.getWidth(),
+		/*glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, bmp.getWidth(),
 
 			bmp.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE,
 
-			bmp.getData() );
+			bmp.getData() );*/
+			
+		gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA,
+			bmp.getWidth(), bmp.getHeight(), GL_RGBA,
+			GL_UNSIGNED_BYTE, bmp.getData() );
+
 
 	}
 
