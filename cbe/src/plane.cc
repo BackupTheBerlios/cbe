@@ -19,14 +19,11 @@
 
 extern "C" {
 
-#ifndef _WIN32
-#include <GL/gl.h>    // OpenGL
-#endif
-
 #ifdef _WIN32
-#include <GL/glaux.h>
+  #include <GL/glaux.h>
 #endif
 
+#include <GL/gl.h>    // OpenGL
 #include <GL/glut.h>  // GLUT
 }
 

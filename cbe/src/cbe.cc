@@ -19,7 +19,7 @@
 
 extern "C" {
 #ifdef _WIN32
-#include <GL/glaux.h>
+  #include <GL/glaux.h>
 #endif
 #include <GL/gl.h>    // OpenGL
 #include <GL/glut.h>  // GLUT
@@ -55,7 +55,12 @@ int main(int argc, char *argv[]) {
     secondWindow = new mainAppWindow(glutMaster,
 				     500, 500,         // height, width
 				     200, 400,         // initPosition (x,y)
-				     (string)PACKAGE + (string)" " + (string)VERSION);   // title
+#ifndef _WIN32
+					 (string)PACKAGE + (string)" " + (string)VERSION);   // title
+#else // Für Win32
+// In the Windows version PACKAGE is not defined.
+					 "Second window" ); // title
+#endif
     cout << "created mainAppWindow secondWindow in cbe.cc" << endl;
     s=new Street(-50,0,0,2);
   }

@@ -26,6 +26,9 @@
 #define __DEMO_WINDOW_H__
 
 #include <string>
+#ifdef _WIN32
+  using namespace std;
+#endif
 #include "glutMaster.h"
 
 class mainAppWindow : public GlutWindow{

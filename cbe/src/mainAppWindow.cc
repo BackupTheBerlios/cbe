@@ -24,6 +24,9 @@
 
 
 #include <iostream>
+#ifdef _WIN32
+  #include <GL/glaux.h>
+#endif
 #include <GL/glut.h>
 #include "mainAppWindow.h"
 #include "glutMaster.h"
