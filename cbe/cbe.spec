@@ -10,15 +10,14 @@ Version: %{version}
 Release: %{release}
 Summary: A Change Blindness Experiment/Environment 
 Copyright: GPL
-Group: Applications
+Group: Applications/Multimedia
 Source: %{name}-%{version}.tar.gz
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root
 URL: http://cbe.berlios.de/
-Packager: Andreas Bauer <baueran@users.sourceforge.net>
+Packager: Andreas Bauer <baueran@users.berlios.de>
 
 %description
 CBE is an environment for setting up Change Blindness experiments.
-
 
 %prep
 %setup
@@ -35,10 +34,18 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-, root, root)
-%doc AUTHORS COPYING ChangeLog NEWS README TODO
+%doc AUTHORS COPYING ChangeLog INSTALL NEWS README TODO
 %{_bindir}/cbe
 
 %changelog
-* Sat Jan 20 2001 Andreas Bauer <baueran@users.sourceforge.net>
+* Thu Jan 25 2001 Andreas Bauer <baueran@users.berlios.de>
+
+- Changed my own e-mail address to BerliOS
+
+- Added INSTALL file to document root
+
+- Changed Group to Applications/Multimedia
+
+* Sat Jan 20 2001 Andreas Bauer <baueran@users.berlios.de>
 
 - Initial creation of the package
