@@ -181,7 +181,7 @@ namespace mainApp {
       (*itr)->draw();
     
     // Check if blending is enabled
-    if (prefs->useBlending()) {
+    if (prefs->useBlending()) {	
       glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
       glDrawPixels(717, 538, GL_RGBA, GL_UNSIGNED_BYTE, cockpitIMG.getData());
       glEnable(GL_BLEND);

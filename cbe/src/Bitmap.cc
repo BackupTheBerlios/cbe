@@ -64,6 +64,25 @@ bool Bitmap::load(void) {
 #ifdef DEBUG
 	cout << "TIF picture successfully loaded." << endl;
 #endif
+
+#if macintosh
+	uint8* p = (uint8*)data;
+	
+	for( long i = 0; i < sizeX * sizeY; i++ )
+	{
+		int r, g, b, a;
+		r = p[ 0 ];
+		g = p[ 1 ];
+		b = p[ 2 ];
+		a = p[ 3 ];
+		p[ 0 ] = a;
+		p[ 1 ] = b;
+		p[ 2 ] = g;
+		p[ 3 ] = r;
+		p += 4;
+	}
+#endif
+
 	TIFFClose(pic);
 	return true;
       }

@@ -54,9 +54,9 @@ street::street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad) {
 
   makeList();
 
-  glDisable(GL_COLOR_MATERIAL);
+  /*glDisable(GL_COLOR_MATERIAL);
   glEnable( GL_TEXTURE_2D );
-  glEnable(GL_BLEND);
+  glEnable(GL_BLEND);*/
 
   makeTreeList();
 }
