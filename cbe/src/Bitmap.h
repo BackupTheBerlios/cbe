@@ -26,7 +26,7 @@
 extern "C" {
 #include <stdio.h>
 #ifndef _WIN32
-	#include <tiffio.h>
+#include <tiffio.h>
 #endif
 }
 #include "config.h"

@@ -23,7 +23,7 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
 #ifndef _WIN32
-	#include <tiffio.h>
+#include <tiffio.h>
 #endif
 }
 #include "Bitmap.h"

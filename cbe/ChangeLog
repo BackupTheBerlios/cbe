@@ -1,6 +1,11 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Fri Aug 17 12:49:47 CEST 2001  Andreas Bauer  <baueran@users.berlios.de>
+
+ * A bunch of clean ups to get us ready for initial release (TODO, NEWS,
+   removed warnings in Bitmap.cc, etc.)
+
 Fri Aug 17 12:02:34 CEST 2001  Andreas Bauer  <baueran@users.berlios.de>
 
  * Added GNU getopt library support
