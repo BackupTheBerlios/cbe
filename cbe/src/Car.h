@@ -38,9 +38,13 @@ class Car : public GLinotteObject {
 		   change_maxChange = change_nextColor };
 		   
 	virtual void move( street* street, double time );
+	void setSpeed( float speed );
+	void setOffset( float offset );
 	
 protected:
 	float mRotation;
+	float mSpeed;
+	float mOffset;
 };
 
 #endif

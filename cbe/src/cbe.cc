@@ -173,6 +173,13 @@ int main(int argc, char *argv[]) {
     car1 = new SedanCar;
     car1->setPos( -3, 0, -5 );
     car1->rotate( 180 );
+    car1->setSpeed( 0.005 );
+
+    car2 = new SedanCar;
+    car2->setPos( -3, 0, -5 );
+    car2->rotate( 180 );
+    car2->setSpeed( -0.008 );
+  	car2->setOffset( 0.1 );
   }
   catch(pref::IOException) {
     cerr << "ERROR: Could not read cbe preferences file." << endl;
@@ -187,7 +194,7 @@ int main(int argc, char *argv[]) {
   driversWindow->setstreet( curStreet );
   driversWindow->setPlane( plane );
   driversWindow->addCar( car1 );
-  //driversWindow->addCar( car2 );
+  driversWindow->addCar( car2 );
   atexit(cleanUp);
 
   double oldTime = 0;

@@ -71,7 +71,12 @@ street::~street() {
 
 void street::getstreetLocation( double alpha, GLfloat* location )
 {
-	alpha = 1 - fmod( alpha, 1 );
+	alpha = fmod( alpha, 1 );
+	
+	if( alpha < 0 )
+		alpha += 1;
+
+	alpha = 1 - alpha;
 
 	double index = alpha * length;
 	long intindex = index;
@@ -229,7 +234,7 @@ void street::draw()
   glEnable(GL_BLEND);
 
   //mTreeMaterial->submit();
-  glCallList( mTreeList );
+  //glCallList( mTreeList );
   //makeTreeList();
 
   glDisable( GL_TEXTURE_2D );

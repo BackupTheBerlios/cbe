@@ -32,20 +32,21 @@ extern "C" {
 Car::Car()
 {
 	mRotation = 0;
+	mSpeed = 0.005;
+	mOffset = 0;
 }
 
 void Car::move( street* street, double time )
 {
 	GLfloat location[ 3 ];
+	float phi = mOffset + time * mSpeed;
 
-	//time = 0.01;
-
-	street->getstreetLocation( time * 0.005, location );
+	street->getstreetLocation( phi, location );
 	setPos( location[ 0 ], location[ 1 ], location[ 2 ] );
 	
 	GLfloat p[ 3 ];
 	GLfloat v[ 3 ];
-	street->getstreetLocation( time * 0.005 + 0.001, p );
+	street->getstreetLocation( phi + mSpeed / 5, p );
 	v[ 0 ] = p[ 0 ] - location[ 0 ];
 	v[ 1 ] = p[ 1 ] - location[ 1 ];
 	v[ 2 ] = p[ 2 ] - location[ 2 ];
@@ -53,3 +54,12 @@ void Car::move( street* street, double time )
 	mRotation = atan2( v[ 2 ], v[ 0 ] ) * ( 180 / 3.1415 );
 }
 
+void Car::setSpeed( float speed )
+{
+	mSpeed = speed;
+}
+
+void Car::setOffset( float offset )
+{
+	mOffset = offset;
+}

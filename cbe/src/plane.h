@@ -18,13 +18,16 @@
 // USA.
 
 #include "GListObject.h"
+#include "linotte/texture_material_t.h"
 
 class Plane : public GListObject
 {
   Point a,b;
+  linotte::texture_material_t* mGrassMaterial;
 
 public:
   Plane(Point,Point);
   ~Plane();
-  void writeList();
+  virtual void writeList();
+  virtual void submit();
 };
