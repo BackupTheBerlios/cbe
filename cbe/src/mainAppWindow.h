@@ -87,7 +87,7 @@ namespace mainApp {
     void CallBackReshapeFunc(int, int);   
     void CallBackIdleFunc(void);
     void CallBackKeyboardFunc(unsigned char, int, int);
-    void CallBackSpecialKeyboardFunc(unsigned char, int, int);
+    void CallBackSpecialKeyboardFunc(int, int, int);
     
     // Window functionality functions
     void StartSpinning(GlutMaster*); // ???
