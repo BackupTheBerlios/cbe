@@ -56,7 +56,6 @@ namespace mainApp {
     // Set preferences
     prefs = newPrefs;
     
-	#ifndef _WIN32
     // Where is the cockpit?
     cockpitIMG.setPath( (string)DATADIR + "/pixmaps/cbe/cockpit.tif" );  // Size: 717 x 538 pixels
     
@@ -67,8 +66,7 @@ namespace mainApp {
 #endif
     }
     else
-      cout << "ERROR: Cockpit image not loaded. Did you forget 'make install'?" << endl;
-    #endif
+      cerr << "ERROR: Cockpit image not loaded. Did you forget 'make install'?" << endl;
     
     // Set default viewing and movement vectors
     movementVector = new Point(1,0,0);
@@ -76,13 +74,13 @@ namespace mainApp {
     // Set default speed and viewingAngle
     speed = 0.0;
     viewingAngle=0.0;
-
+    
     // Set current clock-value to oldTime
     oldTime=clock();
 
     // Set some defaults
     frameCount=0;
-    latenz=1/60; // Default to 60 frames/second
+    latenz = 1/60; // Default to 60 frames/second
     showFramerate=false; // Default to don't display framerate
 
     isFog = false;
@@ -97,7 +95,7 @@ namespace mainApp {
 
     // Set viewport to 0, cockpit height, cockpit width, driver's window height
     glViewport(0, 161, (GLint)width, 377);
-
+    
     glutMaster->CallGlutCreateWindow(title.c_str(), this);
   
     glEnable(GL_DEPTH_TEST);  
@@ -128,7 +126,7 @@ namespace mainApp {
     joystick = new JoystickDriver();
 
     // Initialize SerialPort
-    serialclient = new SerialClient("random"); // to open com-port1 use /dev/ttyS0
+    serialclient = new SerialClient("/dev/ttyS0"); // to open com-port1 use /dev/ttyS0
     isSerial=false; // Disable serialport by default
   }
 
@@ -157,9 +155,9 @@ namespace mainApp {
     // Check if blending is enabled
     if (prefs->useBlending()) {
       glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	  #ifndef _WIN32
+#ifndef _WIN32
       glDrawPixels(717, 538, GL_RGBA, GL_UNSIGNED_BYTE, cockpitIMG.getData());
-	  #endif
+#endif
       glEnable(GL_BLEND);
     }
 
@@ -194,17 +192,27 @@ namespace mainApp {
     // Make blink-detection (only if serialport is activated)
     if (isSerial) {
       serialclient->requestData();
-      if (serialclient->getChange()==CHANGE_HIDE_CAR) {
-		#ifdef DEBUG
-		cout << "hide_car" << endl;
-		#endif
-		GObjectVector::iterator itr = graphicObjects.begin();
-		GObjectVector::iterator listEnd = graphicObjects.end();
-		for( ; itr != listEnd; ++itr )
-	      (*itr)->toggleVisibility();
-	  }
-	}
-    
+      switch (serialclient->getChange()) {
+      case CHANGE_HIDE_CAR: 
+#ifdef DEBUG
+	cout << "hide_car" << endl;
+#endif
+	for(GObjectVector::iterator itr = graphicObjects.begin(); itr != graphicObjects.end(); itr++ )
+	  (*itr)->toggleVisibility();
+	break;
+
+      case CHANGE_TOGGLE_BREAKLIGHTS:
+#ifdef DEBUG
+	cout << "toggle breaklights" << endl;
+#endif
+	for(GObjectVector::iterator itr = graphicObjects.begin(); itr != graphicObjects.end(); itr++ )
+	  (*itr)->change( Car::change_toggleBrakeLight );
+	break;
+	
+      default:
+	break;
+      }
+    }
     // Make Joysick-Calls
     joystick->refreshJoystick();
     viewingAngle+= joystick->getXaxis() * 100 * latenz;
@@ -215,7 +223,7 @@ namespace mainApp {
     if (viewingAngle>=180)
       viewingAngle-=360;
 	GLfloat speedDiff = -joystick->getYaxis() * 100 * latenz;
-	#define BRAKE_FACTOR 3
+#define BRAKE_FACTOR 3
 	if ( (( speed >= 0 ) && ( speedDiff >= 0 )) ||
 	   (( speed <= 0 ) && ( speedDiff <= 0 )) )
 		speed += speedDiff; // Normal acceleration
@@ -354,15 +362,15 @@ namespace mainApp {
       else
 	isSerial=true;
       break;
-	case '1':
-	  carVector[ rndInt( carVector.size() ) ]->changeColor( Car::change_nextColor );
-	  break;
-	case '2':
-	  carVector[ rndInt( carVector.size() ) ]->change( Car::change_toggleBrakeLight );
-	  break;
-	case '3':
-	  carVector[ rndInt( carVector.size() ) ]->toggleVisibility();
-	  break;
+    case '1':
+      carVector[ rndInt( carVector.size() ) ]->changeColor( Car::change_nextColor );
+      break;
+    case '2':
+      carVector[ rndInt( carVector.size() ) ]->change( Car::change_toggleBrakeLight );
+      break;
+    case '3':
+      carVector[ rndInt( carVector.size() ) ]->toggleVisibility();
+      break;
     default:
       cout << "A normal key was pressed. Hurra!" << endl;
       break;
@@ -411,5 +419,4 @@ namespace mainApp {
     oldTime=tnew;
     return(ris/(double)CLOCKS_PER_SEC);
   }
-
 }

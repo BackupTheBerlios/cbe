@@ -1,6 +1,14 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Fri Jul 27 15:53:23 CEST 2001  Labor (all)	
+
+ * Connected breaklights to signal '2'
+
+ * Case-problems in filenames corrected
+
+ * Double-includes in SerialServer.cc deleted
+	
 Fre Jul 26 23:00:00 CEST 2001  David Trachtenherz
 
  * GObject, toggleVisibility() and drawObjectLists() functions added.

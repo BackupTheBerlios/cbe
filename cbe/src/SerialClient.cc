@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <iostream>
 #include "SerialClient.hh"
+#include <cstring>
 
 using namespace std;
 
@@ -12,12 +13,6 @@ extern "C" {
 #include <unistd.h>
 #include <string.h>
 }
-
-#include <cstdlib>
-#include <cstring>
-#include <iostream>
-#include "SerialClient.hh"
-
 
 SerialClient::SerialClient(const char * dev_name) {
   isAvailable=false;
@@ -65,6 +60,9 @@ void SerialClient::requestData() {
 // only requests data (for ues with onlyGetData() ONLY!!! -- you HAVE to pair them!!!)
 void SerialClient::onlyRequestData() {
   if (isAvailable) {
+#ifdef DEBUG
+    cout << "Request" << endl;
+#endif
     tcflush(devptr,TCIOFLUSH);
     if (wasChange==false)  // no change since last request
       write(devptr,"n",1); // request data with 'n'
@@ -81,6 +79,10 @@ void SerialClient::onlyGetData() {
     read(devptr,buffer,10); // read 10 chars, blocking
                             // 4 chars x, 4 chars y, 1 status, 1 '\n'
     // Ok, data is here ...
+#ifdef DEBUG
+    buffer[10]='\0';
+    cout << "Buffer: " << buffer << endl;
+#endif
     // calculate x and y values
     for (int i=2; i<10;i++) // this loop is needed as we must be able to interprete
       if (buffer[i]==' ')   // ' ' as 0  (eg.: '  57' = '0057')

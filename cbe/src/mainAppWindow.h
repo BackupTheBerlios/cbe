@@ -31,7 +31,7 @@ extern "C" {
 }
 #include <string>
 #include <vector>
-#include "Random.h"
+#include "random.h"
 #ifdef _WIN32
 	using namespace std;
 #endif
@@ -49,22 +49,23 @@ extern "C" {
 namespace mainApp {
   typedef vector<GObject*> GObjectVector;
   typedef vector<Car*> CarVector;
-  class mainAppWindow : public GlutWindow{
+
+  class mainAppWindow : public GlutWindow {
   private:
     pref::Preferences* prefs;       // Preferences object
     GObject *plane;                 // holds the plane
     GObject *street;                // holds the street
     GObjectVector graphicObjects;	// Objects to be drawn
-	CarVector carVector;			// Cars
+    CarVector carVector;			// Cars
     GLfloat speed;                  // Speed of movement
     bool isFog;                     // Flag for fog
     Point *movementVector;          // Movement direction
     GLfloat viewingAngle;           // Indicates the angle of view in the x-z-plane
     clock_t oldTime;                // Used to determine the Frames/s (also for constant movement speed)
     double getTimePassed();         // Reports seconds since last call
-	#ifndef _WIN32
-		Bitmap cockpitIMG;              // Cockpit image
-	#endif
+#ifndef _WIN32
+    Bitmap cockpitIMG;              // Cockpit image
+#endif
     JoystickDriver *joystick;       // Joystick-Object
     SerialClient *serialclient;     // Serial-Object
     bool isSerial;                  // Flag for use of serialport

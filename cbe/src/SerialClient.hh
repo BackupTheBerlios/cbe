@@ -11,8 +11,8 @@
 #define REQUEST_CHANGED 1
 
 #define CHANGE_NOTHING 0
-#define CHANGE_HIDE_CAR 1
-
+#define CHANGE_HIDE_CAR 49
+#define CHANGE_TOGGLE_BREAKLIGHTS 50
 
 class SerialClient {
 public:

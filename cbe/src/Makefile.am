@@ -34,4 +34,4 @@ cbe_SOURCES = 	cbe.cc glutMaster.cc glutWindow.cc mainAppWindow.cc \
 		Preferences.h \
 		street.cc plane.cc Point.cc Car.cc GMovableObject.cc \
 		street.h  plane.h  Point.h  Car.h  GMovableObject.h \
-		Random.cc Random.h
+		random.cc random.h
