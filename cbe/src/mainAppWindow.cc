@@ -112,7 +112,7 @@ namespace mainApp {
     glLoadIdentity();
 
     // perspective
-    gluPerspective(120.0, 1.0, 0.1, 100.0);
+    gluPerspective(90/*120.0*/, 1.0, 0.1, 100.0);
   
     // Set viewing direction from z-Axis to x-axis
     glRotatef(90.0, 0, -1, 0);
@@ -400,7 +400,7 @@ namespace mainApp {
 
 
   // Call back function for special keyboard events (cursor keys, etc.)
-  void mainAppWindow::CallBackSpecialKeyboardFunc(unsigned char key, int x, int y) {
+  void mainAppWindow::CallBackSpecialKeyboardFunc(int key, int x, int y) {
     cout << "A special key was pressed. Double hurra." << endl;
   }
 
