@@ -41,28 +41,48 @@ DemoWindow* secondWindow = 0;
 
 
 int main(int argc, char *argv[]) {
+  Plane *p;
+  Street *s;
+
   cout << "Entering main in cbe.cc\n";
-  glutMaster   = new GlutMaster(&argc, argv);  
-  cout << "created GlutMaster in cbe.cc\n";
-  secondWindow = new DemoWindow(glutMaster,
-				500, 500,         // height, width
-				200, 400,         // initPosition (x,y)
-				(string)PACKAGE + (string)" " + (string)VERSION);   // title
-  cout << "created DemoWindow secondWindow in cbe.cc\n";
-  Street* s=new Street(-50,0,0,2);
+  
+  try {
+    glutMaster   = new GlutMaster(&argc, argv);  
+    cout << "created GlutMaster in cbe.cc\n";
+
+    secondWindow = new DemoWindow(glutMaster,
+				  500, 500,         // height, width
+				  200, 400,         // initPosition (x,y)
+				  (string)PACKAGE + (string)" " + (string)VERSION);   // title
+    cout << "created DemoWindow secondWindow in cbe.cc\n";
+    s=new Street(-50,0,0,2);
+  }
+  catch (...) {
+    return -1;
+  }
+  
   GLuint streetList=s->getStreet();
   secondWindow->setStreet(&streetList);
   Point a,b;
   a.x=-60; a.y=-0.1; a.z=-60;
   b.x=60; b.y=-0.1; b.z=60;
-  Plane* p=new Plane(a,b);
+  
+  try {
+    p=new Plane(a,b);
+  }
+  catch (...) {
+    return -1;
+  }
+  
   GLuint Planelist=p->getPlane();
   secondWindow->setPlane(&Planelist);
-
+  
   secondWindow->StartSpinning(glutMaster);        // enable idle function
   cout << "Started Spinning in secondWindow in cbe.cc\n";
   glutMaster->CallGlutMainLoop();
   cout << "CallGlutMainLoop() success\n";
-
+  
+  delete s;
+  delete p;
   return 0;
 }

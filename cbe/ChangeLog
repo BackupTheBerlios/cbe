@@ -1,5 +1,12 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
+
+Mit Mai  9 11:58:54 CEST 2001   Holger Urbanek, Andreas Bauer
+
+ * All news do have deletes and are wrapped in try-catch clause
+
+ * Minor documentation updates (INSTALL, TODO)
+
 Wed May  8 03:14:00 CEST 2001   Holger Urbanek
 
  * Creating of the street and plane now in seperate classes
@@ -8,11 +15,9 @@ Tue May  8 20:54:12 CEST 2001   Andreas Bauer  <baueran@in.tum.de>
 
  * Added <cmath> to cbe.cc
 
-
 Mon Apr 30 23:33:26 CEST 2001   Holger Urbanek, Andreas Bauer
  
  * Initial version of a road is finished
-
 
 Fri Jan 19 22:46:27 GMT+1 2001  Andreas Bauer  <baueran@in.tum.de>
 

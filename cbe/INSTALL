@@ -10,9 +10,9 @@ are installed (e.g. Cygwin, MinGW or DJGPP).
 Compiling CBE from scratch requires you to have the following packages on your
 system:
 
-- Mesa library 3.3 (or higher)
+- Mesa library 3.4.1
 
-- GNU C++ compiler 2.95 (or higher)
+- GNU C++ compiler 2.95.x (or higher)
 
 - GNU autoconf
 

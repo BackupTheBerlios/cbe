@@ -19,10 +19,10 @@
 
 #include <cmath>
 #include <iostream>
-#include <stdlib.h>
 
 extern "C"
 {
+  #include <stdlib.h>
   #include <GL/gl.h>
   #include <GL/glut.h>
 }

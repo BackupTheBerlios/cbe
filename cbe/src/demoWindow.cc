@@ -29,24 +29,6 @@ DemoWindow::DemoWindow(GlutMaster * glutMaster, int setWidth, int setHeight, int
   width  = setWidth;               
   height = setHeight;
   
-  //create almost empty lists to make shure, that a window can be created
-  plane = new GLuint();
-  *plane=glGenLists(1);
-  glNewList(*plane, GL_COMPILE);
-  glBegin(GL_QUAD_STRIP);
-  glVertex3f(1,1,1);
-  glEnd();
-  glEndList();
-
-  street = new GLuint();
-  *plane=glGenLists(1);
-  glNewList(*street, GL_COMPILE);
-  glBegin(GL_QUAD_STRIP);
-  glVertex3f(1,1,1);
-  glEnd();
-  glEndList();
-
-
   initPositionX = setInitPositionX;
   initPositionY = setInitPositionY;
   
@@ -119,12 +101,9 @@ void DemoWindow::StartSpinning(GlutMaster * glutMaster){
 
    
 void DemoWindow::setStreet(GLuint *list) {
-  street=list;
+   street=list;
 }
 
 void DemoWindow::setPlane(GLuint *list) {
   plane=list;
 }
-
-
-

@@ -1,4 +1,4 @@
-// cbe.h - source file for the CBE project
+// street.h - source file for the CBE project
 // Copyright (c) 2001  Ludwig-Maximilian-Universitaet Muenchen
 //                     http://www.uni-muenchen.de/
 //
