@@ -1,6 +1,10 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Mon Oct 29 12:06:00 GMT 2001   Bernhard Liebl <liebl@cccrww.com>
+
+ * Added support to compile for MacOS 9
+
 Fri Oct 19 20:39:06 GMT 2001   Andreas Bauer  <baueran@users.berlios.de>
 
  * Added full screen mode
