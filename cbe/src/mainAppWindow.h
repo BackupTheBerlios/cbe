@@ -27,6 +27,7 @@
 
 extern "C" {
 #include <GL/gl.h>
+#include <time.h>
 }
 #include <string>
 #ifdef _WIN32
@@ -34,15 +35,20 @@ extern "C" {
 #endif
 #include "glutMaster.h"
 #include "GObject.h"
+#include "Point.h"
 
 
 class mainAppWindow : public GlutWindow{
  private:
   GObject *plane;         // holds the plane
   GObject *street;        // holds the street
-  float xRotationSpeed;   // Speed for the x-rotation
-  GLfloat speed;          // Speed for the x-rotation
+  GLfloat speed;          // Speed of movement
   bool isFog;             // Flag for fog
+  Point *movementVector;  // Movement direction
+  GLfloat viewingAngle;   // Indicates the angle of view in the x-z-plane
+  clock_t oldTime;        // Used to determine the Frames/s (also for constant movement speed)
+
+  double getTimePassed();       // Reports seconds since last call
 
  public:
   int height, width;

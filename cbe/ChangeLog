@@ -1,6 +1,12 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Don Mai 24 21:48:05 EDT 2001    Holger Urbanek
+
+ * Its now possible to move around freely
+
+ * Speed should now be on all computers the same
+	
 Wed May 23 16:20:05 CEST 2001   Andreas Bauer, Holger Urbanek
 
  * Changed common.h into individual class and file Point.h

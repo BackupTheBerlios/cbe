@@ -29,16 +29,29 @@ extern "C" {
 #include <GL/glaux.h>
 #endif
 #include <GL/glut.h>
+#include <time.h>
 }
 #include "mainAppWindow.h"
 #include "glutMaster.h"
 #include "glutWindow.h"
+#include "Point.h"
+#include <cmath>
+
+#define M_PI 3.1415926535
 
 using namespace std;
 
 mainAppWindow::mainAppWindow(GlutMaster * glutMaster, int setWidth, int setHeight, int setInitPositionX, int setInitPositionY, string title) {
-  // Set default rotation speed
-  speed = -0.1;
+  
+  // Set default viewing and movement vectors
+  movementVector = new Point(1,0,0);
+    
+  // Set default speed and viewingAngle
+  speed = 0.0;
+  viewingAngle=0.0;
+
+  // Set current clock-value to oldTime
+  oldTime=clock();
 
   // Disable fog by default
   isFog = false;
@@ -64,15 +77,18 @@ mainAppWindow::mainAppWindow(GlutMaster * glutMaster, int setWidth, int setHeigh
   // perspective
   gluPerspective(120.0, 1.0, 0.1, 100.0);
   
-  // Set viewing direction from Z to X
-  glRotatef(90.0, 0.0, 1.0, 0.0);
+  // Set viewing direction from z-Axis to x-axis
+  glRotatef(90.0, 0, -1, 0);
   
   // point of view
-  glTranslatef(5.0, -1.5, 0.0);
+  glTranslatef(0.0, -1.5, 0.0);
 
   // set background color
   glClearColor(0.3, 0.3, 1,0);
-  
+
+  // Save ProjectionMatrix (for futher use in Idle-Function)
+  glPushMatrix();
+
   // Switch to scenery matrix
   glMatrixMode(GL_MODELVIEW);
 }
@@ -80,6 +96,7 @@ mainAppWindow::mainAppWindow(GlutMaster * glutMaster, int setWidth, int setHeigh
 
 mainAppWindow::~mainAppWindow() {
   cout << "Destroying Demo-Window" << endl;
+  delete movementVector;
   glutDestroyWindow(windowID);
 }
 
@@ -88,6 +105,7 @@ void mainAppWindow::CallBackDisplayFunc(void) {
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    plane->draw();
    street->draw();
+
    glutSwapBuffers();
 }
 
@@ -104,7 +122,26 @@ void mainAppWindow::CallBackReshapeFunc(int w, int h) {
 
 // Call back function for idle state
 void mainAppWindow::CallBackIdleFunc(void) {
-  glTranslatef(speed, 0, 0);
+  // Switch to camera matrix
+  glMatrixMode(GL_PROJECTION);
+
+  // Get projection Matrix from Stack, but leave a copy there
+  glPopMatrix();
+  glPushMatrix();
+
+  // Now we can simply turn the camera in the direction we want without considering the next frame
+  glRotatef(viewingAngle,0,1,0);
+
+  // Switch back to world matrix
+  glMatrixMode(GL_MODELVIEW);
+  
+  GLfloat latenz=(double) speed * getTimePassed();
+  
+  // Now move the world according to our viewing direction
+  glTranslatef(movementVector->x*latenz, movementVector->y*latenz, movementVector->z*latenz);
+
+  // Finished with "camera-actions" advance to draw the world
+
   CallBackDisplayFunc();
 }
 
@@ -119,13 +156,29 @@ void mainAppWindow::CallBackKeyboardFunc(unsigned char key, int x, int y) {
     cout << "Exit key was pressed. Bye bye." << endl;
     exit(0);  // exit is not like return - we need a nicer way to exit the program and call all destructors!
     break;
-  case 'U':
+  case 'U':  // faster
   case 'u':
+    speed += 0.05;
+    break;
+  case 'N': // slower
+  case 'n':
     speed -= 0.05;
     break;
-  case 'D':
-  case 'd':
-    speed += 0.05;
+  case 'H': // left
+  case 'h':
+    viewingAngle--;
+    if (viewingAngle>180)
+      viewingAngle-=360;
+    movementVector->x=cos(viewingAngle*M_PI/180);
+    movementVector->z=sin(viewingAngle*M_PI/180);
+    break;
+  case 'J': // right
+  case 'j':
+    viewingAngle++;
+    if (viewingAngle<-180)
+      viewingAngle+=360;
+    movementVector->x=cos(viewingAngle*M_PI/180);
+    movementVector->z=sin(viewingAngle*M_PI/180);
     break;
   case 'F':
   case 'f':
@@ -136,6 +189,7 @@ void mainAppWindow::CallBackKeyboardFunc(unsigned char key, int x, int y) {
     }
     else {
       glDisable(GL_FOG);
+      cout << "Fog disabled." << endl;
       isFog = false;
     }
     break;
@@ -157,12 +211,19 @@ void mainAppWindow::StartSpinning(GlutMaster * glutMaster){
    glutMaster->EnableIdleFunction();
 }
 
-   
 void mainAppWindow::setStreet(GObject *s) {
   street = s;
 }
 
-
 void mainAppWindow::setPlane(GObject *p) {
   plane = p;
+}
+
+// Calculates time passed since last call of this function
+double mainAppWindow::getTimePassed() {
+  clock_t tnew,ris;
+  tnew=clock();
+  ris=tnew-oldTime;
+  oldTime=tnew;
+  return(ris/(double)CLOCKS_PER_SEC);
 }

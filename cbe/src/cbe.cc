@@ -51,7 +51,9 @@ int main(int argc, char *argv[]) {
   cout << endl;
   cout << "Keyboard functions:" << endl;
   cout << "  u: Increase speed" << endl;
-  cout << "  d: Decrease speed" << endl;
+  cout << "  n: Decrease speed" << endl;
+  cout << "  h: Turn left" << endl;
+  cout << "  j: Turn right" << endl;
   cout << "  f: Toggles fog (quite useless until now, find out for yourself)" << endl;
   cout << "  q / ESC: Exits program" << endl << endl;
   
