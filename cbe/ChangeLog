@@ -1,5 +1,14 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
+Fre Mai 17 19:50:00 CEST 2001   David Trachtenherz
+
+ * Base class GObject for graphic objects included. Files GObject.h
+   and GObject.cc added.
+
+ * Street and Plain are now derived from GObject.
+
+ * The mainAppWindow class now address Street and Plane not by
+   their GL list numbers but by pointers of the type *GObject.
 
 Mit Mai 16 14:36:55 CEST 2001   Holger Urbanek, Andreas Bauer
 
