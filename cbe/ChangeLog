@@ -1,6 +1,12 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
+	
+Fre Mai  3 15:18:13 CEST 2002  Holger Urbanek
 
+ * Verified joystick code
+
+ * Adjusted joystick sensitivity 
+	
 Sat Jan  5 17:50:18 GMT 2002   Bernhard Liebl, Andreas Bauer
 
  * Added various textures

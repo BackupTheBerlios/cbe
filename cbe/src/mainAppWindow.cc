@@ -248,7 +248,7 @@ namespace mainApp {
     
     // Make Joysick-Calls
     joystick->refreshJoystick();
-    viewingAngle+= joystick->getXaxis() * 100 * latenz;
+    viewingAngle+= joystick->getXaxis() * 20 * latenz; // Joystick turning speed
     
     // Keep viewingAngle in -180<x<180
     if (viewingAngle<-180)
@@ -257,7 +257,7 @@ namespace mainApp {
     if (viewingAngle>=180)
       viewingAngle-=360;
     
-    GLfloat speedDiff = -joystick->getYaxis() * 100 * latenz;
+    GLfloat speedDiff = -joystick->getYaxis() * 10 * latenz; //Joystick acceleration speed
 
     if ( (( speed >= 0 ) && ( speedDiff >= 0 )) || (( speed <= 0 ) && ( speedDiff <= 0 )) )
       speed += speedDiff;                // Normal acceleration
