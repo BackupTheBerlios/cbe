@@ -1,12 +1,4 @@
 /*
-      3ds2csp copyright (c) 2001 Bernhard Liebl
-      
-      Version 1.0 
-      
-      based on:
-*/
-
-/*
       3DS2POV.C  Copyright (c) 1993 Steve Anger and Jeff Bowermaster
 
       Reads a 3D Studio .3DS file and writes a POV-Ray, Vivid, or
@@ -14,8 +6,9 @@
 
       Version 1.8 Written Oct/93
       
-      modified by Bernhard Liebl to support uv mapping,
-      mesh normal calculation and csp output
+      extended by Bernhard Liebl to support uv mapping and csp output
+
+      Compiled with MSDOS GNU C++ 2.4.1
 */
 
 #include <stdio.h>
@@ -376,12 +369,18 @@ void convert()
     Material *m;
     int i;
 
+	long matcnt = 0;
+	long oldpos = 0;
+	
+	long length;
+	FILE* tmp;
+	
     if ((in = fopen (inname, "rb")) == NULL) {
 	printf ("Cannot open input file %s!\n", inname);
 	exit (1);
     }
 
-    if ((out = fopen (outname, "wb")) == NULL) {
+    if ((out = fopen ("temp.dat", "wb")) == NULL) {
 	printf ("Cannot open output file %s!\n", outname);
 	exit (1);
     }
@@ -410,17 +409,40 @@ void convert()
 	
     parse_file();
 
+	fseek( out, 0, SEEK_SET );
+    fwrite( &g_mesh_count, 1, sizeof( g_mesh_count ), out );
+
     fclose(in);
+	fclose (out);
+	
+    if ((out = fopen (outname, "wb")) == NULL) {
+	printf ("Cannot open output file %s!\n", outname);
+	exit (1);
+    }
+	
+    fwrite( &matcnt, 1, sizeof( matcnt ), out );
 
     for (m = mtl_list; m != NULL; m = m->next) {
 	if (!m->external)
 	    write_material (out, m->name);
+	matcnt++;
     }
-    
-    fseek( out, 0, SEEK_SET );
-    fwrite( &g_mesh_count, 1, sizeof( g_mesh_count ), out );
+    oldpos = ftell( out );
 
-    fclose (out);
+    fseek( out, 0, SEEK_SET );
+    fwrite( &matcnt, 1, sizeof( matcnt ), out );
+    fseek( out, oldpos, SEEK_SET );
+
+	tmp = fopen( "temp.dat", "rb" );
+	fseek( tmp, 0, SEEK_END );
+	length = ftell( tmp );
+	fseek( tmp, 0, SEEK_SET );
+	for( i = 0; i < length; i++ )
+	{
+		char c = fgetc( tmp );
+		fwrite( &c, 1, sizeof( char ), out );
+	}
+	fclose( tmp );
 
     if (frame >= 0)
 	save_animation();
@@ -827,6 +849,17 @@ void write_intro (FILE */*f*/)
 
 void write_material (FILE *f, char *mat)
 {
+	MatProp *mprop = LIST_FIND (mprop_list, mat);
+	long length;
+
+	length = strlen( mprop->name );
+	fwrite( &length, sizeof( length ), 1, f );
+	fwrite( mprop->name, sizeof( char ), length, f );
+	
+	fwrite( &mprop->diffuse.red, sizeof( float ), 1, f );
+	fwrite( &mprop->diffuse.green, sizeof( float ), 1, f );
+	fwrite( &mprop->diffuse.blue, sizeof( float ), 1, f );
+
     /*MatProp *mprop = LIST_FIND (mprop_list, mat);
 
     if (mprop == NULL)
@@ -934,7 +967,7 @@ void write_pov20_material (FILE *f, MatProp *m)
 }
 #endif
 
-static write_component( FILE *fp, Mesh *mesh, Material* mtl )
+static void write_component( FILE *fp, Mesh *mesh, Material* mtl )
 {
 	long i;
 	Smooth smooth;
