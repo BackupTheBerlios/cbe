@@ -1,9 +1,14 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
+
+Mon May 28 19:09:16 CEST 2001   Andreas Bauer
+
+ * Memory is now cleaned up on program exit
+
 Son Mai 27 15:17:00 CEST 2001   David Trachtenherz
-
+ 
  * Base class GObject modified. Procedure writeList() added.
-
+ 
  * Street and Plain modified corresponding to the changen in GObject.
 
 Sat May 26 15:27:01 CEST 2001   Andreas Bauer

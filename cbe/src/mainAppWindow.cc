@@ -42,195 +42,198 @@ extern "C" {
 
 using namespace std;
 
-mainAppWindow::mainAppWindow(GlutMaster * glutMaster, int setWidth, int setHeight, int setInitPositionX, int setInitPositionY, string title) {
-  Bitmap cockpitIMG( (string)DATADIR + "/pixmaps/cbe/cockpit.bmp" );
+namespace mainApp {
 
-  if (cockpitIMG.load())
-    cout << "Img loaded." << endl;
-  else
-    cout << "Img not loaded. Error." << endl;
+  mainAppWindow::mainAppWindow(GlutMaster* glutMaster, int setWidth, int setHeight, int setInitPositionX, int setInitPositionY, string title) {
+    static Bitmap cockpitIMG( (string)DATADIR + "/pixmaps/cbe/cockpit.bmp" );
 
-  // Set default viewing and movement vectors
-  movementVector = new Point(1,0,0);
+    if (cockpitIMG.load())
+      cout << "Img loaded." << endl;
+    else
+      cout << "Img not loaded. Error." << endl;
+
+    // Set default viewing and movement vectors
+    movementVector = new Point(1,0,0);
     
-  // Set default speed and viewingAngle
-  speed = 0.0;
-  viewingAngle=0.0;
+    // Set default speed and viewingAngle
+    speed = 0.0;
+    viewingAngle=0.0;
 
-  // Set current clock-value to oldTime
-  oldTime=clock();
+    // Set current clock-value to oldTime
+    oldTime=clock();
 
-  // Disable fog by default
-  isFog = false;
+    // Disable fog by default
+    isFog = false;
 
-  width  = setWidth;               
-  height = setHeight;
-  initPositionX = setInitPositionX;
-  initPositionY = setInitPositionY;
+    width  = setWidth;               
+    height = setHeight;
+    initPositionX = setInitPositionX;
+    initPositionY = setInitPositionY;
   
-  glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
-  glutInitWindowSize(width, height);
-  glutInitWindowPosition(initPositionX, initPositionY);
-  glViewport(0, 0,(GLint) width,(GLint) height); 
+    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
+    glutInitWindowSize(width, height);
+    glutInitWindowPosition(initPositionX, initPositionY);
+    glViewport(0, 0,(GLint) width,(GLint) height); 
   
-  glutMaster->CallGlutCreateWindow(title.c_str(), this);
+    glutMaster->CallGlutCreateWindow(title.c_str(), this);
   
-  glEnable(GL_DEPTH_TEST);  
+    glEnable(GL_DEPTH_TEST);  
 	
-  // Switch to camera matrix
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
+    // Switch to camera matrix
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
 
-  // perspective
-  gluPerspective(120.0, 1.0, 0.1, 100.0);
+    // perspective
+    gluPerspective(120.0, 1.0, 0.1, 100.0);
   
-  // Set viewing direction from z-Axis to x-axis
-  glRotatef(90.0, 0, -1, 0);
+    // Set viewing direction from z-Axis to x-axis
+    glRotatef(90.0, 0, -1, 0);
   
-  // point of view
-  glTranslatef(0.0, -1.5, 0.0);
+    // point of view
+    glTranslatef(0.0, -1.5, 0.0);
 
-  // set background color
-  glClearColor(0.3, 0.3, 1,0);
+    // set background color
+    glClearColor(0.3, 0.3, 1,0);
 
-  // Save ProjectionMatrix (for futher use in Idle-Function)
-  glPushMatrix();
+    // Save ProjectionMatrix (for futher use in Idle-Function)
+    glPushMatrix();
 
-  // Switch to scenery matrix
-  glMatrixMode(GL_MODELVIEW);
-}
-
-
-mainAppWindow::~mainAppWindow() {
-  cout << "Destroying Demo-Window" << endl;
-  delete movementVector;
-  glutDestroyWindow(windowID);
-}
-
-
-void mainAppWindow::CallBackDisplayFunc(void) {
-   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-   plane->draw();
-   street->draw();
-
-   glutSwapBuffers();
-}
-
-
-// Call back function for reshape state
-void mainAppWindow::CallBackReshapeFunc(int w, int h) {
-   width = w;
-   height= h;
-
-   glViewport(0,0,width,height); 
-   CallBackDisplayFunc();
-}
-
-
-// Call back function for idle state
-void mainAppWindow::CallBackIdleFunc(void) {
-  // Switch to camera matrix
-  glMatrixMode(GL_PROJECTION);
-
-  // Get projection Matrix from Stack, but leave a copy there
-  glPopMatrix();
-  glPushMatrix();
-
-  // Now we can simply turn the camera in the direction we want without considering the next frame
-  glRotatef(viewingAngle,0,1,0);
-
-  // Switch back to world matrix
-  glMatrixMode(GL_MODELVIEW);
-  
-  GLfloat latenz=(double) speed * getTimePassed();
-  
-  // Now move the world according to our viewing direction
-  glTranslatef(movementVector->x*latenz, movementVector->y*latenz, movementVector->z*latenz);
-
-  // Finished with "camera-actions" advance to draw the world
-
-  CallBackDisplayFunc();
-}
-
-
-// Call back function for keyboard events
-void mainAppWindow::CallBackKeyboardFunc(unsigned char key, int x, int y) {
-  // Determine key
-  switch (key) {
-  case 'Q':
-  case 'q':
-  case 27:
-    cout << "Exit key was pressed. Bye bye." << endl;
-    exit(0);  // exit is not like return - we need a nicer way to exit the program and call all destructors!
-    break;
-  case 'U':  // faster
-  case 'u':
-    speed += 0.05;
-    break;
-  case 'N': // slower
-  case 'n':
-    speed -= 0.05;
-    break;
-  case 'H': // left
-  case 'h':
-    viewingAngle--;
-    if (viewingAngle>180)
-      viewingAngle-=360;
-    movementVector->x=cos(viewingAngle*M_PI/180);
-    movementVector->z=sin(viewingAngle*M_PI/180);
-    break;
-  case 'J': // right
-  case 'j':
-    viewingAngle++;
-    if (viewingAngle<-180)
-      viewingAngle+=360;
-    movementVector->x=cos(viewingAngle*M_PI/180);
-    movementVector->z=sin(viewingAngle*M_PI/180);
-    break;
-  case 'F':
-  case 'f':
-    if (!isFog) {
-      glEnable(GL_FOG);
-      cout << "Fog enabled." << endl;
-      isFog = true;
-    }
-    else {
-      glDisable(GL_FOG);
-      cout << "Fog disabled." << endl;
-      isFog = false;
-    }
-    break;
-  default:
-    cout << "A normal key was pressed. Hurra!" << endl;
-    break;
+    // Switch to scenery matrix
+    glMatrixMode(GL_MODELVIEW);
   }
-}
 
 
-// Call back function for special keyboard events (cursor keys, etc.)
-void mainAppWindow::CallBackSpecialKeyboardFunc(unsigned char key, int x, int y) {
-  cout << "A special key was pressed. Double hurra." << endl;
-}
+  mainAppWindow::~mainAppWindow() {
+    delete movementVector;
+    glutDestroyWindow(windowID);
+    cout << "Destructor of mainAppWindow called." << endl;
+  }
 
 
-void mainAppWindow::StartSpinning(GlutMaster * glutMaster){
-   glutMaster->SetIdleToCurrentWindow();
-   glutMaster->EnableIdleFunction();
-}
+  void mainAppWindow::CallBackDisplayFunc(void) {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    plane->draw();
+    street->draw();
 
-void mainAppWindow::setStreet(GObject *s) {
-  street = s;
-}
+    glutSwapBuffers();
+  }
 
-void mainAppWindow::setPlane(GObject *p) {
-  plane = p;
-}
 
-// Calculates time passed since last call of this function
-double mainAppWindow::getTimePassed() {
-  clock_t tnew,ris;
-  tnew=clock();
-  ris=tnew-oldTime;
-  oldTime=tnew;
-  return(ris/(double)CLOCKS_PER_SEC);
+  // Call back function for reshape state
+  void mainAppWindow::CallBackReshapeFunc(int w, int h) {
+    width = w;
+    height= h;
+
+    glViewport(0,0,width,height); 
+    CallBackDisplayFunc();
+  }
+
+
+  // Call back function for idle state
+  void mainAppWindow::CallBackIdleFunc(void) {
+    // Switch to camera matrix
+    glMatrixMode(GL_PROJECTION);
+
+    // Get projection Matrix from Stack, but leave a copy there
+    glPopMatrix();
+    glPushMatrix();
+
+    // Now we can simply turn the camera in the direction we want without considering the next frame
+    glRotatef(viewingAngle,0,1,0);
+
+    // Switch back to world matrix
+    glMatrixMode(GL_MODELVIEW);
+  
+    GLfloat latenz = (double)speed * getTimePassed();
+  
+    // Now move the world according to our viewing direction
+    glTranslatef(movementVector->x * latenz, movementVector->y * latenz, movementVector->z * latenz);
+
+    // Finished with "camera-actions" advance to draw the world
+    CallBackDisplayFunc();
+  }
+
+
+  // Call back function for keyboard events
+  void mainAppWindow::CallBackKeyboardFunc(unsigned char key, int x, int y) {
+    // Determine key
+    switch (key) {
+    case 'Q':
+    case 'q':
+    case 27:
+      exit(0);
+      // throw ExitKeyPressed();
+      break;
+    case 'U':  // faster
+    case 'u':
+      speed += 0.05;
+      break;
+    case 'N': // slower
+    case 'n':
+      speed -= 0.05;
+      break;
+    case 'H': // left
+    case 'h':
+      viewingAngle--;
+      if (viewingAngle>180)
+	viewingAngle-=360;
+      movementVector->x=cos(viewingAngle*M_PI/180);
+      movementVector->z=sin(viewingAngle*M_PI/180);
+      break;
+    case 'J': // right
+    case 'j':
+      viewingAngle++;
+      if (viewingAngle<-180)
+	viewingAngle+=360;
+      movementVector->x=cos(viewingAngle*M_PI/180);
+      movementVector->z=sin(viewingAngle*M_PI/180);
+      break;
+    case 'F':
+    case 'f':
+      if (!isFog) {
+	glEnable(GL_FOG);
+	cout << "Fog enabled." << endl;
+	isFog = true;
+      }
+      else {
+	glDisable(GL_FOG);
+	cout << "Fog disabled." << endl;
+	isFog = false;
+      }
+      break;
+    default:
+      cout << "A normal key was pressed. Hurra!" << endl;
+      break;
+    }
+  }
+
+
+  // Call back function for special keyboard events (cursor keys, etc.)
+  void mainAppWindow::CallBackSpecialKeyboardFunc(unsigned char key, int x, int y) {
+    cout << "A special key was pressed. Double hurra." << endl;
+  }
+
+
+  void mainAppWindow::StartSpinning(GlutMaster* glutMaster){
+    glutMaster->SetIdleToCurrentWindow();
+    glutMaster->EnableIdleFunction();
+  }
+
+  void mainAppWindow::setStreet(GObject* s) {
+    street = s;
+  }
+
+  void mainAppWindow::setPlane(GObject* p) {
+    plane = p;
+  }
+
+  // Calculates time passed since last call of this function
+  double mainAppWindow::getTimePassed() {
+    clock_t tnew,ris;
+    tnew=clock();
+    ris=tnew-oldTime;
+    oldTime=tnew;
+    return(ris/(double)CLOCKS_PER_SEC);
+  }
+
 }

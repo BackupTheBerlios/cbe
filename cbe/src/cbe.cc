@@ -22,6 +22,7 @@ extern "C" {
 #ifdef _WIN32
 #include <GL/glaux.h>
 #endif
+#include <stdlib.h>
 #include <GL/gl.h>    // OpenGL
 #include <GL/glut.h>  // GLUT
 }
@@ -36,32 +37,44 @@ extern "C" {
 
 using namespace std;
 
+// Global functions
+void cleanUp(void);
+
+// Global objects
+GlutMaster* glutMaster;
+mainApp::mainAppWindow* driversWindow;
+Plane* plane;
+Street* street;
+
+// Main program
 int main(int argc, char *argv[]) {
-  GlutMaster* glutMaster;
-  mainAppWindow* driversWindow;
-  Plane *plane;
-  Street *street;
-  
   // Set the size of the plane
   Point x(-60.0, -0.01, -60.0);
   Point y(160.0, -0.01, 60.0);
   
-  cout << endl << "Keyboard functions:" << endl;
-  cout << "  u: Increase speed" << endl;
-  cout << "  n: Decrease speed" << endl;
-  cout << "  h: Turn left" << endl;
-  cout << "  j: Turn right" << endl;
-  cout << "  f: Toggles fog (quite useless until now, find out for yourself)" << endl;
-  cout << "  q / ESC: Exits program" << endl << endl;
+  cout << endl << "CBE keyboard functions:" << endl;
+  cout <<         "  u          Increase speed" << endl;
+  cout <<         "  n          Decrease speed" << endl;
+  cout <<         "  h          Turn left" << endl;
+  cout <<         "  j          Turn right" << endl;
+  cout <<         "  f          Toggles fog (currently pretty useless)" << endl;
+  cout <<         "  q / ESC    Exits program" << endl << endl;
   
   try {
     glutMaster = new GlutMaster(&argc, argv);  
 
-    driversWindow = new mainAppWindow(glutMaster,
-				     500, 500,                                           // height, width
-				     200, 100,                                           // initPosition (x,y)
-				     (string)PACKAGE + (string)" " + (string)VERSION);   // title
-
+#ifndef _WIN32
+    driversWindow = new mainApp::mainAppWindow(glutMaster,
+					       500, 500,                                           // height, width
+					       200, 100,                                           // initPosition (x,y)
+					       (string)PACKAGE + (string)" " + (string)VERSION);   // title
+#else
+    driversWindow = new mainApp::mainAppWindow(glutMaster,
+					       500, 500,            // height, width
+					       200, 400,            // initPosition (x,y)
+					       "Driver's Window" ); // title
+#endif
+    
     // Create street and plane
     street = new Street(-50, 0, 0, 4);
     plane = new Plane(x, y);
@@ -74,17 +87,29 @@ int main(int argc, char *argv[]) {
   // Init scenery
   driversWindow->setStreet(street);
   driversWindow->setPlane(plane);
-  
-  // Enable event loops
-  driversWindow->StartSpinning(glutMaster);
-  glutMaster->CallGlutMainLoop();
-  
-  // Clean up
+  atexit(cleanUp);
+
+  try {
+    // Enable event loops
+    driversWindow->StartSpinning(glutMaster);
+    glutMaster->CallGlutMainLoop();
+  }
+  catch (mainApp::ExitKeyPressed) {
+    cout << "Exit key was pressed. CBE now cleans up and waves good-bye." << endl;
+  }
+  catch (...) {
+    cout << "Exception was thrown during the event loop. CBE aborted." << endl;
+    return -1;
+  }
+
+  return 0;
+}
+
+
+// Clean up memory
+void cleanUp() {
   delete plane;
   delete street;
   delete driversWindow;
   delete glutMaster;
-
-  // Exit normally
-  return 0;
 }

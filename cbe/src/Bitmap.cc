@@ -17,6 +17,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 // USA.
 
+#include <iostream>
 #include <string>
 extern "C" {
 #include <stdio.h>
@@ -107,6 +108,8 @@ bool Bitmap::load(void) {
 Bitmap::~Bitmap() {
   if (data != NULL)
     free(data);
+
+  std::cout << "Destructor of Bitmap object called." << std::endl;
 }
 
 

@@ -22,6 +22,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 // USA.
 
+#include <iostream>
 #include "glutMaster.h"
 #include "glutWindow.h"
                                                        
@@ -50,7 +51,7 @@ void GlutMaster::CallBackIdleFunc(void){
   }
 }
  
-void GlutMaster::CallBackKeyboardFunc(unsigned char key, int x, int y){
+void GlutMaster::CallBackKeyboardFunc(unsigned char key, int x, int y) {
   int windowID = glutGetWindow();
   viewPorts[windowID]->CallBackKeyboardFunc(key, x, y);
 }
@@ -86,28 +87,28 @@ void GlutMaster::CallBackVisibilityFunc(int visible){
 }
 
 void GlutMaster::CallGlutCreateWindow(const char* setTitle, GlutWindow * glutWindow){
-   // Open new window, record its windowID
-   int windowID = glutCreateWindow(setTitle);
-   glutWindow->SetWindowID(windowID);
-
-   // Store the address of new window in global array 
-   // so GlutMaster can send events to propoer callback functions.
-   viewPorts[windowID] = glutWindow;
-
-   // Hand address of universal static callback functions to Glut.
-   // This must be for each new window, even though the address are constant.
-   glutDisplayFunc(CallBackDisplayFunc);
-   glutIdleFunc(CallBackIdleFunc); 
-   glutKeyboardFunc(CallBackKeyboardFunc);
-   glutSpecialFunc(CallBackSpecialKeyboardFunc);
-   glutMouseFunc(CallBackMouseFunc);
-   glutMotionFunc(CallBackMotionFunc);
-   glutPassiveMotionFunc(CallBackPassiveMotionFunc);
-   glutReshapeFunc(CallBackReshapeFunc); 
-   glutVisibilityFunc(CallBackVisibilityFunc);
+  // Open new window, record its windowID
+  int windowID = glutCreateWindow(setTitle);
+  glutWindow->SetWindowID(windowID);
+  
+  // Store the address of new window in global array 
+  // so GlutMaster can send events to propoer callback functions.
+  viewPorts[windowID] = glutWindow;
+  
+  // Hand address of universal static callback functions to Glut.
+  // This must be for each new window, even though the address are constant.
+  glutDisplayFunc(CallBackDisplayFunc);
+  glutIdleFunc(CallBackIdleFunc); 
+  glutKeyboardFunc(CallBackKeyboardFunc);
+  glutSpecialFunc(CallBackSpecialKeyboardFunc);
+  glutMouseFunc(CallBackMouseFunc);
+  glutMotionFunc(CallBackMotionFunc);
+  glutPassiveMotionFunc(CallBackPassiveMotionFunc);
+  glutReshapeFunc(CallBackReshapeFunc); 
+  glutVisibilityFunc(CallBackVisibilityFunc);
 }
 
-void GlutMaster::CallGlutMainLoop(void){
+void GlutMaster::CallGlutMainLoop(void) {
   glutMainLoop();
 }
 
