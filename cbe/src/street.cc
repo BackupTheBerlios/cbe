@@ -98,16 +98,13 @@ GLuint Street::getStreet()
 
     for (long i=1;i<999;i++)
       {
-	GLfloat vx,vy,vz,nx,ny,nz;
-
+	GLfloat vx,vz,nx,nz;
+	//claculate normal of street
 	vx=points[i+1].x-points[i-1].x;
-	//vy=0;
 	vz=points[i+1].z-points[i-1].z;
-	
 	nx=-vz/sqrt(vx*vx+vz*vz);
-	//ny=vy;
 	nz=vx/sqrt(vx*vx+vz*vz);
-
+	//draw street out of triangles
 	glVertex3f(points[i].x+nx*broadness/2,
 		   points[i].y,
 		   points[i].z+nz*broadness/2);
@@ -116,18 +113,36 @@ GLuint Street::getStreet()
 		   points[i].z-nz*broadness/2);
       }
   glEnd();
+
+  // Draw the TingsNextToStreet
+  for (long i=1;i<999;i+=20)
+    {
+      GLfloat vx,vz,nx,nz;
+      
+      // Calculate the normal to the street
+      vx=points[i+1].x-points[i-1].x;
+      vz=points[i+1].z-points[i-1].z;
+      nx=-vz/sqrt(vx*vx+vz*vz);
+      nz=vx/sqrt(vx*vx+vz*vz);
+      
+      createThingsNextToStreet(1,points[i].x+nx*broadness/2,points[i].y,points[i].z+nz*broadness/2);
+      createThingsNextToStreet(1,points[i].x-nx*broadness/2,points[i].y,points[i].z-nz*broadness/2);
+    }
   glEndList();
 
   return list;
 }
 
+
+// getPointOfStreet takes the parameter 0<=t<=1 and returns the equivalent
+// centre-point of street
 Point Street::getPointOfStreet(GLfloat t)
 {
   Point p;
   if (t<0 || t>1)
     p=points[0];
   else
-    p=points[(int)t*1000];
+    p=points[(int)(t*1000)];
   return p;
 }
 
@@ -138,4 +153,36 @@ Point Street::getNormalOfStreet(GLfloat t)
   //To be implemented
 
   return p;
+}
+
+// draws ThingsNextToStreet (don't know how they are called) -- quite simple and very static
+void Street::createThingsNextToStreet(GLfloat size, GLfloat x, GLfloat y, GLfloat z)
+{
+  glColor3f(.9,.9,.9);
+  glBegin(GL_TRIANGLE_STRIP);
+    glVertex3f(-0.2*size+x,0*size+y,-0.2*size+z);
+    glVertex3f(-0.2*size+x,1*size+y,-0.2*size+z);
+    glVertex3f(0.2*size+x,0*size+y,-0.2*size+z);
+    glVertex3f(0.2*size+x,1*size+y,-0.2*size+z);
+    glVertex3f(0*size+x,0*size+y,0.2*size+z);
+    glVertex3f(0*size+x,1*size+y,0.2*size+z);
+    glVertex3f(-0.2*size+x,0*size+y,-0.2*size+z);
+    glVertex3f(-0.2*size+x,1*size+y,-0.2*size+z);
+  glEnd();
+  glColor3f(.1,.1,.1);
+  glBegin(GL_TRIANGLE_STRIP);
+    glVertex3f(-0.2*size+x,1*size+y,-0.2*size+z);
+    glVertex3f(-0.2*size+x,1.3*size+y,-0.2*size+z);
+    glVertex3f(0.2*size+x,1*size+y,-0.2*size+z);
+    glVertex3f(0.2*size+x,1.3*size+y,-0.2*size+z);
+    glVertex3f(0*size+x,1*size+y,0.2*size+z);
+    glVertex3f(0*size+x,1.3*size+y,0.2*size+z);
+    glVertex3f(-0.2*size+x,1*size+y,-0.2*size+z);
+    glVertex3f(-0.2*size+x,1.3*size+y,-0.2*size+z);
+  glEnd();
+  glBegin(GL_TRIANGLES);
+    glVertex3f(-0.2*size+x,1.3*size+y,-0.2*size+z);
+    glVertex3f(0.2*size+x,1.3*size+y,-0.2*size+z);
+    glVertex3f(0*size+x,1.3*size+y,0.2*size+z);
+  glEnd();
 }

@@ -64,9 +64,9 @@ int main(int argc, char *argv[]) {
   GLuint streetList=s->getStreet();
   secondWindow->setStreet(&streetList);
   Point a,b;
+
   a.x=-60; a.y=-0.1; a.z=-60;
   b.x=60; b.y=-0.1; b.z=60;
-  
   try {
     p=new Plane(a,b);
   }

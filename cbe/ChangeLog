@@ -1,6 +1,11 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
+Sam Mai 12 21:51:02 CEST 2001   Holger Urbanek
 
+ * static objects next to street
+
+ * fixed bug in Street::getPointOfStreet
+	
 Mit Mai  9 11:58:54 CEST 2001   Holger Urbanek, Andreas Bauer
 
  * All news do have deletes and are wrapped in try-catch clause

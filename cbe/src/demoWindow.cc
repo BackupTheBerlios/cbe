@@ -54,7 +54,6 @@ DemoWindow::DemoWindow(GlutMaster * glutMaster, int setWidth, int setHeight, int
   glRotatef(60, 1, 1, 1);
   glColor4f(1.0, 0.0, 0.0, 1.0);
 
-  //glShadeModel(GL_FLAT);
 }
 
 
@@ -66,9 +65,6 @@ DemoWindow::~DemoWindow(){
 
 void DemoWindow::CallBackDisplayFunc(void){
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-   //glColor4f(1.0, 0.0, 0.0, 1.0);
-   //glutWireTeapot(50);
 
    glColor4f(1.0, 1.0, 0.0, 1.0);
 
@@ -83,7 +79,7 @@ void DemoWindow::CallBackReshapeFunc(int w, int h){
    width = w;
    height= h;
 
-   glViewport(0, 0, width, height); 
+   glViewport(0,0,width,height); 
    CallBackDisplayFunc();
 }
 
