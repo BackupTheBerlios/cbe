@@ -42,7 +42,6 @@ void Car::move( street* street, double time )
 	float phi = mOffset + time * mSpeed;
 
 	street->getstreetLocation( phi, location );
-	setPos( location[ 0 ], location[ 1 ], location[ 2 ] );
 	
 	GLfloat p[ 3 ];
 	GLfloat v[ 3 ];
@@ -52,6 +51,21 @@ void Car::move( street* street, double time )
 	v[ 2 ] = p[ 2 ] - location[ 2 ];
 	
 	mRotation = atan2( v[ 2 ], v[ 0 ] ) * ( 180 / 3.1415 );
+	
+	/*float d = sqrt( v[ 2 ] * v[ 2 ] + v[ 0 ] * v[ 0 ] );
+    float nx, nz;
+    nx = -v[ 2 ] / d;
+    nz = v[ 0 ] / d;
+    nx *= 5.0 / 3;
+    nz *= 3.0 / 3;*/
+    
+    float angle = ( mRotation + 90.0 ) * ( 3.14159 / 180.0 );
+    float nx = cos( angle ) * 1.5;
+    float nz = sin( angle ) * 1.5;
+    
+	setPos( location[ 0 ] + nx,
+		location[ 1 ] + 0.5,
+		location[ 2 ] + nz );
 }
 
 void Car::setSpeed( float speed )

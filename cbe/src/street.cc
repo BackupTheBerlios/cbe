@@ -100,7 +100,7 @@ void street::getstreetLocation( double alpha, GLfloat* location )
 }
 
 void street::writeList() {
-  points[0].x=startx;
+  /*points[0].x=startx;
   points[0].y=starty;
   points[0].z=startz;
 
@@ -135,9 +135,21 @@ void street::writeList() {
 	points[i].y=starty;
 	a++;
       }
+  }*/
+  
+  float xradius = 1000;
+  float yradius = 200;
+  const int pointcount = length;
+  
+  for( int i = 0; i < pointcount; i++ )
+  {
+      float angle = ( 3.14159 * 2 ) * ( i / (float)( pointcount - 60 ) );
+      points[ i ].x = startx + cos( angle ) * xradius;
+      points[ i ].z = ( startz - yradius - 0.1 ) + sin( angle ) * yradius;  	
+      points[ i ].y = starty;
   }
 
-  GLfloat dy0 = 0.02;
+  GLfloat dy0 = 0.05;
   // introduced this parameter to elevate the
   // street over the landscape due to Z buffer
   // precision problems on my ATI rage (BL101901)
@@ -152,13 +164,17 @@ void street::writeList() {
     vz=points[i+1].z-points[i].z;
     nx=-vz/sqrt(vx*vx+vz*vz);
     nz=vx/sqrt(vx*vx+vz*vz);
+    
+    nx *= broadness / 2;
+    nz *= broadness / 2;
+    
     //draw street out of triangles
-    glVertex3f(points[i].x,
+    glVertex3f(points[i].x+nx,
 	       points[i].y+dy0,
-	       points[i].z+broadness/2);
-    glVertex3f(points[i].x,
+	       points[i].z+nz);
+    glVertex3f(points[i].x-nx,
 	       points[i].y+dy0,
-	       points[i].z-broadness/2);
+	       points[i].z-nz);
   }
   glEnd();
   
@@ -172,26 +188,41 @@ void street::writeList() {
     nx=-vz/sqrt(vx*vx+vz*vz);
     nz=vx/sqrt(vx*vx+vz*vz);
     
-    createPoles(0.6,points[i].x,points[i].y,points[i].z+broadness/2+.5);
-    createPoles(0.6,points[i].x,points[i].y,points[i].z-broadness/2-.5);
+    nx *= ( broadness / 2 + 0.5 );
+    nz *= ( broadness / 2 + 0.5 );
+    
+    createPoles(0.6,points[i].x+nx,points[i].y,points[i].z+nz);
+    createPoles(0.6,points[i].x-nx,points[i].y,points[i].z-nz);
   }
 
   // Draw Middlelines
   glColor3f(.9,.9,.9);
   for (i=1;i<2449;i+=10){
+
+    GLfloat vx,vz,nx,nz;
+    
+    // Calculate the normal to the street
+    vx=points[i+1].x-points[i].x;
+    vz=points[i+1].z-points[i].z;
+    nx=-vz/sqrt(vx*vx+vz*vz);
+    nz=vx/sqrt(vx*vx+vz*vz);
+
+	nx *= broadness/50;
+	nz *= broadness/50;
+
     glBegin(GL_POLYGON);
-    glVertex3f(points[i].x,
+    glVertex3f(points[i].x+nx,
 	       points[i].y+dy0+.01,
-	       points[i].z+broadness/30);
-    glVertex3f(points[i].x,
+	       points[i].z+nz);
+    glVertex3f(points[i].x-nx,
 	       points[i].y+dy0+.01,
-	       points[i].z-broadness/30);
-    glVertex3f(points[i+6].x,
+	       points[i].z-nz);
+    glVertex3f(points[i+6].x-nx,
 	       points[i+6].y+dy0+.01,
-	       points[i+6].z-broadness/30);
-    glVertex3f(points[i+6].x,
+	       points[i+6].z-nz);
+    glVertex3f(points[i+6].x+nx,
 	       points[i+6].y+dy0+.01,
-	       points[i+6].z+broadness/30);
+	       points[i+6].z+nz);
     glEnd();
   } 
   
@@ -220,8 +251,11 @@ void street::makeTreeList()
     r = random();
     float dx = ( ( r - RAND_MAX / 2 ) / (float)( RAND_MAX / 2 ) ) * 3;
 
-    createTree(1,points[i].x + dx, points[i].y, points[i].z+broadness/2+.5 + 2 + dz);
-    createTree(1,points[i].x + dx, points[i].y, points[i].z-broadness/2-.5 - 2 - dz);
+	nx *= ( broadness / 2 + 0.5 + 2 + dx );
+	nz *= ( broadness / 2 + 0.5 + 2 + dz );
+
+    createTree(1,points[i].x + nx, points[i].y, points[i].z+nz);
+    createTree(1,points[i].x - nx, points[i].y, points[i].z-nz);
   }
 
   glEndList();
@@ -232,6 +266,7 @@ void street::draw()
   glDisable(GL_COLOR_MATERIAL);
   glEnable( GL_TEXTURE_2D );
   glEnable(GL_BLEND);
+  glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // added 042402
 
   mTreeMaterial->submit();
   glCallList( mTreeList );

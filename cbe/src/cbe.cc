@@ -65,8 +65,8 @@ GlutMaster* glutMaster;
 mainApp::mainAppWindow* driversWindow;
 Plane* plane;
 street* curStreet;
-Car* car1;
-Car* car2;
+/*Car* car1;
+Car* car2;*/
 
 // Main program
 int main(int argc, char *argv[]) {
@@ -85,8 +85,8 @@ int main(int argc, char *argv[]) {
   };
   
   // Set the size of the plane
-  Point x(-500.0, -0.01, -60.0);
-  Point y(0.0, -0.01, 60.0);
+  Point x(-2000, -0.01, -2000.0);
+  Point y(2000, -0.01, 2000.0);
   
   // Scan command line parameters and options
   while ( (c = getopt_long(argc, argv, "hr:V", long_options, &option_index)) != -1 ) {
@@ -145,7 +145,9 @@ int main(int argc, char *argv[]) {
     else
       prefsFile = (string)"/home/" + (string)getpwuid(getuid())->pw_name + (string)"/.cbe";
   }
-  
+
+  vector<Car*> myCars;
+ 
   try {
     // Try reading the cbe preferences file
     pref::Preferences prefs(prefsFile);
@@ -159,7 +161,7 @@ int main(int argc, char *argv[]) {
 					       (string)PACKAGE + (string)" " + (string)VERSION);   // title
 
     // Create street, plane and car
-    curStreet = new street( -490, 0, 0, 4 );
+    curStreet = new street( -490, 0, 0, 8 );
     plane = new Plane( x, y );
     
     /*car1 = new TestCar( 0, 30 );
@@ -169,8 +171,8 @@ int main(int argc, char *argv[]) {
 	car2 = new TestCar( -1, 0 );
     car2->setPos( -3, 0, -5 );
     car2->rotate( -90 );*/
-    
-    car1 = new SedanCar;
+        
+    /*car1 = new SedanCar;
     car1->setPos( -3, 0, -5 );
     car1->rotate( 180 );
     car1->setSpeed( 0.005 );
@@ -180,6 +182,37 @@ int main(int argc, char *argv[]) {
     car2->rotate( 180 );
     car2->setSpeed( -0.008 );
   	car2->setOffset( 0.4 );
+
+    car3 = new SedanCar;
+    car3->setPos( -3, 0, -5 );
+    car3->rotate( 180 );
+    car3->setSpeed( -0.02 );
+  	car3->setOffset( 0.7 );
+
+    car4 = new SedanCar;
+    car4->setPos( -3, 0, -5 );
+    car4->rotate( 0 );
+    car4->setSpeed( 0.001 );
+  	car4->setOffset( 0.1 );*/
+  	
+  	Car* car;
+  	for( int i = 0; i < 20; i++ )
+  	{
+  		float speed;
+  		bool reverse = rand() & 1;
+  	
+  		car = new SedanCar;
+  		car->setPos( 0, 0, 0 );
+  		car->rotate( reverse ? 180 : 0 );
+  		speed = 0.003 + 0.005 * ( ( abs( rand() ) % 1000 ) / 1000.0 );
+  		if( reverse )
+  			speed = -speed;
+  		car->setSpeed( speed );
+  		car->setOffset( ( rand() % 1000 ) / 1000.0 );
+  		
+  		myCars.push_back( car );
+  	}
+  	
   }
   catch(pref::IOException) {
     cerr << "ERROR: Could not read cbe preferences file." << endl;
@@ -193,8 +226,9 @@ int main(int argc, char *argv[]) {
   // Init scenery
   driversWindow->setstreet( curStreet );
   driversWindow->setPlane( plane );
-  driversWindow->addCar( car1 );
-  driversWindow->addCar( car2 );
+  
+  for( int i = 0; i < myCars.size(); i++ )
+ 	 driversWindow->addCar( myCars[ i ] );
   atexit(cleanUp);
 
   double oldTime = 0;
@@ -220,8 +254,8 @@ int main(int argc, char *argv[]) {
 void cleanUp() {
   delete plane;
   delete curStreet;
-  delete car1;
-  delete car2;
+  //delete car1;
+  //delete car2;
   delete driversWindow;
   delete glutMaster;
 }

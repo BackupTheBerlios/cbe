@@ -81,9 +81,11 @@ void Plane::writeList() {
 
 void Plane::submit()
 {
+  glDisable( GL_DEPTH_TEST );
 	drawSky();
 	mGrassMaterial->submit();
 	GListObject::submit();
+  glEnable( GL_DEPTH_TEST );
 }
 
 void Plane::drawSky()
@@ -93,14 +95,16 @@ void Plane::drawSky()
 	glBlendFunc( GL_SRC_ALPHA, GL_DST_ALPHA );
 	glColor4f( 1.0, 1.0, 1.0, 0.5 );
 	glEnable( GL_BLEND );
-
+	
 	glPushMatrix();
 	
-	glTranslatef(
-		-gLocation[ 0 ],
-		-gLocation[ 1 ],
-		-gLocation[ 2 ] );
-	
+	glLoadIdentity();
+
+	/*glTranslatef(
+		gLocation[ 0 ],
+		gLocation[ 1 ],
+		gLocation[ 2 ] );*/
+			
 	mCloudMotion = clock() * ( 1 / (float)CLOCKS_PER_SEC );
 	
 	glClipPlane( GL_CLIP_PLANE0, gClipPlane );
@@ -108,8 +112,10 @@ void Plane::drawSky()
 	
 	glRotatef( mCloudMotion, 0, 1, 0 );
 	glRotatef( 90, 1, 0, 0 );
+
 	mCloudsMaterial->submit();
-	gluSphere( mQuadratic, 90, 15, 15 );
+
+	gluSphere( mQuadratic, 50, 15, 15 );
 	
 	glDisable( GL_CLIP_PLANE0 );
 	

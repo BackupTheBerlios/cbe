@@ -117,6 +117,7 @@ namespace mainApp {
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	glShadeModel (GL_SMOOTH);*/
+	// ***
     
     gLocation[ 0 ] = 0;
     gLocation[ 1 ] = 0;
@@ -127,8 +128,11 @@ namespace mainApp {
     glLoadIdentity();
 
     // perspective
-    gluPerspective(45/*120.0*/, 1.0, 0.1, 100.0);
+    gluPerspective(45/*120.0*/, 1.0, 0.1, 90.0);
   
+  	//glEnable(GL_FOG);
+  	
+
     // Set viewing direction from z-Axis to x-axis
     glRotatef(90.0, 0, -1, 0);
   
@@ -269,6 +273,7 @@ namespace mainApp {
     
     // recalculate the new movementVector
     movementVector->x=cos(viewingAngle*M_PI/180);
+    movementVector->y=0;
     movementVector->z=sin(viewingAngle*M_PI/180);
 
     // Switch to camera matrix
@@ -329,6 +334,19 @@ namespace mainApp {
 	prefs->setBlending(true);
       }
       break;
+    
+    case 't':					// Bernhard's Turbo
+      speed += 1;
+      break;
+    case ' ':					// full stop
+      speed = 0;
+      break;
+    case '#':
+    	viewingAngle += 180;
+    	if (viewingAngle>180)
+	viewingAngle-=360;
+    	break;
+    
     case 'U':                   // faster
     case 'u':
       if ( speed >= 0 )         // Acceleration in forward movement
