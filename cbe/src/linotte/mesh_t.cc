@@ -65,7 +65,9 @@ mesh_t::mesh_t(
 {
 	std::string				material_name;
 
+	cout << "about to read str" << endl;
 	stream.read_string( material_name );
+	cout << material_name.c_str() << endl;
 
 	m_material = matmgr->material_by_name(
 		material_name.c_str() );
@@ -96,6 +98,8 @@ mesh_t::mesh_t(
 		clear();
 		throw;
 	}
+
+	cout << "read material" << endl;
 }
 
 mesh_t::~mesh_t()

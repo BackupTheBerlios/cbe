@@ -23,7 +23,7 @@
 #define LINOTTE_IS_BIG_ENDIAN 1
 #else
 // FIXME
-#define LINOTTE_IS_BIG_ENDIAN 1
+#define LINOTTE_IS_BIG_ENDIAN 0
 //#else
 //#error unknown operating system
 #endif
@@ -48,7 +48,7 @@ typedef double f64;
 //typedef size_t psize_t;
 typedef s32 pfpos_t;
 
-inline u16 swap_endian32( u32 x )
+inline u32 swap_endian32( u32 x )
 {
 	return ( ( ( ( x >> 8 ) & 0xff ) | ( ( x << 8 ) & 0xff00 ) ) << 16 ) |
 		( ( ( x >> 24 ) & 0xff ) | ( ( ( x >> 16 ) << 8 ) & 0xff00 ) );

@@ -17,32 +17,35 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 // USA.
 
-#include <glu.h>
-
+#include <GL/glu.h>
+#include "config.h"
 #include "SedanCar.h"
 
 SedanCar::SedanCar()
 {
-	load( "models/sedan.csp" );
+  string datadirectory = (string)DATADIR + "/cbe/sedan.csp";
+
+  load( datadirectory.c_str() );
+
 }
 
 void
 SedanCar::submit()
 {
-	glTranslatef( 0, 0, -1.75 );
-
-    glRotatef( -mRotation, 0, 1, 0 );
-
-    glRotatef( -90, 1, 0, 0 );
-
-	glScalef( 0.6, 0.6, 1.0 );
-
-	GLinotteObject::submit();
-
-	/*static GLUquadricObj* q = 0;
-	if( q == 0 )
-		q = gluNewQuadric();
-
-	gluSphere( q, 1, 8, 8 );*/
+  glTranslatef( 0, 0, -1.75 );
+  
+  glRotatef( -mRotation, 0, 1, 0 );
+  
+  glRotatef( -90, 1, 0, 0 );
+  
+  glScalef( 0.6, 0.6, 1.0 );
+  
+  GLinotteObject::submit();
+  
+  /*static GLUquadricObj* q = 0;
+    if( q == 0 )
+    q = gluNewQuadric();
+    
+    gluSphere( q, 1, 8, 8 );*/
 }
 

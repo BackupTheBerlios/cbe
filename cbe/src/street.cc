@@ -30,7 +30,7 @@ extern "C" {
 #include "config.h"
 #include "stdio.h"
 
-Street::Street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad) {
+street::street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad) {
   length=2500L;
   step=0.2;
   startx=x;
@@ -40,12 +40,12 @@ Street::Street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad) {
 
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  
   string path = (string)DATADIR + "/pixmaps/cbe/tree.tif";
   mTreeMaterial = new linotte::texture_material_t( "tree", path.c_str() );
 
@@ -54,18 +54,22 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
   makeList();
 
+  glDisable(GL_COLOR_MATERIAL);
+  glEnable( GL_TEXTURE_2D );
+  glEnable(GL_BLEND);
+
   makeTreeList();
 }
 
 
-Street::~Street() {
+street::~street() {
   // The destructor of the base class is called automatically
   // as the destructors are declared virtual.
   glDeleteLists( mTreeList, 1 );
   delete mTreeMaterial;
 }
 
-void Street::getStreetLocation( double alpha, GLfloat* location )
+void street::getstreetLocation( double alpha, GLfloat* location )
 {
 	alpha = 1 - fmod( alpha, 1 );
 
@@ -90,7 +94,7 @@ void Street::getStreetLocation( double alpha, GLfloat* location )
 	//printf( "%f %f %f\n", location[ 0 ], location[ 1 ], location[ 2 ] );
 }
 
-void Street::writeList() {
+void street::writeList() {
   points[0].x=startx;
   points[0].y=starty;
   points[0].z=startz;
@@ -188,7 +192,7 @@ void Street::writeList() {
   
 }
 
-void Street::makeTreeList()
+void street::makeTreeList()
 {
   mTreeList = glGenLists( 1 );
   glNewList( mTreeList, GL_COMPILE );
@@ -196,7 +200,7 @@ void Street::makeTreeList()
   srandom( 1234 );
 
   // Draw the trees
-  for (int i=1;i<2449;i+=20) {
+  for (int i=1;i<2449;i+=50) {
     GLfloat vx,vz,nx,nz;
     
     // Calculate the normal to the street
@@ -218,7 +222,7 @@ void Street::makeTreeList()
   glEndList();
 }
 
-void Street::draw()
+void street::draw()
 {
   glDisable(GL_COLOR_MATERIAL);
   glEnable( GL_TEXTURE_2D );
@@ -233,9 +237,9 @@ void Street::draw()
   GListObject::draw();
 }
 
-// getPointOfStreet takes the parameter 0<=t<=1 and returns the equivalent
+// getPointOfstreet takes the parameter 0<=t<=1 and returns the equivalent
 // centre-point of street
-Point Street::getPointOfStreet(GLfloat t) {
+Point street::getPointOfstreet(GLfloat t) {
   Point p;
   
   if (t<0 || t>1)
@@ -248,14 +252,14 @@ Point Street::getPointOfStreet(GLfloat t) {
 
 
 //To be implemented
-Point Street::getNormalOfStreet(GLfloat t) {
+Point street::getNormalOfstreet(GLfloat t) {
   Point p;
   return p;
 }
 
 
 // draws poles (don't know how they are called) -- quite simple and very static
-void Street::createPoles(GLfloat size, GLfloat x, GLfloat y, GLfloat z) {
+void street::createPoles(GLfloat size, GLfloat x, GLfloat y, GLfloat z) {
   glColor3f(.9,.9,.9);
   glBegin(GL_TRIANGLE_STRIP);
     glVertex3f(-0.1*size+x,0*size+y,-0.1*size+z);
@@ -286,7 +290,7 @@ void Street::createPoles(GLfloat size, GLfloat x, GLfloat y, GLfloat z) {
 }
 
 
-void Street::createTree(GLfloat size, GLfloat x, GLfloat y, GLfloat z) {
+void street::createTree(GLfloat size, GLfloat x, GLfloat y, GLfloat z) {
   float width = 2;
   float height = 10;
 

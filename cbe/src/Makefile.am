@@ -37,4 +37,7 @@ cbe_SOURCES = 	cbe.cc glutMaster.cc glutWindow.cc mainAppWindow.cc \
 		street.cc plane.cc Point.cc Car.cc GMovableObject.cc \
 		street.h  plane.h  Point.h  Car.h  GMovableObject.h \
 		random.cc random.h \
+		SedanCar.cc SedanCar.h \
+		GLinotteObject.cc GLinotteObject.h \
+		GListObject.cc GListObject.h \
 		getopt.c getopt.h getopt1.c

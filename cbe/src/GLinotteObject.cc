@@ -30,7 +30,6 @@ GLinotteObject::GLinotteObject() :
 GLinotteObject::~GLinotteObject()
 {
 	delete m_model;
-	
 	delete m_matmgr;
 }
 

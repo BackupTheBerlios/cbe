@@ -27,25 +27,25 @@ extern "C" {
 }
 #include "Point.h"
 #include "Car.h"
-#include "Street.h"
+#include "street.h"
 
 Car::Car()
 {
 	mRotation = 0;
 }
 
-void Car::move( Street* street, double time )
+void Car::move( street* street, double time )
 {
 	GLfloat location[ 3 ];
 
 	//time = 0.01;
 
-	street->getStreetLocation( time * 0.005, location );
+	street->getstreetLocation( time * 0.005, location );
 	setPos( location[ 0 ], location[ 1 ], location[ 2 ] );
 	
 	GLfloat p[ 3 ];
 	GLfloat v[ 3 ];
-	street->getStreetLocation( time * 0.005 + 0.001, p );
+	street->getstreetLocation( time * 0.005 + 0.001, p );
 	v[ 0 ] = p[ 0 ] - location[ 0 ];
 	v[ 1 ] = p[ 1 ] - location[ 1 ];
 	v[ 2 ] = p[ 2 ] - location[ 2 ];

@@ -36,7 +36,7 @@ extern "C" {
 #include "glutWindow.h"
 #include "Point.h"
 #include "Bitmap.h"
-#include "Street.h"
+#include "street.h"
 
 #ifndef M_PI
 #define M_PI 3.1415926535
@@ -172,7 +172,7 @@ namespace mainApp {
   void mainAppWindow::CallBackDisplayFunc(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     plane->draw();
-    street->draw();
+    curStreet->draw();
     
     // Draw all graphic objects in the list
     GObjectVector::iterator listEnd = graphicObjects.end();
@@ -287,7 +287,7 @@ namespace mainApp {
     double time = ( clock() - zeroClock ) / (double)CLOCKS_PER_SEC;
     for( CarVector::iterator itr = carVector.begin(); itr != carVector.end(); ++itr )
     {
-    	(*itr)->move( (Street*)street, time );
+    	(*itr)->move( (street*)curStreet, time );
 	}
 
     
@@ -429,10 +429,10 @@ namespace mainApp {
   }
 
 
-  void mainAppWindow::setStreet(GObject* s) {
-    street = s;
+  void mainAppWindow::setstreet(GObject* s) {
+    curStreet = s;
     GLfloat loc[ 3 ];
-    ((Street*)s)->getStreetLocation( 0, loc );
+    ((street*)s)->getstreetLocation( 0, loc );
     
     glLoadIdentity();
   	glTranslatef( -loc[ 0 ], -loc[ 1 ], -loc[ 2 ] );

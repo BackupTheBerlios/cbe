@@ -22,7 +22,7 @@
 
 #include "GLinotteObject.h"
 
-class Street;
+class street;
 
 class Car : public GLinotteObject {
  public:
@@ -37,7 +37,7 @@ class Car : public GLinotteObject {
 	enum { change_minChange = change_brakeLightOn,
 		   change_maxChange = change_nextColor };
 		   
-	virtual void move( Street* street, double time );
+	virtual void move( street* street, double time );
 	
 protected:
 	float mRotation;

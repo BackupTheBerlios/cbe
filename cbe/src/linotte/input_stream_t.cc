@@ -25,9 +25,15 @@ input_stream_t::read_string(
 		
 	u08*				buffer = s_temp_buffer;
 	const int			buffer_size = TEMP_BUFFER_SIZE / sizeof( char );
-		
+	
+	if( !buffer )
+	  {
+	    s_temp_buffer = new u08[ TEMP_BUFFER_SIZE ];
+	    buffer = s_temp_buffer;
+	  }
+	
 	while( (long)length >= buffer_size )
-	{
+	  {
 		read_bytes( buffer, buffer_size * sizeof( char ) );
 		length -= buffer_size;
 		string.append( (char*)buffer, buffer_size );
@@ -35,7 +41,9 @@ input_stream_t::read_string(
 	
 	if( length > 0 )
 	{
+	  cout << "1" << endl;
 		read_bytes( buffer, length * sizeof( char ) );
+		cout << "2" << endl;
 		string.append( (char*)buffer, length );
 	}
 }

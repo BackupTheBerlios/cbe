@@ -24,7 +24,7 @@
 #include "GListObject.h" // The base class for graphic objects
 #include "linotte/texture_material_t.h"
 
-class Street: public GListObject
+class street: public GListObject
 {
  private:
   Point points[5050];
@@ -38,16 +38,16 @@ public:
   GLfloat startx, starty, startz;
   GLfloat broadness;
   
-  Point getPointOfStreet(GLfloat); // Gets Point near location (0<=location<=1)
-  Point getNormalOfStreet(GLfloat); // Gets the normal near location
+  Point getPointOfstreet(GLfloat); // Gets Point near location (0<=location<=1)
+  Point getNormalOfstreet(GLfloat); // Gets the normal near location
   void writeList();
   virtual void draw();
   void createPoles(GLfloat size, GLfloat x, GLfloat y, GLfloat z);
   void createTree(GLfloat, GLfloat, GLfloat, GLfloat);
-  void getStreetLocation( double alpha, GLfloat* location );
+  void getstreetLocation( double alpha, GLfloat* location );
   
-  Street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad);
-  ~Street();
+  street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad);
+  ~street();
 };
 
 #endif

@@ -77,11 +77,11 @@ model_t::model_t(
 	mesh_t**				meshes;
 
 
-
+	cout << "back in const" << endl;
 	mesh_count = stream.read_u32();
 
 	m_mesh_count = mesh_count;
-
+	cout << mesh_count << endl;
 	
 
 	meshes = (mesh_t**)( std::calloc(
@@ -183,7 +183,7 @@ model_t::load_materials(
 {
 
 	u32						material_count = stream.read_u32();
-
+	cout << material_count << endl;
 
 
 	for( u32 i = 0; i < material_count; i++ )
@@ -197,7 +197,7 @@ model_t::load_materials(
 		GLfloat				color[ 3 ];
 
 	
-
+		cout << "read len" << endl;
 		length = stream.read_u32();
 
 		if( length >= 80 )
@@ -211,7 +211,7 @@ model_t::load_materials(
 		name[ length ] = '\0';
 
 		
-
+		cout << name << endl;
 		color[ 0 ] = stream.read_f32();
 
 		color[ 1 ] = stream.read_f32();
@@ -223,11 +223,11 @@ model_t::load_materials(
 		material_t*			material;
 
 		
-
+		cout << "creating mat" << endl;
 		material = new simple_material_t( name, color );
 
 		
-
+		cout << "addint mat" << endl;
 		matmgr->add_material( material );
 
 	}

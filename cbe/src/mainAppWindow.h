@@ -57,7 +57,7 @@ namespace mainApp {
   private:
     pref::Preferences* prefs;       // Preferences object
     GObject *plane;                 // holds the plane
-    GObject *street;                // holds the street
+    GObject *curStreet;                // holds the street
     GObjectVector graphicObjects;	// Objects to be drawn
     CarVector carVector;			// Cars
     GLfloat speed;                  // Speed of movement
@@ -92,7 +92,7 @@ namespace mainApp {
     
     // Window functionality functions
     void StartSpinning(GlutMaster*); // ???
-    void setStreet(GObject*);        // used to alter the polygonList
+    void setstreet(GObject*);        // used to alter the polygonList
     void setPlane(GObject*);         // ???
     void addGraphicObject(GObject*); // ???
     void addCar(Car*);               // ???

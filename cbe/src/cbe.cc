@@ -64,7 +64,7 @@ void cleanUp(void);
 GlutMaster* glutMaster;
 mainApp::mainAppWindow* driversWindow;
 Plane* plane;
-Street* street;
+street* curStreet;
 Car* car1;
 Car* car2;
 
@@ -159,7 +159,7 @@ int main(int argc, char *argv[]) {
 					       (string)PACKAGE + (string)" " + (string)VERSION);   // title
 
     // Create street, plane and car
-    street = new Street( -490, 0, 0, 4 );
+    curStreet = new street( -490, 0, 0, 4 );
     plane = new Plane( x, y );
     
     /*car1 = new TestCar( 0, 30 );
@@ -184,7 +184,7 @@ int main(int argc, char *argv[]) {
   }
   
   // Init scenery
-  driversWindow->setStreet( street );
+  driversWindow->setstreet( curStreet );
   driversWindow->setPlane( plane );
   driversWindow->addCar( car1 );
   //driversWindow->addCar( car2 );
@@ -212,7 +212,7 @@ int main(int argc, char *argv[]) {
 // Clean up memory
 void cleanUp() {
   delete plane;
-  delete street;
+  delete curStreet;
   delete car1;
   delete car2;
   delete driversWindow;
