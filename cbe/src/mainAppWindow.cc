@@ -32,6 +32,7 @@ extern "C" {
 #include <GL/glut.h>
 #include <time.h>
 }
+#include "Preferences.h"
 #include "cbe.hh"
 #include "mainAppWindow.h"
 #include "glutMaster.h"
@@ -47,7 +48,14 @@ using namespace std;
 
 namespace mainApp {
 
-  mainAppWindow::mainAppWindow(GlutMaster* glutMaster, int setWidth, int setHeight, int setInitPositionX, int setInitPositionY, string title) {
+  mainAppWindow::mainAppWindow(GlutMaster* glutMaster,
+			       pref::Preferences* newPrefs,
+			       int setWidth, int setHeight,
+			       int setInitPositionX, int setInitPositionY,
+			       string title) {
+    // Set preferences
+    prefs = newPrefs;
+    
     // Where is the cockpit?
     cockpitIMG.setPath( (string)DATADIR + "/pixmaps/cbe/cockpit.tif" );  // Size: 717 x 538 pixels
     
@@ -73,8 +81,6 @@ namespace mainApp {
     showFramerate=false; // Default to don't display framerate
 
     isFog = false;
-    blend = 1;
-
     width  = setWidth;               
     height = setHeight;
     initPositionX = setInitPositionX;
@@ -140,11 +146,12 @@ namespace mainApp {
     for( GObjectList::iterator itr = graphicObjectsList.begin(); itr != graphicObjectsList.end(); itr++ )
       (*itr)->draw();
     
-    // Blend cockpit
-    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    // Draw cockpit
-    glDrawPixels(717, 538, GL_RGBA, GL_UNSIGNED_BYTE, cockpitIMG.getData());
+    // Check if blending is enabled
+    if (prefs->useBlending()) {
+      glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      glDrawPixels(717, 538, GL_RGBA, GL_UNSIGNED_BYTE, cockpitIMG.getData());
+      glEnable(GL_BLEND);
+    }
 
     // Finally draw everything on the screen that we just created and constructed
     glutSwapBuffers();   
@@ -241,12 +248,13 @@ namespace mainApp {
       break;
     case 'B':
     case 'b':
-      blend = blend ? 0 : 1;
-      if (blend) {
+      if (prefs->useBlending()) {
 	glDisable(GL_BLEND);
+	prefs->setBlending(false);
       }
       else {
 	glEnable(GL_BLEND);
+	prefs->setBlending(true);
       }
       break;
     case 'U':  // faster
@@ -340,17 +348,23 @@ namespace mainApp {
     glutMaster->EnableIdleFunction();
   }
 
+
   void mainAppWindow::setStreet(GObject* s) {
     street = s;
   }
 
+
   void mainAppWindow::setPlane(GObject* p) {
     plane = p;
   }
+
+
   void mainAppWindow::addGraphicObject( GObject* obj) {
-	  // Append the passed graphic object pointer to the list
-	  graphicObjectsList.push_back( obj );
+    // Append the passed graphic object pointer to the list
+    graphicObjectsList.push_back( obj );
   }
+
+
   // Calculates time passed since last call of this function
   double mainAppWindow::getTimePassed() {
     clock_t tnew,ris;
@@ -361,9 +375,3 @@ namespace mainApp {
   }
 
 }
-
-
-
-
-
-

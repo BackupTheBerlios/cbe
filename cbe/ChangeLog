@@ -1,5 +1,14 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
+
+Tue Jul 24 19:52:12 CEST 2001  Andreas Bauer
+
+ * Updated pixmaps/Makefile.am
+
+ * Removed cockpit.bmp from the current CVS tree
+
+ * Added Preferences object to read some rcfile
+
 Mon Jul 16 17:10:07 CEST 2001  Labor (Holger Urbanek)
 
  * Again Changed SerialClient.cc according to MS-DOS machine

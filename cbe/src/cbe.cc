@@ -25,7 +25,12 @@ extern "C" {
 #include <stdlib.h>
 #include <GL/gl.h>    // OpenGL
 #include <GL/glut.h>  // GLUT
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>                                                         
 }
+#include "Preferences.h"
 #include "cbe.hh"
 #include "glutMaster.h"
 #include "glutWindow.h"
@@ -51,10 +56,13 @@ Car* car2;
 
 // Main program
 int main(int argc, char *argv[]) {
+  string prefsFile;                          // Path to the cbe preferences file
+
   // Set the size of the plane
   Point x(-60.0, -0.01, -60.0);
   Point y(160.0, -0.01, 60.0);
   
+  // Some commands to be displayed on the screen
   cout << endl << "CBE keyboard functions:" << endl;
   cout <<         "  u          Increase speed" << endl;
   cout <<         "  n          Decrease speed" << endl;
@@ -67,16 +75,28 @@ int main(int argc, char *argv[]) {
   cout <<         "  e          Toggle eye-position-server communication" << endl;
   cout <<         "  q / ESC    Exits program" << endl << endl;
   
+  // Determine path for rcfile
+  if (getenv("HOME"))
+    prefsFile = (string)getenv("HOME") + (string)"/.cbe";
+  else
+    prefsFile = (string)"/home/" + (string)getpwuid(getuid())->pw_name + (string)"/.cbe";
+
   try {
+    // Try reading the cbe preferences file
+    pref::Preferences prefs(prefsFile);
+
+    // Try initializing the main Glut objects
     glutMaster = new GlutMaster(&argc, argv);  
 
 #ifndef _WIN32
     driversWindow = new mainApp::mainAppWindow(glutMaster,
+					       &prefs,
 					       WINDOW_WIDTH, WINDOW_HEIGHT,                        // height, width
 					       10, 10,                                             // initPosition (x,y)
 					       (string)PACKAGE + (string)" " + (string)VERSION);   // title
 #else
     driversWindow = new mainApp::mainAppWindow(glutMaster,
+					       &prefs,
 					       WINDOW_WITH, WINDOW_HEIGHT,       // height, width
 					       10, 10,                           // initPosition (x,y)
 					       "Driver's Window" );              // title
@@ -92,8 +112,12 @@ int main(int argc, char *argv[]) {
     car2->setPos( -3, 0, -5 );
     car2->rotate( -90 );
   }
+  catch (pref::IOException) {
+    cerr << "ERROR: Could not read cbe preferences file." << endl;
+    return -1;
+  }
   catch (...) {
-    cout << "Exception was thrown on program initialization. Not enough memory?!" << endl;
+    cerr << "ERROR: Exception was thrown on program initialization. Not enough memory?!" << endl;
     return -1;
   }
   

@@ -34,6 +34,7 @@ extern "C" {
 #ifdef _WIN32
 using namespace std;
 #endif
+#include "Preferences.h"
 #include "glutMaster.h"
 #include "GObject.h"
 #include "Point.h"
@@ -46,12 +47,12 @@ namespace mainApp {
   
   class mainAppWindow : public GlutWindow{
   private:
+    pref::Preferences* prefs;       // Preferences object
     GObject *plane;                 // holds the plane
     GObject *street;                // holds the street
     GObjectList graphicObjectsList; // Objects to be drawn
     GLfloat speed;                  // Speed of movement
     bool isFog;                     // Flag for fog
-    int blend;                      // Flag for blending
     Point *movementVector;          // Movement direction
     GLfloat viewingAngle;           // Indicates the angle of view in the x-z-plane
     clock_t oldTime;                // Used to determine the Frames/s (also for constant movement speed)
@@ -68,10 +69,7 @@ namespace mainApp {
     int height, width;
     int initPositionX, initPositionY;
     
-    mainAppWindow(GlutMaster* glutMaster,
-		  int setWidth, int setHeight,
-		  int setInitPositionX, int setInitPositionY,
-		  string title);
+    mainAppWindow(GlutMaster*, pref::Preferences*, int, int, int, int, string);
     ~mainAppWindow();
     
     // Some call back functions
