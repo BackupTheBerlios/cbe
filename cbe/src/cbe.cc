@@ -17,16 +17,14 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 // USA.
 
+#include <iostream>
 extern "C" {
 #ifdef _WIN32
-  #include <GL/glaux.h>
+#include <GL/glaux.h>
 #endif
 #include <GL/gl.h>    // OpenGL
 #include <GL/glut.h>  // GLUT
 }
-
-#include <iostream>
-
 #include "cbe.hh"
 #include "glutMaster.h"
 #include "glutWindow.h"
@@ -40,16 +38,15 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
   GlutMaster* glutMaster;
-  mainAppWindow* secondWindow;
+  mainAppWindow* driversWindow;
   Plane *plane;
   Street *street;
   
-  // Size of plane
-  Point a(-60.0, -0.01, -60.0);
-  Point b(160.0, -0.01, 60.0);
+  // Set the size of the plane
+  Point x(-60.0, -0.01, -60.0);
+  Point y(160.0, -0.01, 60.0);
   
-  cout << endl;
-  cout << "Keyboard functions:" << endl;
+  cout << endl << "Keyboard functions:" << endl;
   cout << "  u: Increase speed" << endl;
   cout << "  n: Decrease speed" << endl;
   cout << "  h: Turn left" << endl;
@@ -58,38 +55,43 @@ int main(int argc, char *argv[]) {
   cout << "  q / ESC: Exits program" << endl << endl;
   
   try {
-    glutMaster   = new GlutMaster(&argc, argv);  
+    glutMaster = new GlutMaster(&argc, argv);  
 
 #ifndef _WIN32
-    secondWindow = new mainAppWindow(glutMaster,
-				     500, 500,         // height, width
-				     200, 400,         // initPosition (x,y)
+    driversWindow = new mainAppWindow(glutMaster,
+				     500, 500,                                           // height, width
+				     200, 100,                                           // initPosition (x,y)
 				     (string)PACKAGE + (string)" " + (string)VERSION);   // title
 #else
-    secondWindow = new mainAppWindow(glutMaster,
-				     500, 500,          // height, width
-				     200, 400,          // initPosition (x,y)
-				     "Second window" ); // title
+    driversWindow = new mainAppWindow(glutMaster,
+				     500, 500,            // height, width
+				     200, 400,            // initPosition (x,y)
+				     "Driver's Window" ); // title
 #endif
 
     // Create street and plane
     street = new Street(-50, 0, 0, 4);
-    plane = new Plane(a, b);
+    plane = new Plane(x, y);
   }
   catch (...) {
+    cout << "Exception was thrown on program initialization. Not enough memory?!" << endl;
     return -1;
   }
   
   // Init scenery
-  secondWindow->setStreet(street);
-  secondWindow->setPlane(plane);
+  driversWindow->setStreet(street);
+  driversWindow->setPlane(plane);
   
-  secondWindow->StartSpinning(glutMaster);        // enable idle function
+  // Enable event loops
+  driversWindow->StartSpinning(glutMaster);
   glutMaster->CallGlutMainLoop();
   
-  // Clean up street and plane
-  delete street;
+  // Clean up
   delete plane;
+  delete street;
+  delete driversWindow;
+  delete glutMaster;
 
+  // Exit normally
   return 0;
 }

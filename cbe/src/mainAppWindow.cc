@@ -24,6 +24,7 @@
 
 
 #include <iostream>
+#include <cmath>
 extern "C" {
 #ifdef _WIN32
 #include <GL/glaux.h>
@@ -35,14 +36,20 @@ extern "C" {
 #include "glutMaster.h"
 #include "glutWindow.h"
 #include "Point.h"
-#include <cmath>
+#include "Bitmap.h"
 
 #define M_PI 3.1415926535
 
 using namespace std;
 
 mainAppWindow::mainAppWindow(GlutMaster * glutMaster, int setWidth, int setHeight, int setInitPositionX, int setInitPositionY, string title) {
-  
+  Bitmap cockpitIMG( (string)DATADIR + "/pixmaps/cbe/cockpit.bmp" );
+
+  if (cockpitIMG.load())
+    cout << "Img loaded." << endl;
+  else
+    cout << "Img not loaded. Error." << endl;
+
   // Set default viewing and movement vectors
   movementVector = new Point(1,0,0);
     

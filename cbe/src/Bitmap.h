@@ -1,4 +1,4 @@
-// street.h - source file for the CBE project
+// Bitmap.h - source file for the CBE project
 // Copyright (c) 2001  Ludwig-Maximilian-Universitaet Muenchen
 //                     http://www.uni-muenchen.de/
 //
@@ -17,29 +17,31 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 // USA.
 
-#ifndef __STREET_H_
-#define __STREET_H_
 
-#include "Point.h"
-#include "GObject.h" // The base class for graphic objects
+#ifndef __BITMAP_H_
+#define __BITMAP_H_
 
-class Street: public GObject
-{
+#include <string>
+extern "C" {
+#include <stdio.h>
+}
+
+class Bitmap {
  private:
-  Point points[1010];
-  long length;
-  GLfloat step;
+  string path;          // Path to image
+  char* data;           // The image itself
+  unsigned long sizeX;  // Image size
+  unsigned long sizeY;  // Image size
+
+  unsigned int getint(FILE*);
+  unsigned int getshort(FILE*);
+
  public:
-  GLfloat startx, starty, startz;
-  GLfloat broadness;
-  
-  Point getPointOfStreet(GLfloat); // Gets Point near location (0<=location<=1)
-  Point getNormalOfStreet(GLfloat); // Gets the normal near location
-  virtual void makeList();
-  void createPoles(GLfloat size, GLfloat x, GLfloat y, GLfloat z);
-  
-  Street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad);
-  virtual ~Street();
+  Bitmap();
+  Bitmap(string);
+  ~Bitmap();
+  bool load(void);
+  void setPath(string);
 };
 
 #endif

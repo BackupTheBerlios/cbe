@@ -1,6 +1,16 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Sat May 26 15:27:01 CEST 2001   Andreas Bauer
+
+ * Bitmaps can be loaded and stored via the new Bitmap class
+
+ * Added the pixmaps/ directory to the CVS repository
+
+ * Modified configuration files
+
+ * Minor documentation updates
+
 Don Mai 24 21:48:05 EDT 2001    Holger Urbanek
 
  * Its now possible to move around freely
@@ -45,7 +55,7 @@ Mit Mai 16 14:36:55 CEST 2001   Holger Urbanek, Andreas Bauer
 
  * Moved point of view right on top of the street
 
-Mon May 14 15:44:25 CEST 2001   Andreas Bauer <baueran@in.tum.de>
+Mon May 14 15:44:25 CEST 2001   Andreas Bauer
 
  * Documented some things in various header files
  
@@ -78,7 +88,7 @@ Wed May  8 03:14:00 CEST 2001   Holger Urbanek
 
  * Creating of the street and plane now in seperate classes
 	
-Tue May  8 20:54:12 CEST 2001   Andreas Bauer  <baueran@in.tum.de>
+Tue May  8 20:54:12 CEST 2001   Andreas Bauer
 
  * Added <cmath> to cbe.cc
 
@@ -86,7 +96,7 @@ Mon Apr 30 23:33:26 CEST 2001   Holger Urbanek, Andreas Bauer
  
  * Initial version of a road is finished
 
-Fri Jan 19 22:46:27 GMT+1 2001  Andreas Bauer  <baueran@in.tum.de>
+Fri Jan 19 22:46:27 GMT+1 2001  Andreas Bauer
 
  * Created initial source files, autoconf/automake installation scripts
    and program configuration
