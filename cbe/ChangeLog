@@ -1,0 +1,7 @@
+CBE ChangeLog
+-=-=-=-=-=-=-
+
+Fri Jan 19 22:46:27 GMT+1 2001  Andreas Bauer  <baueran@in.tum.de>
+
+ * Created initial source files, autoconf/automake installation scripts
+   and program configuration
