@@ -32,12 +32,7 @@ extern "C" {
 #include <string>
 #include <vector>
 #include "random.h"
-#ifdef _WIN32
-	using namespace std;
-#endif
-
 #include "Preferences.h"
-
 #include "glutMaster.h"
 #include "GObject.h"
 #include "Car.h"
@@ -45,6 +40,8 @@ extern "C" {
 #include "Bitmap.h"
 #include "JoystickDriver.hh"
 #include "SerialClient.hh"
+
+using namespace std;
 
 namespace mainApp {
   typedef vector<GObject*> GObjectVector;
@@ -63,9 +60,7 @@ namespace mainApp {
     GLfloat viewingAngle;           // Indicates the angle of view in the x-z-plane
     clock_t oldTime;                // Used to determine the Frames/s (also for constant movement speed)
     double getTimePassed();         // Reports seconds since last call
-#ifndef _WIN32
     Bitmap cockpitIMG;              // Cockpit image
-#endif
     JoystickDriver *joystick;       // Joystick-Object
     SerialClient *serialclient;     // Serial-Object
     bool isSerial;                  // Flag for use of serialport
@@ -91,8 +86,8 @@ namespace mainApp {
     void StartSpinning(GlutMaster*); // ???
     void setStreet(GObject*);        // used to alter the polygonList
     void setPlane(GObject*);         // ???
-    void addGraphicObject( GObject* obj);
-	void addCar ( Car* c );
+    void addGraphicObject(GObject*); // ???
+    void addCar(Car*);               // ???
   };
   
   // Exceptions

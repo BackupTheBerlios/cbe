@@ -26,9 +26,6 @@
 #include <iostream>
 #include <cmath>
 extern "C" {
-#ifdef _WIN32
-#include <GL/glaux.h>
-#endif
 #include <GL/glut.h>
 #include <time.h>
 }
@@ -168,9 +165,7 @@ namespace mainApp {
     // Check if blending is enabled
     if (prefs->useBlending()) {
       glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-#ifndef _WIN32
       glDrawPixels(717, 538, GL_RGBA, GL_UNSIGNED_BYTE, cockpitIMG.getData());
-#endif
       glEnable(GL_BLEND);
     }
 

@@ -17,12 +17,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 // USA.
 
-#include <iostream>
-
 extern "C" {
-#ifdef _WIN32
-#include <GL/glaux.h>
-#endif
 #include <stdlib.h>
 #include <GL/gl.h>    // OpenGL
 #include <GL/glut.h>  // GLUT
@@ -32,6 +27,7 @@ extern "C" {
 #include <sys/types.h>
 }
 
+#include <iostream>
 #include "Preferences.h"
 #include "cbe.hh"
 #include "glutMaster.h"
@@ -86,7 +82,7 @@ int main(int argc, char *argv[]) {
   Point y(160.0, -0.01, 60.0);
   
   // Scan command line parameters and options
-  while ( (c = getopt_long(argc, argv, "hL:M:Vv:", long_options, &option_index)) != -1 ) {
+  while ( (c = getopt_long(argc, argv, "hr:V", long_options, &option_index)) != -1 ) {
     switch (c) {
     case 'h':
     case VALUE_HELP:
@@ -143,31 +139,18 @@ int main(int argc, char *argv[]) {
       prefsFile = (string)"/home/" + (string)getpwuid(getuid())->pw_name + (string)"/.cbe";
   }
 
-#ifdef _WIN32
-  prefsFile = "cbe.cfg";
-#endif
-  
   try {
     // Try reading the cbe preferences file
     pref::Preferences prefs(prefsFile);
     
-    // Try initializing the main Glut objects
+    // Try initializing the main Glut objects and window
     glutMaster = new GlutMaster(&argc, argv);  
-    
-#ifndef _WIN32
     driversWindow = new mainApp::mainAppWindow(glutMaster,
 					       &prefs,
 					       WINDOW_WIDTH, WINDOW_HEIGHT,                        // height, width
 					       10, 10,                                             // initPosition (x,y)
 					       (string)PACKAGE + (string)" " + (string)VERSION);   // title
-#else
-    driversWindow = new mainApp::mainAppWindow(glutMaster,
-					       &prefs,
-					       WINDOW_WIDTH, WINDOW_HEIGHT,                        // height, width
-					       10, 10,                                             // initPosition (x,y)
-					       "Driver's Window" );                                // title 
-#endif
-    
+
     // Create street, plane and car
     street = new Street( -50, 0, 0, 4 );
     plane = new Plane( x, y );

@@ -1,3 +1,22 @@
+// SerialClient.cc - source file for the CBE project
+// Copyright (c) 2001  Ludwig-Maximilian-Universitaet Muenchen
+//                     http://www.uni-muenchen.de/
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+// USA.
+
 #include <cstdlib>
 #include <iostream>
 #include "SerialClient.hh"
@@ -5,7 +24,6 @@
 
 using namespace std;
 
-#ifndef _WIN32 // Linux Version
 extern "C" {
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -95,37 +113,6 @@ void SerialClient::onlyGetData() {
 }
 
 
-#else // Windows Version, Dummy
-
-#include "Random.h"
-
-SerialClient::SerialClient(const char * dev_name)
-{
-    isRandom=true;
-    cout << "Using random eye-events" << endl;
-	resetRandom();
-}
-
-SerialClient::~SerialClient() {
-}
-
-void SerialClient::requestData() {
-	x = rndInt( 32768 );
-	y = rndInt( 32768 );
-}
-
-void SerialClient::onlyRequestData() {
-}
-
-void SerialClient::onlyGetData() {
-	x = rndInt( 32768 );
-	y = rndInt( 32768 );
-}
-
-#endif
-
-
-
 // returns run-reset-flag
 bool SerialClient::isRun() {
   if (status==0)
@@ -134,9 +121,11 @@ bool SerialClient::isRun() {
     return true;
 }
 
+
 void SerialClient::setChange() {
   wasChange=true;
 }
+
 
 // Returns x
 int SerialClient::getX() {
@@ -147,6 +136,7 @@ int SerialClient::getX() {
     return x;
 }
 
+
 // Returns y
 int SerialClient::getY() {
   if (isRandom) {
@@ -155,6 +145,7 @@ int SerialClient::getY() {
   else
     return y;
 }
+
 
 // returns what to change
 int SerialClient::getChange() {
@@ -167,4 +158,3 @@ int SerialClient::getChange() {
   }
   return change;
 }
-  

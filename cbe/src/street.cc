@@ -21,9 +21,6 @@
 #include <iostream>
 extern "C" {
 #include <stdlib.h>
-#ifdef _WIN32
-#include <GL/glaux.h>
-#endif
 #include <GL/gl.h>
 #include <GL/glut.h>
 }

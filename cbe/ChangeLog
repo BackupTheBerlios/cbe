@@ -1,6 +1,14 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Fri Oct 19 20:39:06 GMT 2001   Andreas Bauer  <baueran@users.berlios.de>
+
+ * Chucked out all old _WIN32 definitions and code (no use for it anymore)
+
+ * Fixed up command line options, switch -r works correctly now
+
+ * Added README file
+
 Wed Oct  3 17:45:16 GMT 2001   Andreas Bauer  <baueran@users.berlios.de>
 
  * Added keyword SERIAL to Preferences.cc

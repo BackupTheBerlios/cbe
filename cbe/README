@@ -1,4 +1,26 @@
 CBE README
 -=-=-=-=-=
 
-Find out more at http://cbe.berlios.de/.
+CBE is the free and open Change Blindness Experiment/Environment developed
+at the Ludwig-Maximilian-Universität Muenchen. It was started during a
+project-seminar dealing with perception and especially Change Blindness.
+The idea is to provide a frame work that can be used to simulate real world
+situations in which people are usually blind to the visual changes around
+them.
+
+This project is a joint effort between students and staff from the Technical
+University of Munich and the Ludwig Maximilian University, Munich. To take
+full advantage of CBE's program features you need an eye movement tracker
+and ideally access to a professional Psychology lab.
+
+CBE is released under the terms of the GNU General Public License. For more
+information, see the COPYING document provided with the CBE program.
+
+Program installation and configuration is explained in detail in the INSTALL
+file. It is recommended you read that document, and if it's just to find out
+how to set up CBE properly. The latest program sources and news are always
+available at:
+
+   http://cbe.berlios.de/
+
+Enjoy CBE!

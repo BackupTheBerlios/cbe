@@ -20,9 +20,6 @@
 #ifndef __G_MOVABLE_OBJECT_H
 #define __G_MOVABLE_OBJECT_H
 
-#ifdef _WIN32
-#include <GL/glaux.h>
-#endif
 #include <GL/gl.h>
 #include "Point.h"
 #include "GObject.h"

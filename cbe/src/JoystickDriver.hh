@@ -35,14 +35,6 @@ private:
   int buttons;                   // Status of buttons
   bool joystickAvailable;        // true if joystick available
 
-#ifdef _WIN32
-  float xStir, yStir;            // For keyboard emulation
-  const float xStirValue;
-  const float yStirValue;
-  int keyIsDownConst;
-  int lastTime;
-#endif
-
 public:
   JoystickDriver(pref::Preferences*);  // Initialises first available joystick
   JoystickDriver(string); 

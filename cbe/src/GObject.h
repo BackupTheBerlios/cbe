@@ -20,9 +20,6 @@
 #ifndef __GOBJECT_H
 #define __GOBJECT_H
 
-#ifdef _WIN32
-#include <GL/glaux.h>
-#endif
 #include <GL/gl.h>
 
 class GObject {

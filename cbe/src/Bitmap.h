@@ -25,15 +25,12 @@
 #include <string>
 extern "C" {
 #include <stdio.h>
-#ifndef _WIN32
 #include <tiffio.h>
-#endif
 }
 #include "config.h"
 
 using namespace std;
 
-#ifndef _WIN32
 class Bitmap {
  private:
   string path;   // Path to image
@@ -50,6 +47,5 @@ class Bitmap {
   void setPath(string);
   uint32* getData(void);
 };
-#endif
 
 #endif
