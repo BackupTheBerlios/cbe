@@ -1,4 +1,4 @@
-// common.h - source file for the CBE project
+// Point.h - source file for the CBE project
 // Copyright (c) 2001  Ludwig-Maximilian-Universitaet Muenchen
 //                     http://www.uni-muenchen.de/
 //
@@ -17,9 +17,23 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 // USA.
 
-struct Point
-{
+
+#ifndef __POINT_H_
+#define __POINT_H_
+
+extern "C" {
+#include <GL/gl.h>
+}
+
+class Point {
+ public:
   GLfloat x;
   GLfloat y;
   GLfloat z;
+
+  Point();
+  Point(GLfloat, GLfloat, GLfloat);
+  ~Point();
 };
+
+#endif

@@ -1,6 +1,14 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Wed May 23 16:20:05 CEST 2001   Andreas Bauer, Holger Urbanek
+
+ * Changed common.h into individual class and file Point.h
+
+ * Added header files where necessary
+
+ * Kicked out some old code where appropriate ;-)
+
 Sun May 20 19:49:24 CEST 2001   Andreas Bauer
  
  * Minor documentation and style fixes

@@ -27,27 +27,29 @@ extern "C" {
 
 #include <iostream>
 
-#include "common.h"
-#include "config.h"
 #include "cbe.hh"
 #include "glutMaster.h"
 #include "glutWindow.h"
 #include "mainAppWindow.h"
 #include "street.h"
 #include "plane.h"
+#include "Point.h"
+#include "config.h"
 
 using namespace std;
 
-GlutMaster* glutMaster;
-mainAppWindow* secondWindow = 0;
-
-
 int main(int argc, char *argv[]) {
-  Plane *p;
-  Street *s;
-
+  GlutMaster* glutMaster;
+  mainAppWindow* secondWindow;
+  Plane *plane;
+  Street *street;
+  
+  // Size of plane
+  Point a(-60.0, -0.01, -60.0);
+  Point b(160.0, -0.01, 60.0);
+  
   cout << endl;
-  cout << "Keyboardfunctions:" << endl;
+  cout << "Keyboard functions:" << endl;
   cout << "  u: Increase speed" << endl;
   cout << "  d: Decrease speed" << endl;
   cout << "  f: Toggles fog (quite useless until now, find out for yourself)" << endl;
@@ -55,43 +57,37 @@ int main(int argc, char *argv[]) {
   
   try {
     glutMaster   = new GlutMaster(&argc, argv);  
+
+#ifndef _WIN32
     secondWindow = new mainAppWindow(glutMaster,
 				     500, 500,         // height, width
 				     200, 400,         // initPosition (x,y)
-#ifndef _WIN32
-					 (string)PACKAGE + (string)" " + (string)VERSION);   // title
-#else // Für Win32
-// In the Windows version PACKAGE is not defined.
-					 "Second window" ); // title
+				     (string)PACKAGE + (string)" " + (string)VERSION);   // title
+#else
+    secondWindow = new mainAppWindow(glutMaster,
+				     500, 500,          // height, width
+				     200, 400,          // initPosition (x,y)
+				     "Second window" ); // title
 #endif
-    cout << "created mainAppWindow secondWindow in cbe.cc" << endl;
-    s=new Street(-50,0,0,4);
-  }
-  catch (...) {
-    return -1;
-  }
-  
-  //GLuint streetList=s->getList();
-  secondWindow->setStreet( s );
-  Point a,b;
 
-  a.x=-60; a.y=-0.1; a.z=-60;
-  b.x=160; b.y=-0.1; b.z=60;
-  try {
-    p=new Plane(a,b);
+    // Create street and plane
+    street = new Street(-50, 0, 0, 4);
+    plane = new Plane(a, b);
   }
   catch (...) {
     return -1;
   }
   
-  secondWindow->setPlane( p );
+  // Init scenery
+  secondWindow->setStreet(street);
+  secondWindow->setPlane(plane);
   
   secondWindow->StartSpinning(glutMaster);        // enable idle function
   glutMaster->CallGlutMainLoop();
   
   // Clean up street and plane
-  delete s;
-  delete p;
+  delete street;
+  delete plane;
 
   return 0;
 }

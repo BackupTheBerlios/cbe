@@ -20,15 +20,16 @@
 #ifndef __STREET_H
 #define __STREET_H
 
+#include "Point.h"
 #include "GObject.h" // The base class for graphic objects
 
-class Street : public GObject
+class Street: public GObject
 {
-private:
+ private:
   Point points[1010];
   long length;
   GLfloat step;
-public:
+ public:
   GLfloat startx, starty, startz;
   GLfloat broadness;
   
@@ -36,7 +37,7 @@ public:
   Point getNormalOfStreet(GLfloat); // Gets the normal near location
   virtual void makeList();
   void createPoles(GLfloat size, GLfloat x, GLfloat y, GLfloat z);
-
+  
   Street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad);
   virtual ~Street();
 };

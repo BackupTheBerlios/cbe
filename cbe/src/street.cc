@@ -21,20 +21,17 @@
 #include <iostream>
 extern "C" {
 #include <stdlib.h>
-
 #ifdef _WIN32
   #include <GL/glaux.h>
 #endif
-
 #include <GL/gl.h>
 #include <GL/glut.h>
 }
 #include "config.h"
-#include "common.h"
+#include "Point.h"
 #include "street.h"
 
-Street::Street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad) 
-{
+Street::Street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad) {
   length=1000L;
   step=0.2;
   startx=x;
@@ -44,11 +41,12 @@ Street::Street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad)
   makeList();
 }
 
-Street::~Street()
-{
-	/* The destructor of the base class is called automatically
-	   as the destructors are declared virtual. */
+
+Street::~Street() {
+  // The destructor of the base class is called automatically
+  // as the destructors are declared virtual.
 }
+
 
 void Street::makeList() {
   points[0].x=startx;
@@ -132,28 +130,27 @@ void Street::makeList() {
 
 // getPointOfStreet takes the parameter 0<=t<=1 and returns the equivalent
 // centre-point of street
-Point Street::getPointOfStreet(GLfloat t)
-{
+Point Street::getPointOfStreet(GLfloat t) {
   Point p;
+
   if (t<0 || t>1)
     p=points[0];
   else
     p=points[(int)(t*1000)];
+  
   return p;
 }
 
-Point Street::getNormalOfStreet(GLfloat t)
-{
+
+//To be implemented
+Point Street::getNormalOfStreet(GLfloat t) {
   Point p;
-
-  //To be implemented
-
   return p;
 }
+
 
 // draws poles (don't know how they are called) -- quite simple and very static
-void Street::createPoles(GLfloat size, GLfloat x, GLfloat y, GLfloat z)
-{
+void Street::createPoles(GLfloat size, GLfloat x, GLfloat y, GLfloat z) {
   glColor3f(.9,.9,.9);
   glBegin(GL_TRIANGLE_STRIP);
     glVertex3f(-0.1*size+x,0*size+y,-0.1*size+z);

@@ -1,4 +1,4 @@
-// plane.cc - source file for the CBE project
+// Point.cc - source file for the CBE project
 // Copyright (c) 2001  Ludwig-Maximilian-Universitaet Muenchen
 //                     http://www.uni-muenchen.de/
 //
@@ -18,37 +18,18 @@
 // USA.
 
 extern "C" {
-#ifdef _WIN32
-#include <GL/glaux.h>
-#endif
-#include <GL/gl.h>    // OpenGL
-#include <GL/glut.h>  // GLUT
+#include <GL/gl.h>
 }
 #include "Point.h"
-#include "plane.h"
 
 
-Plane::Plane(Point p1, Point p2) {
-  a.x=p1.x; a.y=p1.y; a.z=p1.z;
-  b.x=p2.x; b.y=p2.y; b.z=p2.z;
-  makeList(); // Create the GL list for drawing the object
+Point::Point() {
+  x = 0; y = 0; z = 0;
 }
 
-
-Plane::~Plane() {
+Point::Point(GLfloat X, GLfloat Y, GLfloat Z) {
+  x = X; y = Y; z = Z;
 }
 
-
-void Plane::makeList() {
-  glNewList(getList(), GL_COMPILE);
- 
-  glBegin(GL_QUADS);
-  glColor3f(0,1,0);
-  glVertex3f(a.x,a.y,a.z);
-  glVertex3f(a.x,a.y,b.z);
-  glVertex3f(b.x,b.y,b.z);
-  glVertex3f(b.x,a.y,a.z);
-  glEnd();
-
-  glEndList();
+Point::~Point() {
 }

@@ -22,9 +22,12 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 // USA.
 
-#ifndef __DEMO_WINDOW_H__
-#define __DEMO_WINDOW_H__
+#ifndef __MAINAPPWINDOW_WINDOW_H__
+#define __MAINAPPWINDOW_WINDOW_H__
 
+extern "C" {
+#include <GL/gl.h>
+}
 #include <string>
 #ifdef _WIN32
   using namespace std;
@@ -53,15 +56,15 @@ class mainAppWindow : public GlutWindow{
   
   // Some call back functions
   void CallBackDisplayFunc(void);
-  void CallBackReshapeFunc(int w, int h);   
+  void CallBackReshapeFunc(int, int);   
   void CallBackIdleFunc(void);
   void CallBackKeyboardFunc(unsigned char, int, int);
   void CallBackSpecialKeyboardFunc(unsigned char, int, int);
   
   // Window functionality functions
-  void StartSpinning(GlutMaster * glutMaster);         // ???
-  void mainAppWindow::setStreet(GObject *s);        // used to alter the polygonList
-  void mainAppWindow::setPlane(GObject *p);          // ???
+  void StartSpinning(GlutMaster*);                // ???
+  void mainAppWindow::setStreet(GObject*);        // used to alter the polygonList
+  void mainAppWindow::setPlane(GObject*);         // ???
 };
 
 #endif

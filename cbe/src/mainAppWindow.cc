@@ -24,10 +24,12 @@
 
 
 #include <iostream>
+extern "C" {
 #ifdef _WIN32
-  #include <GL/glaux.h>
+#include <GL/glaux.h>
 #endif
 #include <GL/glut.h>
+}
 #include "mainAppWindow.h"
 #include "glutMaster.h"
 #include "glutWindow.h"
@@ -53,24 +55,25 @@ mainAppWindow::mainAppWindow(GlutMaster * glutMaster, int setWidth, int setHeigh
   
   glutMaster->CallGlutCreateWindow(title.c_str(), this);
   
-  glEnable(GL_DEPTH_TEST);
-  
+  glEnable(GL_DEPTH_TEST);  
 	
+  // Switch to camera matrix
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
-  //perspective
-  gluPerspective(120.0,1.0,0.1,100.0);
+  // perspective
+  gluPerspective(120.0, 1.0, 0.1, 100.0);
   
-  //viewing direction
+  // Set viewing direction from Z to X
   glRotatef(90.0, 0.0, 1.0, 0.0);
   
-  //point of view
-  glTranslatef(5.0,-1.5,0.0);
+  // point of view
+  glTranslatef(5.0, -1.5, 0.0);
 
   // set background color
-  glClearColor(0.3,0.3,1,0);
+  glClearColor(0.3, 0.3, 1,0);
   
+  // Switch to scenery matrix
   glMatrixMode(GL_MODELVIEW);
 }
 
@@ -158,6 +161,7 @@ void mainAppWindow::StartSpinning(GlutMaster * glutMaster){
 void mainAppWindow::setStreet(GObject *s) {
   street = s;
 }
+
 
 void mainAppWindow::setPlane(GObject *p) {
   plane = p;

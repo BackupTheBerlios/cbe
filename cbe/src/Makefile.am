@@ -28,8 +28,7 @@ cbe_LDADD = @X_LDFLAGS@ @GLUT_LDFLAGS@ @GL_LDFLAGS@ @X_LIBS@ @GLUT_LIBS@ @GL_LIB
 # Don't forget to update NEWS and ChangeLog
 cbe_SOURCES = 	cbe.cc glutMaster.cc glutWindow.cc mainAppWindow.cc \
 		cbe.hh glutMaster.h  glutWindow.h  mainAppWindow.h \
-		street.cc plane.cc \
-		street.h  plane.h \
+		street.cc plane.cc Point.cc \
+		street.h  plane.h  Point.h \
 		GObject.cc \
-		GObject.h \
-		common.h
+		GObject.h
