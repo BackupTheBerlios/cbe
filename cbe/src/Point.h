@@ -33,6 +33,10 @@ class Point {
 
   Point();
   Point(GLfloat, GLfloat, GLfloat);
+  void set( Point p );
+  void set( GLfloat, GLfloat, GLfloat);
+  void move( Point p );
+  void move( GLfloat, GLfloat, GLfloat);
   ~Point();
 };
 

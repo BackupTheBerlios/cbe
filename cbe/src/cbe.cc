@@ -32,6 +32,7 @@ extern "C" {
 #include "mainAppWindow.h"
 #include "street.h"
 #include "plane.h"
+#include "Car.h"
 #include "Point.h"
 #include "config.h"
 
@@ -45,6 +46,8 @@ GlutMaster* glutMaster;
 mainApp::mainAppWindow* driversWindow;
 Plane* plane;
 Street* street;
+Car* car1;
+Car* car2;
 
 // Main program
 int main(int argc, char *argv[]) {
@@ -57,6 +60,8 @@ int main(int argc, char *argv[]) {
   cout <<         "  n          Decrease speed" << endl;
   cout <<         "  h          Turn left" << endl;
   cout <<         "  j          Turn right" << endl;
+  cout <<         "  d          Hide moving objects" << endl;
+  cout <<         "  s          Show moving objects" << endl;
   cout <<         "  f          Toggles fog (currently pretty useless)" << endl;
   cout <<         "  q / ESC    Exits program" << endl << endl;
   
@@ -78,6 +83,11 @@ int main(int argc, char *argv[]) {
     // Create street and plane
     street = new Street(-50, 0, 0, 4);
     plane = new Plane(x, y);
+	car1 = new TestCar( 0, 30 );
+	car1->setPos( -20, 2, 10 );
+	car2 = new TestCar( -1, 0 );
+	car2->setPos( -3, 0, -5 );
+	car2->rotate( -90 );
   }
   catch (...) {
     cout << "Exception was thrown on program initialization. Not enough memory?!" << endl;
@@ -87,6 +97,8 @@ int main(int argc, char *argv[]) {
   // Init scenery
   driversWindow->setStreet(street);
   driversWindow->setPlane(plane);
+  driversWindow->addGraphicObject( car1 );
+  driversWindow->addGraphicObject( car2 );
   atexit(cleanUp);
 
   try {
@@ -110,6 +122,8 @@ int main(int argc, char *argv[]) {
 void cleanUp() {
   delete plane;
   delete street;
+  delete car1;
+  delete car2;
   delete driversWindow;
   delete glutMaster;
 }

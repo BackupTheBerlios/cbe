@@ -114,6 +114,11 @@ namespace mainApp {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     plane->draw();
     street->draw();
+	// Draw all graphic objects in the list
+	for( GObjectList::iterator itr = graphicObjectsList.begin();
+		 itr != graphicObjectsList.end(); itr++ ) {
+		(*itr)->draw();
+	}
 
     glutSwapBuffers();
   }
@@ -156,8 +161,9 @@ namespace mainApp {
 
   // Call back function for keyboard events
   void mainAppWindow::CallBackKeyboardFunc(unsigned char key, int x, int y) {
-    // Determine key
-    switch (key) {
+	GObjectList::iterator itr;
+	// Determine key
+	switch (key) {
     case 'Q':
     case 'q':
     case 27:
@@ -166,41 +172,67 @@ namespace mainApp {
       break;
     case 'U':  // faster
     case 'u':
-      speed += 0.05;
+	  if ( speed >= 0 )  // Acceleration in forward movement
+		speed += 0.05;
+	  else { // Braking
+	    speed += 0.2; // brake
+		if (speed > 0 ) // started reverse movement while braking
+		  speed = 0; // brake only untill stopping
+	  }
       break;
     case 'N': // slower
     case 'n':
-      speed -= 0.05;
+	  if ( speed <= 0 )  // Acceleration in backward movement
+		speed -= 0.05;
+	  else { // Braking
+	    speed -= 0.2; // brake
+		if (speed < 0 ) // started reverse movement while braking
+		  speed = 0; // brake only untill stopping
+	  }
       break;
     case 'H': // left
     case 'h':
       viewingAngle--;
       if (viewingAngle>180)
-	viewingAngle-=360;
-      movementVector->x=cos(viewingAngle*M_PI/180);
-      movementVector->z=sin(viewingAngle*M_PI/180);
-      break;
+		viewingAngle-=360;
+	  movementVector->x=cos(viewingAngle*M_PI/180);
+	  movementVector->z=sin(viewingAngle*M_PI/180);
+	  break;
     case 'J': // right
     case 'j':
       viewingAngle++;
       if (viewingAngle<-180)
-	viewingAngle+=360;
+		viewingAngle+=360;
       movementVector->x=cos(viewingAngle*M_PI/180);
       movementVector->z=sin(viewingAngle*M_PI/180);
       break;
     case 'F':
     case 'f':
       if (!isFog) {
-	glEnable(GL_FOG);
-	cout << "Fog enabled." << endl;
-	isFog = true;
+		glEnable(GL_FOG);
+		cout << "Fog enabled." << endl;
+		isFog = true;
       }
       else {
-	glDisable(GL_FOG);
-	cout << "Fog disabled." << endl;
-	isFog = false;
+		glDisable(GL_FOG);
+		cout << "Fog disabled." << endl;
+		isFog = false;
       }
       break;
+	case 'd':
+	case 'D':
+		for( itr = graphicObjectsList.begin();
+			 itr != graphicObjectsList.end(); itr++ ) {
+			(*itr)->hide();
+		}
+		break;
+	case 's':
+	case 'S':
+		for( itr = graphicObjectsList.begin();
+			 itr != graphicObjectsList.end(); itr++ ) {
+			(*itr)->unhide();
+		}
+		break;
     default:
       cout << "A normal key was pressed. Hurra!" << endl;
       break;
@@ -226,7 +258,10 @@ namespace mainApp {
   void mainAppWindow::setPlane(GObject* p) {
     plane = p;
   }
-
+  void mainAppWindow::addGraphicObject( GObject* obj) {
+	  // Append the passed graphic object pointer to the list
+	  graphicObjectsList.push_back( obj );
+  }
   // Calculates time passed since last call of this function
   double mainAppWindow::getTimePassed() {
     clock_t tnew,ris;

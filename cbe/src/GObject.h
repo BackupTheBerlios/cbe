@@ -81,6 +81,10 @@ class GObject {
   virtual inline void unhide() {
     hidden = false;
   }
+  // Returns the hidden-flag.
+  inline bool isHidden() {
+	  return hidden;
+  }
   // Draws the object.
   virtual void draw();
 };

@@ -27,11 +27,31 @@ extern "C" {
 
 
 Point::Point() {
-  x = 0; y = 0; z = 0;
+  set( 0, 0, 0 );
 }
 
 Point::Point(GLfloat X, GLfloat Y, GLfloat Z) {
-  x = X; y = Y; z = Z;
+  set( X, Y, Z );
+}
+
+void Point::set( Point p ) {
+	set( p.x, p.y, p.z );
+}
+
+void Point::set(GLfloat X, GLfloat Y, GLfloat Z) {
+  x = X;
+  y = Y;
+  z = Z;
+}
+
+void Point::move( Point p ) {
+	move( p.x, p.y, p.z );
+}
+
+void Point::move(GLfloat X, GLfloat Y, GLfloat Z) {
+  x += X;
+  y += Y;
+  z += Z;
 }
 
 Point::~Point() {

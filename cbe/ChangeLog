@@ -1,5 +1,14 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
+Sam Jun 02 16:40:00 CEST 2001   David Trachtenherz
+
+ * Base class GMovableObject for movable objects created.
+
+ * Class Car created.
+
+ * Class Point enhanced for moving.
+
+ * Braking while driving enhanced.
 
 Mon May 28 19:09:16 CEST 2001   Andreas Bauer
 

@@ -36,13 +36,16 @@ extern "C" {
 #include "glutMaster.h"
 #include "GObject.h"
 #include "Point.h"
+#include <list>
 
 namespace mainApp {
+	typedef list<GObject*> GObjectList;
 
     class mainAppWindow : public GlutWindow{
     private:
       GObject *plane;         // holds the plane
       GObject *street;        // holds the street
+	  GObjectList graphicObjectsList; // Objects to be drawn
       GLfloat speed;          // Speed of movement
       bool isFog;             // Flag for fog
       Point *movementVector;  // Movement direction
@@ -70,8 +73,9 @@ namespace mainApp {
       
       // Window functionality functions
       void StartSpinning(GlutMaster*);                // ???
-      void mainAppWindow::setStreet(GObject*);        // used to alter the polygonList
-      void mainAppWindow::setPlane(GObject*);         // ???
+      void setStreet(GObject*);        // used to alter the polygonList
+      void setPlane(GObject*);         // ???
+	  void addGraphicObject( GObject* obj);
     };
     
     // Exceptions
