@@ -1,6 +1,10 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
+Thu Jun 21 21:09:10 CEST 2001  Holger Urbanek
 
+ * Simple paralellport reading functionality 
+   (includes an randomized blink generaor)	
+	
 Don Jun 14 19:43:38 EDT 2001   Holger Urbanek
 
  * Included simple joystick functionality

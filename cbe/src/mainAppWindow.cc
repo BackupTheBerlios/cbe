@@ -109,12 +109,15 @@ namespace mainApp {
 
     // Initialize Joystick
     joystick=new JoystickDriver();
+    // Initialize Parallelport
+    pport=new PPortDriver("random");
   }
 
 
   mainAppWindow::~mainAppWindow() {
     delete movementVector;
     delete joystick;
+    delete pport;
     glutDestroyWindow(windowID);
     cout << "Destructor of mainAppWindow called." << endl;
   }
@@ -129,15 +132,15 @@ namespace mainApp {
     for( GObjectList::iterator itr = graphicObjectsList.begin(); itr != graphicObjectsList.end(); itr++ )
       (*itr)->draw();
     
-    // Draw cockpit
-    glDrawPixels(717, 538, GL_RGB, GL_UNSIGNED_BYTE, cockpitIMG.getData());
-
-    // Finally draw everything on the screen that we just created and constructed
-    glutSwapBuffers();
-
     // Blend cockpit
     glBlendColor(1.0f, 1.0f, 1.0f, 0.0);
     glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+    glBlendFunc(GL_SRC_COLOR,GL_SRC_COLOR);
+    // Draw cockpit
+    glDrawPixels(717, 538, GL_RGB, GL_UNSIGNED_BYTE, cockpitIMG.getData());
+    
+    // Finally draw everything on the screen that we just created and constructed
+    glutSwapBuffers();   
   }
 
 
@@ -158,6 +161,11 @@ namespace mainApp {
   void mainAppWindow::CallBackIdleFunc(void) {
     GLfloat latenz = getTimePassed(); // save passed time
 
+    // Make blink-detection
+    pport->refreshData();
+    if (pport->isBlink())
+      cout << "Blink" << endl;
+    
     // Make Joysick-Calls
     joystick->refreshJoystick();
     viewingAngle+= joystick->getXaxis() * 200 * latenz;
@@ -170,7 +178,7 @@ namespace mainApp {
   
     speed-= joystick->getYaxis() * 200 * latenz;
   
-    // recalculate the new movementVecto
+    // recalculate the new movementVector
     movementVector->x=cos(viewingAngle*M_PI/180);
     movementVector->z=sin(viewingAngle*M_PI/180);
 
@@ -188,7 +196,9 @@ namespace mainApp {
     glMatrixMode(GL_MODELVIEW);
   
     // Now move the world according to our viewing direction
-    glTranslatef(movementVector->x * latenz * speed , movementVector->y * latenz * speed, movementVector->z * latenz * speed);
+    glTranslatef(movementVector->x * latenz * speed, 
+		 movementVector->y * latenz * speed, 
+		 movementVector->z * latenz * speed);
 
     // Finished with "camera-actions" advance to draw the world
     CallBackDisplayFunc();

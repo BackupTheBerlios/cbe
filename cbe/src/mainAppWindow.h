@@ -39,6 +39,7 @@ using namespace std;
 #include "Point.h"
 #include "Bitmap.h"
 #include "JoystickDriver.hh"
+#include "PPortDriver.hh"
 
 namespace mainApp {
   typedef list<GObject*> GObjectList;
@@ -56,7 +57,8 @@ namespace mainApp {
     clock_t oldTime;                // Used to determine the Frames/s (also for constant movement speed)
     double getTimePassed();         // Reports seconds since last call
     Bitmap cockpitIMG;              // Cockpit image
-    JoystickDriver *joystick;        // Joystick-Object
+    JoystickDriver *joystick;       // Joystick-Object
+    PPortDriver *pport;             // Parallelport-Object
     
   public:
     int height, width;
