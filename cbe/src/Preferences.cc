@@ -38,7 +38,8 @@ namespace pref {
     ifstream prefsFile(file.c_str());
     setBlending(true);            // Blending is on by default
     framerate = 60;               // Some default frame rate if none was specified
-    joystick = "/dev/ttyS0";      // Default joystick device
+    serial = "/dev/ttyS0";        // Default serial port
+    joystick = "/dev/js0";        // Default joystick device
     lineCount = 0;
     
     if (prefsFile) {
@@ -63,6 +64,8 @@ namespace pref {
 	    setFramerate( atoi( (*(getPrefValues(curLine)).begin()).c_str() ) );
 	  else if (curLine.find("JOYSTICK=", 0) == 0)
 	    setJoystick(*(getPrefValues(curLine)).begin());
+	  else if (curLine.find("SERIAL=", 0) == 0)
+	    setSerial(*(getPrefValues(curLine)).begin());
 	  else if (curLine.length()) {
 	    cerr << PACKAGE << ": Invalid keyword in '" << file << "' (" << lineCount << "): ";
 	    cerr << "'" << curLine.substr(0, curLine.find("=")) << "'" << endl;
@@ -151,6 +154,16 @@ namespace pref {
   
   string Preferences::getJoystick(void) {
     return joystick;
+  }
+
+
+  void Preferences::setSerial(string newSerial) {
+    serial = newSerial;
+  }
+
+  
+  string Preferences::getSerial(void) {
+    return serial;
   }
 
 }

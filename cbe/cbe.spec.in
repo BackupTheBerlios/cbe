@@ -2,7 +2,7 @@
 # -*- rpm-spec -*-
 
 %define name cbe
-%define version 0.0.1
+%define version 0.0.2
 %define release 1
 
 Name: %{name}
@@ -37,11 +37,15 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-, root, root)
-%doc AUTHORS COPYING ChangeLog INSTALL NEWS README TODO
+%doc AUTHORS COPYING ChangeLog INSTALL NEWS README TODO doc/rcfile.example
 %{_datadir}/pixmaps/cbe/cockpit.tif
 %{_bindir}/cbe
 
 %changelog
+* Wed Oct 03 2001 Andreas Bauer <baueran@users.berlios.de>
+
+- Added sample rcfile
+
 * Fri Aug 17 2001 Andreas Bauer <baueran@users.berlios.de>
 
 - Added dependencies and changed from manual build commands to pre-defined

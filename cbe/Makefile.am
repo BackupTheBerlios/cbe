@@ -20,7 +20,7 @@
 
 AUTOMAKE_OPTIONS = dist-shar dist-zip dist-tarZ
 
-SUBDIRS = macros src pixmaps
+SUBDIRS = macros src pixmaps doc
 
 EXTRA_DIST = TODO
 
@@ -47,6 +47,7 @@ EXTRA_DIST = TODO
 
 @MAINT@cvsclean: maintainer-clean
 @MAINT@	@-rm -f `find . -name Makefile.in`
+@MAINT@	@-rm -rf *~
 @MAINT@	@-rm -f configure aclocal.m4 config.h.in stamp-h.in
 @MAINT@	@-rm -f mkinstalldirs missing install-sh COPYING
 @MAINT@	@-rm -rf @PACKAGE@-@VERSION@*

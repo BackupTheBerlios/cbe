@@ -132,10 +132,8 @@ namespace mainApp {
     glMatrixMode(GL_MODELVIEW);
 
     try {
-      joystick = new JoystickDriver("/dev/jso");                             // Initialize Joystick
-      
-      // Initialize SerialPort
-      serialclient = new SerialClient(prefs->getJoystick().c_str());         // to open com-port1 use /dev/ttyS0 in your prefs file
+      joystick = new JoystickDriver(prefs->getJoystick().c_str());           // Initialize Joystick
+      serialclient = new SerialClient(prefs->getSerial().c_str());           // Initialize Serial port
       isSerial = false;                                                      // Disable serialport by default
     }
     catch (...) {

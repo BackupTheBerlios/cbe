@@ -36,7 +36,7 @@ namespace pref {
     string curLine;
     bool blending;
     int framerate;
-    string joystick;
+    string joystick, serial;
     list<string> getPrefValues(string);
     void showErrorParameter(string, string, string);
 
@@ -49,6 +49,8 @@ namespace pref {
     int getFramerate(void);
     void setJoystick(string);
     string getJoystick(void);
+    void setSerial(string);
+    string getSerial(void);
   };
   
   // Exceptions

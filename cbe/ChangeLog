@@ -1,12 +1,20 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Wed Oct  3 17:45:16 GMT 2001   Andreas Bauer  <baueran@users.berlios.de>
+
+ * Added keyword SERIAL to Preferences.cc
+
+ * Added doc/ subdirectory with example rcfile for cbe-settings
+
+ * Updated INSTALLation instructions
+
+ * Switched version number to 0.0.2 (see NEWS file for more information)
+
 Fri Aug 17 12:49:47 CEST 2001  Andreas Bauer  <baueran@users.berlios.de>
 
  * A bunch of clean ups to get us ready for initial release (TODO, NEWS,
    removed warnings in Bitmap.cc, etc.)
-
-Fri Aug 17 12:02:34 CEST 2001  Andreas Bauer  <baueran@users.berlios.de>
 
  * Added GNU getopt library support
 
