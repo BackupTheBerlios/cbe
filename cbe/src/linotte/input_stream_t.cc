@@ -20,13 +20,13 @@ input_stream_t::read_string(
 {
 	u32					length = read_u32();
 
-	string.clear();
+	string = "";
 	string.reserve( length );
 		
 	u08*				buffer = s_temp_buffer;
 	const int			buffer_size = TEMP_BUFFER_SIZE / sizeof( char );
 		
-	while( length >= buffer_size )
+	while( (long)length >= buffer_size )
 	{
 		read_bytes( buffer, buffer_size * sizeof( char ) );
 		length -= buffer_size;
@@ -43,7 +43,7 @@ input_stream_t::read_string(
 void
 input_stream_t::read_bytes(
 	void*				buffer,
-	fpos_t				count )
+	pfpos_t				count )
 {
 	if( read_some_bytes( buffer, count ) != count )
 		throw_linotte_error( "io read error" );
@@ -51,7 +51,7 @@ input_stream_t::read_bytes(
 
 void
 input_stream_t::skip(
-	fpos_t				count )
+	pfpos_t				count )
 {
 	if( !count )
 		return;

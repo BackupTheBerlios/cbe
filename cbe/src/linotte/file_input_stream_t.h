@@ -13,6 +13,7 @@
 
 
 #include "input_stream_t.h"
+#include <stdio.h>
 
 
 
@@ -34,21 +35,21 @@ public:
 
 
 
-	virtual fpos_t		tell();
+	virtual pfpos_t		tell();
 
 	
 
-	virtual fpos_t		read_some_bytes(
+	virtual pfpos_t		read_some_bytes(
 
 							void*				buffer,
 
-							fpos_t				count );
+							pfpos_t				count );
 
 							
 
 private:
 
-	std::FILE*			m_fp;
+	FILE*				m_fp;
 
 };
 

@@ -2,8 +2,6 @@
 //	texture_material_t.cp	   ©2000-2001 Bernhard Liebl. All rights reserved.
 // ===========================================================================
 
-#pragma once
-
 #include "texture_material_t.h"
 #include "Bitmap.h"
 

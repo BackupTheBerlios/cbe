@@ -21,16 +21,16 @@ file_input_stream_t::~file_input_stream_t()
 	fclose( m_fp );
 }
 
-fpos_t
+pfpos_t
 file_input_stream_t::tell()
 {
 	return ftell( m_fp );
 }
 
-fpos_t
+pfpos_t
 file_input_stream_t::read_some_bytes(
 	void*				buffer,
-	fpos_t				count )
+	pfpos_t				count )
 {
 	return fread( buffer, sizeof( u08 ), count, m_fp );
 }

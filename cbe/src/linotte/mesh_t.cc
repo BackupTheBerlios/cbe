@@ -88,7 +88,7 @@ mesh_t::mesh_t(
 		if( !m_strips )
 			throw std::bad_alloc();
 		
-		for( long i = 0; i < strip_count; i++ )
+		for( long i = 0; i < (long)strip_count; i++ )
 			read_tri_strip( stream, &m_strips[ i ] );
 	}
 	catch(...)
@@ -131,7 +131,7 @@ mesh_t::clear()
 	delete[] m_vertices;
 	m_vertices = 0;
 	
-	for( long i = 0; i < m_strip_count; i++ )
+	for( long i = 0; i < (long)m_strip_count; i++ )
 	{
 		tristrip_t*			strip = &m_strips[ i ];
 	

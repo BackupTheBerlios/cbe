@@ -1,54 +1,37 @@
 // ===========================================================================
-
-//	input_stream_t.h			   ©2000-2000 Bernhard Liebl. All rights reserved.
-
+//	input_stream_t.h       	    ©2000-2000 Bernhard Liebl. All rights reserved.
 // ===========================================================================
 
-
-
 #ifndef LINOTTE_INPUT_STREAM_HH
-
 #define LINOTTE_INPUT_STREAM_HH
 
-
-
 #include "linotte.h"
-
 #include <string>
-
-
 
 BEGIN_LINOTTE_NAMESPACE
 
-
-
 class input_stream_t {
-
 public:
 
 	virtual				~input_stream_t();
 
 
 
-	virtual fpos_t		read_some_bytes(
-
+	virtual pfpos_t		read_some_bytes(
 							void*				buffer,
-
-							fpos_t				count ) = 0;
+							pfpos_t				count ) = 0;
 
 
 
 	void				read_bytes(
-
 							void*				buffer,
-
-							fpos_t				count );
+							pfpos_t				count );
 
 
 
 	virtual void		skip(
 
-							fpos_t				count );
+							pfpos_t				count );
 
 
 

@@ -38,7 +38,7 @@ array_t::insert_at(
 
 	if( index < 0 )
 		index = 0;
-	else if( index > count )
+	else if( (u32)index > count )
 		index = count;
 	
 	if( count == m_alloc )
@@ -71,7 +71,7 @@ array_t::remove(
 {
 	const u32			count = m_count;
 
-	if( index < 0 || index >= count )
+	if( index < 0 || (u32)index >= count )
 		return;
 
 	u08*				elem = m_elems;
