@@ -8,6 +8,8 @@
 
 #include "mesh_t.h"
 
+#include <math.h>
+
 #include "material_t.h"
 
 #include "material_manager_t.h"
