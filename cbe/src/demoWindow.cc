@@ -34,7 +34,7 @@ DemoWindow::DemoWindow(GlutMaster * glutMaster, int setWidth, int setHeight, int
   glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE);
   glutInitWindowSize(width, height);
   glutInitWindowPosition(initPositionX, initPositionY);
-  // glViewport(0, 0, width, height); 
+  glViewport(0, 0, width, height); 
   
   glutMaster->CallGlutCreateWindow(title.c_str(), this);
   
