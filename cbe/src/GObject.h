@@ -31,7 +31,7 @@ public:
 	virtual inline void hide() { hidden = true; }
 	/* Sets the hidden flag to false. The object will be
 	   displayed by the next draw(). */
-	virtual void unhide() { hidden = false; }
+	virtual inline void unhide() { hidden = false; }
 	// Draws the object.
 	virtual void draw();
 };
