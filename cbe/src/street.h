@@ -22,6 +22,7 @@
 
 #include "Point.h"
 #include "GObject.h" // The base class for graphic objects
+#include "linotte/texture_material_t.h"
 
 class Street: public GObject
 {
@@ -29,14 +30,20 @@ class Street: public GObject
   Point points[5050];
   long length;
   GLfloat step;
- public:
+  linotte::texture_material_t* mTreeMaterial;
+  GLuint mTreeList;
+ 
+  void makeTreeList();
+public:
   GLfloat startx, starty, startz;
   GLfloat broadness;
   
   Point getPointOfStreet(GLfloat); // Gets Point near location (0<=location<=1)
   Point getNormalOfStreet(GLfloat); // Gets the normal near location
   void writeList();
+  virtual void draw();
   void createPoles(GLfloat size, GLfloat x, GLfloat y, GLfloat z);
+  void createTree(GLfloat, GLfloat, GLfloat, GLfloat);
   
   Street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad);
   ~Street();

@@ -27,6 +27,8 @@ extern "C" {
 #include "config.h"
 #include "Point.h"
 #include "street.h"
+#include "config.h"
+#include "stdio.h"
 
 Street::Street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad) {
   length=2500L;
@@ -35,13 +37,32 @@ Street::Street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad) {
   starty=y;
   startz=z;
   broadness=broad;
+
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+  string path = (string)DATADIR + "/pixmaps/cbe/tree.tif";
+  mTreeMaterial = new linotte::texture_material_t( "tree", path.c_str() );
+
+  int err = glGetError();
+  cout << "gl error: " << err << endl;
+
   makeList();
+
+  makeTreeList();
 }
 
 
 Street::~Street() {
   // The destructor of the base class is called automatically
   // as the destructors are declared virtual.
+  glDeleteLists( mTreeList, 1 );
+  delete mTreeMaterial;
 }
 
 void Street::writeList() {
@@ -120,7 +141,7 @@ void Street::writeList() {
     createPoles(1,points[i].x,points[i].y,points[i].z+broadness/2+.5);
     createPoles(1,points[i].x,points[i].y,points[i].z-broadness/2-.5);
   }
-  
+
   // Draw Middlelines
   glColor3f(.9,.9,.9);
   for (i=1;i<2449;i+=10){
@@ -142,6 +163,49 @@ void Street::writeList() {
   
 }
 
+void Street::makeTreeList()
+{
+  //mTreeList = glGenLists( 1 );
+  //glNewList( mTreeList, GL_COMPILE );
+  srandom( 1234 );
+
+  // Draw the trees
+  for (int i=1;i<2449;i+=20) {
+    GLfloat vx,vz,nx,nz;
+    
+    // Calculate the normal to the street
+    vx=points[i+1].x-points[i].x;
+    vz=points[i+1].z-points[i].z;
+    nx=-vz/sqrt(vx*vx+vz*vz);
+    nz=vx/sqrt(vx*vx+vz*vz);
+
+    int r = random();
+    float dz = ( r / (float)RAND_MAX ) * 1.5;
+    
+    r = random();
+    float dx = ( ( r - RAND_MAX / 2 ) / (float)( RAND_MAX / 2 ) ) * 3;
+
+    createTree(1,points[i].x + dx, points[i].y, points[i].z+broadness/2+.5 + 2 + dz);
+    createTree(1,points[i].x + dx, points[i].y, points[i].z-broadness/2-.5 - 2 - dz);
+  }
+
+  //glEndList();
+}
+
+void Street::draw()
+{
+  glDisable(GL_COLOR_MATERIAL);
+  glEnable( GL_TEXTURE_2D );
+  glEnable(GL_BLEND);
+
+  mTreeMaterial->submit();
+  //glCallList( mTreeList );
+  makeTreeList();
+
+  glDisable( GL_TEXTURE_2D );
+
+  GObject::draw();
+}
 
 // getPointOfStreet takes the parameter 0<=t<=1 and returns the equivalent
 // centre-point of street
@@ -192,5 +256,24 @@ void Street::createPoles(GLfloat size, GLfloat x, GLfloat y, GLfloat z) {
     glVertex3f(-0.1*size+x,1.3*size+y,-0.1*size+z);
     glVertex3f(0.1*size+x,1.3*size+y,-0.1*size+z);
     glVertex3f(0*size+x,1.3*size+y,0.1*size+z);
+  glEnd();
+}
+
+
+void Street::createTree(GLfloat size, GLfloat x, GLfloat y, GLfloat z) {
+  float width = 2;
+  float height = 10;
+
+  glColor3f( 1, 1, 1 );
+
+  glBegin( GL_QUADS );
+  glTexCoord2f( 1, 1 );  
+  glVertex3f( x, y + height, z + width );
+  glTexCoord2f( 1, 0 );
+glVertex3f( x, y, z + width);  
+  glTexCoord2f( 0, 0 );
+glVertex3f( x, y, z );
+  glTexCoord2f( 0, 1 );  
+  glVertex3f( x, y + height, z );
   glEnd();
 }
