@@ -1,5 +1,10 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
+
+Sun May 20 19:49:24 CEST 2001   Andreas Bauer
+ 
+ * Minor documentation and style fixes
+
 Fre Mai 17 19:50:00 CEST 2001   David Trachtenherz
 
  * Base class GObject for graphic objects included. Files GObject.h
