@@ -121,7 +121,7 @@ namespace mainApp {
     glTranslatef(0.0, -1.5, 0.0);
 
     // set background color
-    glClearColor(0.3, 0.3, 1,0);
+    glClearColor(0.3, 0.3, 1.0, 0.0);
 
     // Save ProjectionMatrix (for futher use in Idle-Function)
     glPushMatrix();
@@ -174,8 +174,12 @@ namespace mainApp {
     if (prefs->useBlending()) {
       glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
       glDrawPixels(717, 538, GL_RGBA, GL_UNSIGNED_BYTE, cockpitIMG.getData());
-      glEnable(GL_BLEND);
+      //glEnable(GL_BLEND);
     }
+
+    // Mesa transparency work around
+      glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
 
     // Finally draw everything on the screen that we just created and constructed
     glutSwapBuffers();   
