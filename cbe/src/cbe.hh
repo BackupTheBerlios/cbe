@@ -24,6 +24,11 @@
 #define WINDOW_WIDTH 717
 #define WINDOW_HEIGHT 538
 
+// Start up parameters
+#define VALUE_HELP                      1
+#define VALUE_RCFILE                    2
+#define VALUE_VERSION                   3
+
 #include "config.h"
 
 #endif

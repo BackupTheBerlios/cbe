@@ -15,6 +15,9 @@ Source: %{name}-%{version}.tar.gz
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root
 URL: http://cbe.berlios.de/
 Packager: Andreas Bauer <baueran@users.berlios.de>
+Requires: GL
+Requires: glut
+Requires: libtiff
 
 %description
 CBE is an environment for setting up Change Blindness experiments.
@@ -23,11 +26,11 @@ CBE is an environment for setting up Change Blindness experiments.
 %setup
 
 %build
-./configure
-make
+%configure
+make install-strip
 
 %install
-make install prefix=$RPM_BUILD_ROOT%{_prefix} sysconfdir=$RPM_BUILD_ROOT%{_sysconfdir}
+%makeinstall
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -39,6 +42,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/cbe
 
 %changelog
+* Fri Aug 17 2001 Andreas Bauer <baueran@users.berlios.de>
+
+- Added dependencies and changed from manual build commands to pre-defined
+  macros
+
 * Wed Jul 25 2001 Andreas Bauer <baueran@users.berlios.de>
 
 - Added pixmaps

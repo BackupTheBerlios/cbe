@@ -41,7 +41,21 @@ extern "C" {
 #include "plane.h"
 #include "Car.h"
 #include "Point.h"
+
+#ifdef HAVE_CONFIG_H
 #include "config.h"
+#endif
+
+#ifdef HAVE_GETOPT_H
+extern "C" {
+#include <getopt.h>
+}
+#else
+extern "C" {
+#include "getopt.h"
+}
+#endif
+
 
 using namespace std;
 
@@ -57,35 +71,79 @@ Car* car1; Car* car2;
 
 // Main program
 int main(int argc, char *argv[]) {
-  string prefsFile;                          // Path to the cbe preferences file
+  string prefsFile = "";      // Path to the cbe preferences file
+  int c = 0, option_index = 0;
+  extern char *optarg;
+  static struct option long_options[] = {
+    {"help", 0, NULL, VALUE_HELP},
+    {"rcfile", 1, NULL, VALUE_RCFILE},
+    {"version", 0, NULL, VALUE_VERSION},
+    {0, 0, 0, 0}
+  };
   
   // Set the size of the plane
   Point x(-60.0, -0.01, -60.0);
   Point y(160.0, -0.01, 60.0);
   
-  // Some commands to be displayed on the screen
-  cout << endl << "CBE keyboard functions:" << endl;
-  cout <<         "  u          Increase speed" << endl;
-  cout <<         "  n          Decrease speed" << endl;
-  cout <<         "  h          Turn left" << endl;
-  cout <<         "  j          Turn right" << endl;
-  cout <<         "  d          Hide moving objects" << endl;
-  cout <<         "  s          Show moving objects" << endl;
-  cout <<         "  1          Change random car color" << endl;
-  cout <<         "  2          Toggle random car brake light" << endl;
-  cout <<         "  3          Hide/unhide random car" << endl;
-  cout <<         "  f          Toggle fog (currently pretty useless)" << endl;
-  cout <<         "  b          Toggle blending (blend function needs fixing!!)" << endl;
-  cout <<         "  e          Toggle eye-position-server communication" << endl;
-  cout <<         "  q / ESC    Exits program" << endl << endl;
+  // Scan command line parameters and options
+  while ( (c = getopt_long(argc, argv, "hL:M:Vv:", long_options, &option_index)) != -1 ) {
+    switch (c) {
+    case 'h':
+    case VALUE_HELP:
+      cout << "CBE is the Change Blindness Experiment/Environment." << endl;
+      cout << endl;
+      cout << "Usage: " << PACKAGE << " [OPTION]..." << endl;
+      cout << endl;
+      cout << "If a long option shows an argument as mandatory, then it is mandatory" << endl;
+      cout << "for the equivalent short option also." << endl;
+      cout << endl;
+      cout << "Options:" << endl;
+      cout << "  -h, --help          Display this help information" << endl;
+      cout << "  -r, --rcfile=FILE   Specify rcfile location" << endl;
+      cout << "  -V, --version       Display version information" << endl;
+      cout << endl;
+      cout << "Keyboard map:" << endl;
+      cout << "  u  Increase speed     d  Hide moveable objects" << endl;
+      cout << "  n  Decrease speed     s  Show moveable objects" << endl;
+      cout << "  h  Turn left          1  Change car color randomly" << endl;
+      cout << "  j  Turn right         2  Toggle brake lights randomly" << endl;
+      cout << "  f  Toggle fog         3  Hide/unhide car randomly" << endl;
+      cout << "  b  Toggle blending    e  Toggle eye-position-server communication" << endl;
+      cout << "  q  (Escape) Exit" << endl;
+      cout << endl;
+      cout << "Report bugs to <cbe-development@lists.berlios.de>" << endl;
+      return 0;
+      break;
+    case 'V':
+    case VALUE_VERSION:
+      cout << PACKAGE << " " << VERSION << endl;
+      cout << endl;
+      cout << "Copyright (c) 2001  Ludwig-Maximilian-Universitaet Muenchen, Germany" << endl;
+      cout << endl;
+      cout << "This is free software; see the source for copying conditions.  There is NO" << endl;
+      cout << "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE." << endl;
+      return 0;
+      break;
+    case 'r':
+    case VALUE_RCFILE:
+      prefsFile = optarg;
+      break;
+    default:
+      // Unrecognized option
+      cerr << "Try '" << argv[0] << " --help' for more information." << endl;
+      return -1;
+    }
+  }
   
   // Determine path for rcfile
-#ifndef _WIN32
-  if (getenv("HOME"))
-    prefsFile = (string)getenv("HOME") + (string)"/.cbe";
-  else
-    prefsFile = (string)"/home/" + (string)getpwuid(getuid())->pw_name + (string)"/.cbe";
-#else
+  if (!prefsFile.length()) {
+    if (getenv("HOME"))
+      prefsFile = (string)getenv("HOME") + (string)"/.cbe";
+    else
+      prefsFile = (string)"/home/" + (string)getpwuid(getuid())->pw_name + (string)"/.cbe";
+  }
+
+#ifdef _WIN32
   prefsFile = "cbe.cfg";
 #endif
   

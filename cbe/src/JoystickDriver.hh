@@ -18,28 +18,38 @@
 // USA.
 
 
+#include <string>
+#include <iostream>
+#include "Preferences.h"
+
+using namespace std;
+
 // very simple joystick-interface
 class JoystickDriver {
 private:
+  pref::Preferences *prefs;      // Preferences object
+  string joystick;               // As an alternative to the preferences object
   int joydev;
-  int xAxis; // Position der x-Achse
-  int yAxis; // Position der y-Achse
-  int buttons; // Status der Tasten
-  bool joystickAvailable; // true if joystick available
+  int xAxis;                     // Position x-axis
+  int yAxis;                     // Position y-axis
+  int buttons;                   // Status of buttons
+  bool joystickAvailable;        // true if joystick available
 
-  #ifdef _WIN32
-	float xStir, yStir;  // For keyboard emulation
-	const float xStirValue;
-	const float yStirValue;
-	int keyIsDownConst;
-	int lastTime;
-  #endif
+#ifdef _WIN32
+  float xStir, yStir;            // For keyboard emulation
+  const float xStirValue;
+  const float yStirValue;
+  int keyIsDownConst;
+  int lastTime;
+#endif
+
 public:
-  JoystickDriver(); // initialises first available joystick
+  JoystickDriver(pref::Preferences*);  // Initialises first available joystick
+  JoystickDriver(string); 
   ~JoystickDriver();
 
-  void refreshJoystick(); // Reads the new joy-values into the object
-  float getXaxis(); // returns value for the x-axis (-1<=x<=1)
-  float getYaxis(); // returns value for the y-axis (-1<=y<=1)
-  int getButtons(); // returns status of buttons 
+  void refreshJoystick();              // Reads the new joy-values into the object
+  float getXaxis();                    // returns value for the x-axis (-1<=x<=1)
+  float getYaxis();                    // returns value for the y-axis (-1<=y<=1)
+  int getButtons();                    // returns status of buttons 
 };

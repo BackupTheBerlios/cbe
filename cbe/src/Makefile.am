@@ -21,7 +21,7 @@ AM_CXXFLAGS=-Wall -DDATADIR=\"@datadir@\" -DPREFIX=\"@prefix@\"
 
 bin_PROGRAMS = cbe 
 
-INCLUDES = @X_CFLAGS@ @GLUT_CFLAGS@ @GL_CFLAGS@
+INCLUDES = -I$(includedir) -I$(top_srcdir)/src @X_CFLAGS@ @GLUT_CFLAGS@ @GL_CFLAGS@
 
 cbe_LDADD = @LIBTIFF@ @X_LDFLAGS@ @GLUT_LDFLAGS@ @GL_LDFLAGS@ @X_LIBS@ @GLUT_LIBS@ @GL_LIBS@
 
@@ -34,4 +34,5 @@ cbe_SOURCES = 	cbe.cc glutMaster.cc glutWindow.cc mainAppWindow.cc \
 		Preferences.h \
 		street.cc plane.cc Point.cc Car.cc GMovableObject.cc \
 		street.h  plane.h  Point.h  Car.h  GMovableObject.h \
-		random.cc random.h
+		random.cc random.h \
+		getopt.c getopt.h getopt1.c

@@ -1,6 +1,22 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Fri Aug 17 12:02:34 CEST 2001  Andreas Bauer  <baueran@users.berlios.de>
+
+ * Added GNU getopt library support
+
+ * autogen checks for getopt now and eventually links the getopt stuff
+   from the local src/ directory
+
+ * Added help and version information
+
+ * Preferences file location can be specified on the command line now
+ 
+ * Fixed up Joystick classes to support preferences and kicked out
+   hardcoded device descriptions, too
+
+ * Updated make files and spec files to mind packet dependencies
+
 Fri Aug 17 09:02:23 CEST 2001  Andreas Bauer  <baueran@users.berlios.de>
 
  * Code clean-up (comments, a bunch of exceptions are cought now, i.e.
