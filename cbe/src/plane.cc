@@ -25,6 +25,7 @@ extern "C" {
 #include "plane.h"
 #include "config.h"
 
+extern GLfloat gLocation[ 3 ];
 
 Plane::Plane(Point p1, Point p2) {
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -95,7 +96,10 @@ void Plane::drawSky()
 
 	glPushMatrix();
 	
-	//glTranslatef( 0, 0, 0 );
+	glTranslatef(
+		-gLocation[ 0 ],
+		-gLocation[ 1 ],
+		-gLocation[ 2 ] );
 	
 	mCloudMotion = clock() * ( 1 / (float)CLOCKS_PER_SEC );
 	

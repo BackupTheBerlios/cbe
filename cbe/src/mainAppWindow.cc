@@ -46,6 +46,7 @@ extern "C" {
 #define BRAKE_FACTOR 3
 #endif
 
+GLfloat gLocation[ 3 ];
 
 using namespace std;
 
@@ -116,6 +117,10 @@ namespace mainApp {
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	glShadeModel (GL_SMOOTH);*/
+    
+    gLocation[ 0 ] = 0;
+    gLocation[ 1 ] = 0;
+    gLocation[ 2 ] = 0;
     
     // Switch to camera matrix
     glMatrixMode(GL_PROJECTION);
@@ -283,7 +288,11 @@ namespace mainApp {
     glTranslatef(movementVector->x * latenz * speed, 
 		 movementVector->y * latenz * speed, 
 		 movementVector->z * latenz * speed);
-    
+		 
+	gLocation[ 0 ] += movementVector->x * latenz * speed;
+	gLocation[ 1 ] += movementVector->y * latenz * speed;
+	gLocation[ 2 ] += movementVector->z * latenz * speed;
+		     
     // advance cars
     double time = ( clock() - zeroClock ) / (double)CLOCKS_PER_SEC;
     for( CarVector::iterator itr = carVector.begin(); itr != carVector.end(); ++itr )
