@@ -20,15 +20,17 @@
 #include <iostream>
 extern "C" {
 #ifdef _WIN32
-#include <GL/glaux.h>
+	#include <GL/glaux.h>
 #endif
 #include <stdlib.h>
 #include <GL/gl.h>    // OpenGL
 #include <GL/glut.h>  // GLUT
 #include <stdlib.h>
-#include <unistd.h>
+#ifndef _WIN32
+	#include <unistd.h>
+	#include <pwd.h>                                                         
+#endif
 #include <sys/types.h>
-#include <pwd.h>                                                         
 }
 #include "Preferences.h"
 #include "cbe.hh"
@@ -70,17 +72,24 @@ int main(int argc, char *argv[]) {
   cout <<         "  j          Turn right" << endl;
   cout <<         "  d          Hide moving objects" << endl;
   cout <<         "  s          Show moving objects" << endl;
+  cout <<         "  1          Change random car color" << endl;
+  cout <<         "  2          Toggle random car brake light" << endl;
+  cout <<         "  3          Hide/unhide random car" << endl;
   cout <<         "  f          Toggle fog (currently pretty useless)" << endl;
   cout <<         "  b          Toggle blending (blend function needs fixing!!)" << endl;
   cout <<         "  e          Toggle eye-position-server communication" << endl;
   cout <<         "  q / ESC    Exits program" << endl << endl;
   
   // Determine path for rcfile
+#ifndef _WIN32 // Unix
   if (getenv("HOME"))
     prefsFile = (string)getenv("HOME") + (string)"/.cbe";
   else
     prefsFile = (string)"/home/" + (string)getpwuid(getuid())->pw_name + (string)"/.cbe";
-
+#else // Windows
+    prefsFile = "cbe.cfg"; // Assume the file in the working directory
+#endif
+	
   try {
     // Try reading the cbe preferences file
     pref::Preferences prefs(prefsFile);
@@ -97,7 +106,7 @@ int main(int argc, char *argv[]) {
 #else
     driversWindow = new mainApp::mainAppWindow(glutMaster,
 					       &prefs,
-					       WINDOW_WITH, WINDOW_HEIGHT,       // height, width
+					       WINDOW_WIDTH, WINDOW_HEIGHT,       // height, width
 					       10, 10,                           // initPosition (x,y)
 					       "Driver's Window" );              // title
 #endif
@@ -124,8 +133,8 @@ int main(int argc, char *argv[]) {
   // Init scenery
   driversWindow->setStreet(street);
   driversWindow->setPlane(plane);
-  driversWindow->addGraphicObject( car1 );
-  driversWindow->addGraphicObject( car2 );
+  driversWindow->addCar( car1 );
+  driversWindow->addCar( car2 );
   atexit(cleanUp);
 
   try {

@@ -1,6 +1,27 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Fre Jul 26 23:00:00 CEST 2001  David Trachtenherz
+
+ * GObject, toggleVisibility() and drawObjectLists() functions added.
+   The draw() function now checks, whether the object is hidden,
+   and, if not hidden, calls drawObjectLists() function.
+
+ * mainAppWindow: GObjects are now stored in a vector<GObject*>.
+
+ * Cars are stored not only in the vector<GObject*> graphicObjects 
+   but also in a separate vector<Car*> carVector.
+
+ * Braking enhanced; the car brakes faster than it accelerates.
+
+ * change(), changeColor() and changeShape() functions added to GObject.
+
+ * change() and changeColor() functions implemented in Car.
+   A car can change its color and turn the brake lights on and off.
+
+ * Random.cc and random.h files added. The files contain a simple
+   interface to produce random integer and float numbers.
+
 Thu Jul 26 21:37:16 CEST 2001  Holger Urbanek	
 
  * AGAIN changed serial protocoll

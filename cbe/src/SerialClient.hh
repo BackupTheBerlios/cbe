@@ -1,6 +1,8 @@
-extern "C" {
-#include <termios.h>
-}
+#ifndef _WIN32
+	extern "C" {
+	#include <termios.h>
+	}
+#endif
 
 #define BAUDRATE B115200
 
@@ -30,7 +32,9 @@ public:
 
 private:
   int devptr;
-  struct termios newtio;  // for the new serialport settings
+  #ifndef _WIN32
+    struct termios newtio;  // for the new serialport settings
+  #endif
   int change;
   int status;
   bool wasChange; // used to confirm changes back to the server

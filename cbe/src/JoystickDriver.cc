@@ -17,14 +17,20 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 // USA.
 
+#ifndef _WIN32 // In Unix
 extern "C" {
 #include <linux/joystick.h> // so we need at least the Kernel-Headers
 #include <fcntl.h>  // Needed by open
 #include <unistd.h> // Needed by read
 }
+#else // In Windows
+#include "Windows.h"
+#endif
 
 #include "JoystickDriver.hh"
 #include <iostream>
+
+#ifndef _WIN32 // Unix
 
 using namespace std;
 
@@ -78,3 +84,74 @@ float JoystickDriver::getYaxis() {
 int JoystickDriver::getButtons() {
   return buttons;
 }
+
+#else // Windows
+
+#include "time.h"
+// Constructor
+JoystickDriver::JoystickDriver()
+: xStirValue( 1.0/4 ), yStirValue( 1.0/64 )
+{
+  // Initialize Values
+  xAxis=128;
+  yAxis=128;
+  buttons=0;
+  joystickAvailable = true;
+  xStir = yStir = 0;
+  // The keyIsDownConst ist used in an AND operation with the
+  // result of GetKeyState( key ). If the key is currently pressed,
+  // the high bit of the return value is set.
+  keyIsDownConst = 1 << (sizeof( int ) * 8 - 1 );
+  lastTime = time( 0 );
+}
+
+// Destructor
+JoystickDriver::~JoystickDriver() {
+}
+
+// just get the jostic-Values into the object
+// here I'm using the old and depreciated 0.x Linux-Joystick-Driver
+// View /usr/src/linux/Documentation/joystick-api.txt on linux-systems for explanation
+void JoystickDriver::refreshJoystick() {
+
+}
+#define GetKeyState_KEY_IS_DOWN( key ) ( GetKeyState( key ) & keyIsDownConst )
+// Returns x-value
+float JoystickDriver::getXaxis() {
+	/*
+	using namespace std;
+	if( lastTime < time( 0 ) ) {
+		cout << "LEFT key : " << GetKeyState_KEY_IS_DOWN( VK_LEFT ) << endl;
+		cout << "RIGHT key: " << GetKeyState_KEY_IS_DOWN( VK_RIGHT ) << endl;
+		cout << "UP key   : " << GetKeyState_KEY_IS_DOWN( VK_UP ) << endl;
+		cout << "DOWN key : " << GetKeyState_KEY_IS_DOWN( VK_DOWN ) << endl;
+		cout << endl;
+		lastTime = time( 0 );
+	}
+	*/
+	xStir = 0;
+	if GetKeyState_KEY_IS_DOWN( VK_LEFT )
+		xStir -= xStirValue;
+	if GetKeyState_KEY_IS_DOWN( VK_RIGHT )
+		xStir += xStirValue;
+
+	return xStir;
+}
+
+// Returns y-value
+float JoystickDriver::getYaxis() {
+	yStir = 0;
+	if GetKeyState_KEY_IS_DOWN( VK_UP )
+		yStir -= yStirValue;
+	if GetKeyState_KEY_IS_DOWN( VK_DOWN )
+		yStir += yStirValue;
+
+	return yStir;
+}
+
+// Returns buttons (first button: button&1, second: button&2 ...)
+int JoystickDriver::getButtons() {
+  return buttons;
+}
+
+#endif

@@ -65,7 +65,7 @@ void GMovableObject::draw() {
     // Rotate the object by the object angle around the vertical axis
     glRotatef( angle, 0, 1, 0 );
     // Draw the object
-    glCallList( getList() );
+    drawObjectLists();
     glPopMatrix();
   }
 }

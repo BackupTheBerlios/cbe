@@ -31,8 +31,12 @@ GObject::~GObject() {
 
 void GObject::draw() {
   if ( !hidden ) {
-    glCallList( gl_list ); // Draw the object
+	drawObjectLists();
   }
+}
+
+void GObject::drawObjectLists() {
+  glCallList( gl_list ); // Draw the object
 }
 
 void GObject::makeList() {
@@ -45,3 +49,7 @@ void GObject::makeList() {
 // implementation may not be removed from here, because 
 // it would produce a link error.
 void GObject::writeList() {}
+
+void GObject::change( int changeNum ) {}
+void GObject::changeColor( int changeNum ) {}
+void GObject::changeShape( int changeNum ) {}

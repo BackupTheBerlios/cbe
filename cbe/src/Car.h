@@ -24,9 +24,28 @@
 #include "Point.h"
 
 class Car: public GMovableObject {
+ public:
+	// Change constants
+	enum { change_brakeLightOn = 0, change_brakeLightOff, change_toggleBrakeLight,
+		   change_color0, change_color1, change_nextColor };
+	// Change constants range
+	enum { change_minColor = change_color0,
+		   change_maxColor = change_color1 };
+	enum { change_minChange = change_brakeLightOn,
+		   change_maxChange = change_nextColor };
+
  private:
   GLuint gl_wheelList;
-  
+  GLuint gl_brakeLightList;
+  static const GLfloat color0[];
+  static const GLfloat color1[];
+  static const GLfloat* colors[];
+
+  static const GLfloat brakeLightColors[2][3];
+
+  int currColorNumber; // The array index of the current color
+  int currBrakeLightNumber; // 0 for brake light off, 1 for brake light on
+
   GLfloat width; // The car width
   GLfloat length; // The car length
   // See the scheme for meaning of the following variables
@@ -45,6 +64,29 @@ class Car: public GMovableObject {
   GLfloat wheelWidth1; // The width of the wheels
   GLfloat wheelWidth2; // The inner width of the wheels (is a bit leaner)
 
+  GLfloat brakeLightWidth; // The width of a brake light
+  GLfloat brakeLightHeight; // The height of a brake light
+  GLfloat brakeLighty; // The brake light distance from the floor
+  GLfloat brakeLightx; // The brake light distance from the car middle
+ 
+/*
+
+
+ h4Back            _____________________                h4Front
+ h3back           /                     \               h3Front
+ h2back  ______--/                       \----____      h2Front
+        /   __                              __    \
+ h1Back |__-  -____________________________-  -____\    h1Front
+           -__-                            -__-
+
+
+                  x4Back               x4Front
+                x3Back                   x3Front
+        x2Back                                   x2Front
+       x1Back                                      x1Front
+*/
+
+ 
  public:
   Car();
   ~Car();
@@ -54,11 +96,19 @@ class Car: public GMovableObject {
   GLuint inline getWheelList() {
     return gl_wheelList;
   }
+  GLuint inline getBrakeLightList() {
+	  return gl_brakeLightList;
+  }
+  void change( int changeNum );
+  void changeColor( int changeNum );
 
  protected:
   void drawCoachwork(); // Karosserie zeichnen
-  // Make a gl_list for a wheel, used by drawCoachwork().
+  // Make a GL list for a wheel, used by drawCoachwork().
   virtual void writeWheelList();
+  // GL list for brake lights
+  virtual void writeBrakeLightList();
+  void drawObjectLists();
 };
 
 // A test of the GMovableObject class and the Car class

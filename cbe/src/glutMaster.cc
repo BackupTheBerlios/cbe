@@ -56,6 +56,11 @@ void GlutMaster::CallBackKeyboardFunc(unsigned char key, int x, int y) {
   viewPorts[windowID]->CallBackKeyboardFunc(key, x, y);
 }
 
+void GlutMaster::CallBackKeyboardUpFunc(unsigned char key, int x, int y) {
+  int windowID = glutGetWindow();
+  viewPorts[windowID]->CallBackKeyboardFunc(key, x, y);
+}
+
 void GlutMaster::CallBackMotionFunc(int x, int y){
   int windowID = glutGetWindow();
   viewPorts[windowID]->CallBackMotionFunc(x, y);

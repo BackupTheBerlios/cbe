@@ -75,12 +75,40 @@ class GObject {
   virtual inline void unhide() {
     hidden = false;
   }
+  // Show the object if it is hidden and hide it, if it is visible.
+  virtual inline void toggleVisibility() {
+	hidden = !hidden;
+  }
   // Returns the hidden-flag.
   inline bool isHidden() {
 	  return hidden;
   }
   // Draws the object.
   virtual void draw();
+
+  // Functions for changing something like color, shape etc.
+  // In each function the parameter changeNum gives the number
+  // of the change to be performed. These numbers are specific
+  // to each class derived from GObject.
+  //
+  // In GObject class this procedures has no function. You just
+  // have to overwrite them in a derived class, if You want
+  // it to be able to perform changes.
+  //
+  // If You want to add a new change function like 
+  // changeSomething( int changeNum ) for a new class, You should 
+  // add the function already in the GObject class, so that it can 
+  // be called for any instance of a subclass of GObject without
+  // causing an error.
+  virtual void change( int changeNum );
+  virtual void changeColor( int changeNum );
+  virtual void changeShape( int changeNum );
+protected:
+  // Draws the Open GL list(s) for the graphic object.
+  // If a derived class must draw several lists or, You just
+  // have to overwrite this function without changing the draw()
+  // function.
+  virtual void drawObjectLists();
 };
 
 #endif

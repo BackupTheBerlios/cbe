@@ -31,7 +31,17 @@ extern "C" {
 
 #include "Car.h"
 
+const GLfloat Car::color0[] = { 0.75, 0.75, 0.75 };
+const GLfloat Car::color1[] = { 0.8, 0.4, 0.0 };
+const GLfloat* Car::colors[] = { Car::color0, Car::color1 };
+const GLfloat Car::brakeLightColors[2][3] = { 
+	{ 0.7, 0.0, 0.0 },
+	{ 1.0, 0.0, 0.0 } };
+
 Car::Car() {
+  currColorNumber = 0; // Start with the first car color
+  currBrakeLightNumber = 0; // The brake lights are off at the beginning
+
   width = 1.8;
   length = 4.0;
   x1Back = -length / 2;
@@ -59,19 +69,59 @@ Car::Car() {
   frontWheelx = x1Front - 0.6;
   backWheelx = x1Back + 0.6;
 
+  brakeLightWidth = 0.2;
+  brakeLightHeight = 0.1;
+  brakeLightx = width/2 - 0.3;
+  brakeLighty = h2Back - 0.3;
+
   gl_wheelList = glGenLists( 1 );
+  gl_brakeLightList = glGenLists( 1 );
   makeList();
 }
 
 Car::~Car() {
   glDeleteLists( gl_wheelList, 1 );
+  glDeleteLists( gl_brakeLightList, 1 );
+}
+
+void Car::change( int changeNum ) {
+	if ( ( changeNum >= change_minColor ) && ( changeNum <= change_nextColor ) ) {
+		changeColor( changeNum );
+	}
+	else {
+		switch ( changeNum ) {
+		case change_brakeLightOn:
+			currBrakeLightNumber = 1;
+			break;
+		case change_brakeLightOff:
+			currBrakeLightNumber = 0;
+			break;
+		case change_toggleBrakeLight:
+			currBrakeLightNumber = 1 - currBrakeLightNumber;
+		}
+	}
+}
+
+void Car::changeColor( int changeNum ) {
+	if ( ( changeNum >= change_minColor ) && ( changeNum <= change_maxColor ) ) {
+		currColorNumber = changeNum - change_minColor;
+	}
+	else if ( changeNum == change_nextColor ) {
+		++currColorNumber; // Next color
+		// From the last color we go again to the first color
+		if ( currColorNumber > change_maxColor - change_minColor )
+			currColorNumber = 0;
+	}
 }
 
 void Car::makeList() {
   glNewList( gl_wheelList, GL_COMPILE); // Initialize the wheel list
   writeWheelList(); // Save the GL operations for a wheel to the list
   glEndList(); // Finish the list
-  GMovableObject::makeList(); // Call inherited function
+  glNewList( gl_brakeLightList, GL_COMPILE );
+  writeBrakeLightList();
+  glEndList();
+  GMovableObject::makeList(); // Call inherited function to write the list gl_list.
 }
 
 void Car::writeList() {
@@ -80,9 +130,14 @@ void Car::writeList() {
   glPopMatrix();
 }
 
-void Car::drawCoachwork() { // zeichneKarosserie
-  glColor3f( 0.75, 0.75, 0.75 );
+void Car::drawObjectLists() {
+  glColor3fv( brakeLightColors[ currBrakeLightNumber ] );
+  glCallList( gl_brakeLightList );
+  glColor3fv( colors[ currColorNumber ] );
+  glCallList( getList() ); // Draw the object
+}
 
+void Car::drawCoachwork() { // zeichneKarosserie
   // Coachwork
   int i;
 
@@ -225,6 +280,23 @@ void Car::writeWheelList() {
 	     1 );// loops
     glPopMatrix();
   }
+}
+
+void Car::writeBrakeLightList() {
+  GLfloat w = brakeLightWidth,
+		  h = brakeLightHeight,
+		  x = brakeLightx,
+		  y = brakeLighty;
+  glBegin( GL_QUADS );
+  int i;
+  for( i = 0; i <= 1; ++i ) {
+	int f = 2*i-1; // -1, if i==0, 1 if i==1
+    glVertex3f( f*x + w/2, y + h/2, x1Back );
+    glVertex3f( f*x + w/2, y - h/2, x1Back );
+    glVertex3f( f*x - w/2, y - h/2, x1Back );
+    glVertex3f( f*x - w/2, y + h/2, x1Back );
+  }
+  glEnd();
 }
 
 TestCar::TestCar() {

@@ -1,3 +1,10 @@
+#include <cstdlib>
+#include <iostream>
+#include "SerialClient.hh"
+
+using namespace std;
+
+#ifndef _WIN32 // Linux Version
 extern "C" {
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -5,12 +12,12 @@ extern "C" {
 #include <unistd.h>
 #include <string.h>
 }
+
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
 #include "SerialClient.hh"
 
-using namespace std;
 
 SerialClient::SerialClient(const char * dev_name) {
   isAvailable=false;
@@ -85,17 +92,37 @@ void SerialClient::onlyGetData() {
   }
 }
 
-// returns what to change
-int SerialClient::getChange() {
-  if (isRandom) {
-    if (rand()%10==0) { // make change
-      return rand()%10;
-    }
-    else
-      return 0;
-  }
-  return change;
+
+#else // Windows Version, Dummy
+
+#include "Random.h"
+
+SerialClient::SerialClient(const char * dev_name)
+{
+    isRandom=true;
+    cout << "Using random eye-events" << endl;
+	resetRandom();
 }
+
+SerialClient::~SerialClient() {
+}
+
+void SerialClient::requestData() {
+	x = rndInt( 32768 );
+	y = rndInt( 32768 );
+}
+
+void SerialClient::onlyRequestData() {
+}
+
+void SerialClient::onlyGetData() {
+	x = rndInt( 32768 );
+	y = rndInt( 32768 );
+}
+
+#endif
+
+
 
 // returns run-reset-flag
 bool SerialClient::isRun() {
@@ -127,4 +154,15 @@ int SerialClient::getY() {
     return y;
 }
 
-
+// returns what to change
+int SerialClient::getChange() {
+  if (isRandom) {
+    if (rand()%10==0) { // make change
+      return rand()%10;
+    }
+    else
+      return 0;
+  }
+  return change;
+}
+  

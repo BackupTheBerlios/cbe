@@ -30,34 +30,41 @@ extern "C" {
 #include <time.h>
 }
 #include <string>
-#include <list>
+#include <vector>
+#include "Random.h"
 #ifdef _WIN32
-using namespace std;
+	using namespace std;
 #endif
+
 #include "Preferences.h"
+
 #include "glutMaster.h"
 #include "GObject.h"
+#include "Car.h"
 #include "Point.h"
 #include "Bitmap.h"
 #include "JoystickDriver.hh"
 #include "SerialClient.hh"
 
 namespace mainApp {
-  typedef list<GObject*> GObjectList;
-  
+  typedef vector<GObject*> GObjectVector;
+  typedef vector<Car*> CarVector;
   class mainAppWindow : public GlutWindow{
   private:
     pref::Preferences* prefs;       // Preferences object
     GObject *plane;                 // holds the plane
     GObject *street;                // holds the street
-    GObjectList graphicObjectsList; // Objects to be drawn
+    GObjectVector graphicObjects;	// Objects to be drawn
+	CarVector carVector;			// Cars
     GLfloat speed;                  // Speed of movement
     bool isFog;                     // Flag for fog
     Point *movementVector;          // Movement direction
     GLfloat viewingAngle;           // Indicates the angle of view in the x-z-plane
     clock_t oldTime;                // Used to determine the Frames/s (also for constant movement speed)
     double getTimePassed();         // Reports seconds since last call
-    Bitmap cockpitIMG;              // Cockpit image
+	#ifndef _WIN32
+		Bitmap cockpitIMG;              // Cockpit image
+	#endif
     JoystickDriver *joystick;       // Joystick-Object
     SerialClient *serialclient;     // Serial-Object
     bool isSerial;                  // Flag for use of serialport
@@ -84,6 +91,7 @@ namespace mainApp {
     void setStreet(GObject*);        // used to alter the polygonList
     void setPlane(GObject*);         // ???
     void addGraphicObject( GObject* obj);
+	void addCar ( Car* c );
   };
   
   // Exceptions

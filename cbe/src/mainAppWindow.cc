@@ -56,6 +56,7 @@ namespace mainApp {
     // Set preferences
     prefs = newPrefs;
     
+	#ifndef _WIN32
     // Where is the cockpit?
     cockpitIMG.setPath( (string)DATADIR + "/pixmaps/cbe/cockpit.tif" );  // Size: 717 x 538 pixels
     
@@ -66,7 +67,8 @@ namespace mainApp {
 #endif
     }
     else
-      cerr << "ERROR: Cockpit image not loaded. Did you forget 'make install'?" << endl;
+      cout << "ERROR: Cockpit image not loaded. Did you forget 'make install'?" << endl;
+    #endif
     
     // Set default viewing and movement vectors
     movementVector = new Point(1,0,0);
@@ -148,13 +150,16 @@ namespace mainApp {
     street->draw();
     
     // Draw all graphic objects in the list
-    for( GObjectList::iterator itr = graphicObjectsList.begin(); itr != graphicObjectsList.end(); itr++ )
+	GObjectVector::iterator listEnd = graphicObjects.end();
+    for( GObjectVector::iterator itr = graphicObjects.begin(); itr != listEnd; ++itr )
       (*itr)->draw();
     
     // Check if blending is enabled
     if (prefs->useBlending()) {
       glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	  #ifndef _WIN32
       glDrawPixels(717, 538, GL_RGBA, GL_UNSIGNED_BYTE, cockpitIMG.getData());
+	  #endif
       glEnable(GL_BLEND);
     }
 
@@ -190,18 +195,15 @@ namespace mainApp {
     if (isSerial) {
       serialclient->requestData();
       if (serialclient->getChange()==CHANGE_HIDE_CAR) {
-#ifdef DEBUG
-	cout << "hide_car" << endl;
-#endif
-	GObjectList::iterator itr=graphicObjectsList.begin();
-	if ((*itr)->isHidden())
-	  for( itr = graphicObjectsList.begin(); itr != graphicObjectsList.end(); itr++ )
-	    (*itr)->unhide();
-	else
-	  for( itr = graphicObjectsList.begin(); itr != graphicObjectsList.end(); itr++ )
-	    (*itr)->hide();
-      }
-    }
+		#ifdef DEBUG
+		cout << "hide_car" << endl;
+		#endif
+		GObjectVector::iterator itr = graphicObjects.begin();
+		GObjectVector::iterator listEnd = graphicObjects.end();
+		for( ; itr != listEnd; ++itr )
+	      (*itr)->toggleVisibility();
+	  }
+	}
     
     // Make Joysick-Calls
     joystick->refreshJoystick();
@@ -212,9 +214,22 @@ namespace mainApp {
       viewingAngle+=360;
     if (viewingAngle>=180)
       viewingAngle-=360;
-  
-    speed -= joystick->getYaxis() * 100 * latenz;
-  
+	GLfloat speedDiff = -joystick->getYaxis() * 100 * latenz;
+	#define BRAKE_FACTOR 3
+	if ( (( speed >= 0 ) && ( speedDiff >= 0 )) ||
+	   (( speed <= 0 ) && ( speedDiff <= 0 )) )
+		speed += speedDiff; // Normal acceleration
+	// Otherwise we are braking
+	else if ( speed > 0 ) { // and speedDiff < 0, braking from forward movement
+		speed += speedDiff * BRAKE_FACTOR;
+		if ( speed < 0 ) speed = 0; // Brake not more than until stopping.
+			// Do not start moving in reverse direction this time.
+	}
+	else { // ( speed < 0 and speedDiff > 0, braking from backward movement
+		speed += speedDiff * BRAKE_FACTOR;
+		if ( speed > 0 ) speed = 0; // Brake not more than until stopping.
+	}
+
     // recalculate the new movementVector
     movementVector->x=cos(viewingAngle*M_PI/180);
     movementVector->z=sin(viewingAngle*M_PI/180);
@@ -244,7 +259,8 @@ namespace mainApp {
 
   // Call back function for keyboard events
   void mainAppWindow::CallBackKeyboardFunc(unsigned char key, int x, int y) {
-    GObjectList::iterator itr;
+    GObjectVector::iterator itr;
+    GObjectVector::iterator listEnd;
     // Determine key
     switch (key) {
     case 'Q':
@@ -296,7 +312,6 @@ namespace mainApp {
     case 'J': // right
     case 'j':
       viewingAngle++;
-
       if (viewingAngle<-180)
 	viewingAngle+=360;
       break;
@@ -315,12 +330,14 @@ namespace mainApp {
       break;
 	case 'd':
     case 'D':
-      for( itr = graphicObjectsList.begin(); itr != graphicObjectsList.end(); itr++ )
+	  listEnd = graphicObjects.end();
+      for( itr = graphicObjects.begin(); itr != listEnd; ++itr )
 	(*itr)->hide();
       break;
     case 's':
     case 'S':
-      for( itr = graphicObjectsList.begin(); itr != graphicObjectsList.end(); itr++ )
+	  listEnd = graphicObjects.end();
+      for( itr = graphicObjects.begin(); itr != listEnd; ++itr )
 	(*itr)->unhide();
       break;
     case 'r':
@@ -337,6 +354,15 @@ namespace mainApp {
       else
 	isSerial=true;
       break;
+	case '1':
+	  carVector[ rndInt( carVector.size() ) ]->changeColor( Car::change_nextColor );
+	  break;
+	case '2':
+	  carVector[ rndInt( carVector.size() ) ]->change( Car::change_toggleBrakeLight );
+	  break;
+	case '3':
+	  carVector[ rndInt( carVector.size() ) ]->toggleVisibility();
+	  break;
     default:
       cout << "A normal key was pressed. Hurra!" << endl;
       break;
@@ -368,7 +394,12 @@ namespace mainApp {
 
   void mainAppWindow::addGraphicObject( GObject* obj) {
     // Append the passed graphic object pointer to the list
-    graphicObjectsList.push_back( obj );
+    graphicObjects.push_back( obj );
+  }
+
+  void mainAppWindow::addCar( Car* c ) {
+	  carVector.push_back( c );
+	  addGraphicObject( c );
   }
 
 

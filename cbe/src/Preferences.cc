@@ -103,8 +103,12 @@ namespace pref {
       
       return parsedValues;
     }
-    else
+    else {
       throw MalformedPrefsFile();
+	  #ifdef _WIN32 // The VC compiler does not handle exceptions correctly
+	  return 0;
+      #endif
+	}
   }
 
 

@@ -22,12 +22,15 @@
 extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
-#include <tiffio.h>
+#ifndef _WIN32
+	#include <tiffio.h>
+#endif
 }
 #include "Bitmap.h"
 
 using namespace std;
 
+#ifndef _WIN32
 Bitmap::Bitmap(string newPath) {
   path = newPath;
   data = NULL;
@@ -89,3 +92,5 @@ void Bitmap::setPath(string newPath) {
 uint32* Bitmap::getData(void) {
   return data;
 }
+
+#endif
