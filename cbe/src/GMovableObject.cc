@@ -21,7 +21,7 @@ extern "C" {
 #ifdef _WIN32
 #include <GL/glaux.h>
 #endif
-#include <GL/gl.h>    // OpenGL
+#include <GL/gl.h>
 }
 #include "GMovableObject.h"
 
@@ -60,12 +60,16 @@ void GMovableObject::rotate( GLfloat r ) {
 void GMovableObject::draw() {
   if ( !isHidden() ) {
     glPushMatrix();
+
     // Move the object to its position
     glTranslatef( position.x, position.y, position.z );
+
     // Rotate the object by the object angle around the vertical axis
     glRotatef( angle, 0, 1, 0 );
+
     // Draw the object
     drawObjectLists();
+
     glPopMatrix();
   }
 }

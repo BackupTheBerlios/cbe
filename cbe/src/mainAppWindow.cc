@@ -44,6 +44,11 @@ extern "C" {
 #define M_PI 3.1415926535
 #endif
 
+#ifndef BRAKE_FACTOR
+#define BRAKE_FACTOR 3
+#endif
+
+
 using namespace std;
 
 namespace mainApp {
@@ -57,7 +62,7 @@ namespace mainApp {
     prefs = newPrefs;
     
     // Where is the cockpit?
-    cockpitIMG.setPath( (string)DATADIR + "/pixmaps/cbe/cockpit.tif" );  // Size: 717 x 538 pixels
+    cockpitIMG.setPath( (string)DATADIR + "/pixmaps/cbe/cockpit.tif" );       // Size: 717 x 538 pixels
     
     // Load the cockpit
     if (cockpitIMG.load()) {
@@ -68,20 +73,24 @@ namespace mainApp {
     else
       cerr << "ERROR: Cockpit image not loaded. Did you forget 'make install'?" << endl;
     
-    // Set default viewing and movement vectors
-    movementVector = new Point(1,0,0);
-    
+    try {
+      movementVector = new Point(1,0,0);         // Set default viewing and movement vectors
+    }
+    catch(...) {
+      throw;
+    }
+
     // Set default speed and viewingAngle
     speed = 0.0;
-    viewingAngle=0.0;
+    viewingAngle = 0.0;
     
     // Set current clock-value to oldTime
-    oldTime=clock();
+    oldTime = clock();
 
-    // Set some defaults
-    frameCount=0;
-    latenz = 1/60; // Default to 60 frames/second
-    showFramerate=false; // Default to don't display framerate
+    // Set some defaults concerning framerate
+    frameCount = 0;
+    latenz = 1/prefs->getFramerate();
+    showFramerate=false;
 
     isFog = false;
     width  = setWidth;               
@@ -95,9 +104,9 @@ namespace mainApp {
 
     // Set viewport to 0, cockpit height, cockpit width, driver's window height
     glViewport(0, 161, (GLint)width, 377);
-    
+
     glutMaster->CallGlutCreateWindow(title.c_str(), this);
-  
+
     glEnable(GL_DEPTH_TEST);  
     
     // Switch to camera matrix
@@ -122,19 +131,24 @@ namespace mainApp {
     // Switch to scenery matrix
     glMatrixMode(GL_MODELVIEW);
 
-    // Initialize Joystick
-    joystick = new JoystickDriver();
-
-    // Initialize SerialPort
-    serialclient = new SerialClient("/dev/ttyS0"); // to open com-port1 use /dev/ttyS0
-    isSerial=false; // Disable serialport by default
+    try {
+      joystick = new JoystickDriver();      // Initialize Joystick
+      
+      // Initialize SerialPort
+      serialclient = new SerialClient(prefs->getJoystick().c_str());         // to open com-port1 use /dev/ttyS0 in your prefs file
+      isSerial = false;                                                      // Disable serialport by default
+    }
+    catch (...) {
+      throw;
+    }
   }
-
+  
 
   mainAppWindow::~mainAppWindow() {
     delete movementVector;
     delete joystick;
     delete serialclient;
+  
     glutDestroyWindow(windowID);
 #ifdef DEBUG
     cout << "Destructor of mainAppWindow called." << endl;
@@ -148,7 +162,8 @@ namespace mainApp {
     street->draw();
     
     // Draw all graphic objects in the list
-	GObjectVector::iterator listEnd = graphicObjects.end();
+    GObjectVector::iterator listEnd = graphicObjects.end();
+    
     for( GObjectVector::iterator itr = graphicObjects.begin(); itr != listEnd; ++itr )
       (*itr)->draw();
     
@@ -172,7 +187,7 @@ namespace mainApp {
 
     width  = w;                   // Full window width
     height = h - cockpitHeight;   // Window height - cockpit height
-
+    
     // 0, cockpit height, cockpit width, driver's window height
     glViewport(0, height, width, cockpitHeight); 
     CallBackDisplayFunc();
@@ -182,9 +197,11 @@ namespace mainApp {
   // Call back function for idle state
   void mainAppWindow::CallBackIdleFunc(void) {
     frameCount++;
-    if (frameCount==10) { // recalculate framerate every 10 frames and set latenz according      
-      latenz = getTimePassed()/10; // save passed time
+    
+    if (frameCount==10) {                   // recalculate framerate every 10 frames and set latenz according      
+      latenz = getTimePassed()/10;          // save passed time
       frameCount=0;
+
       if (showFramerate) 
 	cout << 1/latenz << endl;
     }
@@ -192,27 +209,23 @@ namespace mainApp {
     // Make blink-detection (only if serialport is activated)
     if (isSerial) {
       serialclient->requestData();
-      switch (serialclient->getChange()) {
+      
+      switch ( serialclient->getChange() ) {
       case CHANGE_HIDE_CAR: 
-#ifdef DEBUG
-	cout << "hide_car" << endl;
-#endif
 	for(GObjectVector::iterator itr = graphicObjects.begin(); itr != graphicObjects.end(); itr++ )
 	  (*itr)->toggleVisibility();
+	
 	break;
-
       case CHANGE_TOGGLE_BREAKLIGHTS:
-#ifdef DEBUG
-	cout << "toggle breaklights" << endl;
-#endif
 	for(GObjectVector::iterator itr = graphicObjects.begin(); itr != graphicObjects.end(); itr++ )
 	  (*itr)->change( Car::change_toggleBrakeLight );
-	break;
 	
+	break;
       default:
 	break;
       }
     }
+    
     // Make Joysick-Calls
     joystick->refreshJoystick();
     viewingAngle+= joystick->getXaxis() * 100 * latenz;
@@ -220,24 +233,28 @@ namespace mainApp {
     // Keep viewingAngle in -180<x<180
     if (viewingAngle<-180)
       viewingAngle+=360;
+    
     if (viewingAngle>=180)
       viewingAngle-=360;
-	GLfloat speedDiff = -joystick->getYaxis() * 100 * latenz;
-#define BRAKE_FACTOR 3
-	if ( (( speed >= 0 ) && ( speedDiff >= 0 )) ||
-	   (( speed <= 0 ) && ( speedDiff <= 0 )) )
-		speed += speedDiff; // Normal acceleration
-	// Otherwise we are braking
-	else if ( speed > 0 ) { // and speedDiff < 0, braking from forward movement
-		speed += speedDiff * BRAKE_FACTOR;
-		if ( speed < 0 ) speed = 0; // Brake not more than until stopping.
-			// Do not start moving in reverse direction this time.
-	}
-	else { // ( speed < 0 and speedDiff > 0, braking from backward movement
-		speed += speedDiff * BRAKE_FACTOR;
-		if ( speed > 0 ) speed = 0; // Brake not more than until stopping.
-	}
+    
+    GLfloat speedDiff = -joystick->getYaxis() * 100 * latenz;
 
+    if ( (( speed >= 0 ) && ( speedDiff >= 0 )) || (( speed <= 0 ) && ( speedDiff <= 0 )) )
+      speed += speedDiff;                // Normal acceleration
+    // Otherwise we are braking
+    else if ( speed > 0 ) {              // and speedDiff < 0, braking from forward movement
+      speed += speedDiff * BRAKE_FACTOR;
+      
+      if ( speed < 0 )
+	speed = 0;                       // Brake not more than until stopping.
+    }
+    else {                               // ( speed < 0 and speedDiff > 0, braking from backward movement
+      speed += speedDiff * BRAKE_FACTOR;
+      
+      if ( speed > 0 )
+	speed = 0;                       // Brake not more than until stopping.
+    }
+    
     // recalculate the new movementVector
     movementVector->x=cos(viewingAngle*M_PI/180);
     movementVector->z=sin(viewingAngle*M_PI/180);
@@ -259,7 +276,7 @@ namespace mainApp {
     glTranslatef(movementVector->x * latenz * speed, 
 		 movementVector->y * latenz * speed, 
 		 movementVector->z * latenz * speed);
-
+    
     // Finished with "camera-actions" advance to draw the world
     CallBackDisplayFunc();
   }
@@ -269,13 +286,13 @@ namespace mainApp {
   void mainAppWindow::CallBackKeyboardFunc(unsigned char key, int x, int y) {
     GObjectVector::iterator itr;
     GObjectVector::iterator listEnd;
+    
     // Determine key
     switch (key) {
     case 'Q':
     case 'q':
     case 27:
-      exit(0);
-      // throw ExitKeyPressed();
+      exit(0);                   // or throw ExitKeyPressed();
       break;
     case 'B':
     case 'b':
@@ -287,29 +304,32 @@ namespace mainApp {
 	glEnable(GL_BLEND);
 	prefs->setBlending(true);
       }
+
       break;
-    case 'U':  // faster
+    case 'U':                   // faster
     case 'u':
-      if ( speed >= 0 )  // Acceleration in forward movement
+      if ( speed >= 0 )         // Acceleration in forward movement
 	speed += 0.05;
-      else { // Braking
-	speed += 0.2; // brake
-	if (speed > 0 ) // started reverse movement while braking
-	  speed = 0; // brake only untill stopping
+      else {                    // Braking
+	speed += 0.2;           // brake
+	if (speed > 0 )         // started reverse movement while braking
+	  speed = 0;            // brake only untill stopping
       }
+      
       break;
-    case 'N': // slower
+    case 'N':                   // slower
     case 'n':
-      if ( speed <= 0 )  // Acceleration in backward movement
+      if ( speed <= 0 )         // Acceleration in backward movement
 	speed -= 0.05;
-      else { // Braking
-	speed -= 0.2; // brake
+      else {                    // Braking
+	speed -= 0.2;           // brake
 	
-	if (speed < 0 ) // started reverse movement while braking
-	  speed = 0; // brake only untill stopping
+	if (speed < 0 )         // started reverse movement while braking
+	  speed = 0;            // brake only untill stopping
       }
+      
       break;
-    case 'H': // left
+    case 'H':                   // left
     case 'h':
       viewingAngle--;
 
@@ -317,36 +337,41 @@ namespace mainApp {
 	viewingAngle-=360;
 
       break;
-    case 'J': // right
+    case 'J':                   // right
     case 'j':
       viewingAngle++;
+      
       if (viewingAngle<-180)
 	viewingAngle+=360;
+
       break;
     case 'F':
     case 'f':
       if (!isFog) {
 	glEnable(GL_FOG);
-	cout << "Fog enabled." << endl;
 	isFog = true;
       }
       else {
 	glDisable(GL_FOG);
-	cout << "Fog disabled." << endl;
 	isFog = false;
       }
+      
       break;
-	case 'd':
+    case 'd':
     case 'D':
-	  listEnd = graphicObjects.end();
+      listEnd = graphicObjects.end();
+      
       for( itr = graphicObjects.begin(); itr != listEnd; ++itr )
 	(*itr)->hide();
+
       break;
     case 's':
     case 'S':
-	  listEnd = graphicObjects.end();
+      listEnd = graphicObjects.end();
+      
       for( itr = graphicObjects.begin(); itr != listEnd; ++itr )
 	(*itr)->unhide();
+
       break;
     case 'r':
     case 'R':
@@ -354,6 +379,7 @@ namespace mainApp {
 	showFramerate=false;
       else
 	showFramerate=true;
+
       break;
     case 'e':
     case 'E':
@@ -361,6 +387,7 @@ namespace mainApp {
 	isSerial=false;
       else
 	isSerial=true;
+
       break;
     case '1':
       carVector[ rndInt( carVector.size() ) ]->changeColor( Car::change_nextColor );
@@ -372,7 +399,9 @@ namespace mainApp {
       carVector[ rndInt( carVector.size() ) ]->toggleVisibility();
       break;
     default:
+#ifdef DEBUG
       cout << "A normal key was pressed. Hurra!" << endl;
+#endif
       break;
     }
   }
@@ -406,17 +435,19 @@ namespace mainApp {
   }
 
   void mainAppWindow::addCar( Car* c ) {
-	  carVector.push_back( c );
-	  addGraphicObject( c );
+    carVector.push_back( c );
+    addGraphicObject( c );
   }
 
 
   // Calculates time passed since last call of this function
   double mainAppWindow::getTimePassed() {
-    clock_t tnew,ris;
-    tnew=clock();
-    ris=tnew-oldTime;
-    oldTime=tnew;
-    return(ris/(double)CLOCKS_PER_SEC);
+    clock_t tnew, ris;
+
+    tnew = clock();
+    ris = tnew-oldTime;
+    oldTime = tnew;
+
+    return (ris/(double)CLOCKS_PER_SEC);
   }
 }

@@ -1,6 +1,15 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Fri Aug 17 09:02:23 CEST 2001  Andreas Bauer  <baueran@users.berlios.de>
+
+ * Code clean-up (comments, a bunch of exceptions are cought now, i.e.
+   never do a 'new' without catching out-of-memory!!!)
+
+ * Added framerate to the preferences (file)
+
+ * Added joystick device ID to preferences (file)
+
 Fri Jul 27 15:53:23 CEST 2001  Labor (all)	
 
  * Connected breaklights to signal '2'

@@ -35,6 +35,8 @@ namespace pref {
     int lineCount;
     string curLine;
     bool blending;
+    int framerate;
+    string joystick;
     list<string> getPrefValues(string);
     void showErrorParameter(string, string, string);
 
@@ -43,6 +45,10 @@ namespace pref {
     ~Preferences();
     bool useBlending(void);
     void setBlending(bool);
+    void setFramerate(int);
+    int getFramerate(void);
+    void setJoystick(string);
+    string getJoystick(void);
   };
   
   // Exceptions

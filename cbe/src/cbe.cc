@@ -18,20 +18,20 @@
 // USA.
 
 #include <iostream>
+
 extern "C" {
 #ifdef _WIN32
-	#include <GL/glaux.h>
+#include <GL/glaux.h>
 #endif
 #include <stdlib.h>
 #include <GL/gl.h>    // OpenGL
 #include <GL/glut.h>  // GLUT
 #include <stdlib.h>
-#ifndef _WIN32
-	#include <unistd.h>
-	#include <pwd.h>                                                         
-#endif
+#include <unistd.h>
+#include <pwd.h>                                                         
 #include <sys/types.h>
 }
+
 #include "Preferences.h"
 #include "cbe.hh"
 #include "glutMaster.h"
@@ -53,13 +53,12 @@ GlutMaster* glutMaster;
 mainApp::mainAppWindow* driversWindow;
 Plane* plane;
 Street* street;
-Car* car1;
-Car* car2;
+Car* car1; Car* car2;
 
 // Main program
 int main(int argc, char *argv[]) {
   string prefsFile;                          // Path to the cbe preferences file
-
+  
   // Set the size of the plane
   Point x(-60.0, -0.01, -60.0);
   Point y(160.0, -0.01, 60.0);
@@ -81,22 +80,22 @@ int main(int argc, char *argv[]) {
   cout <<         "  q / ESC    Exits program" << endl << endl;
   
   // Determine path for rcfile
-#ifndef _WIN32 // Unix
+#ifndef _WIN32
   if (getenv("HOME"))
     prefsFile = (string)getenv("HOME") + (string)"/.cbe";
   else
     prefsFile = (string)"/home/" + (string)getpwuid(getuid())->pw_name + (string)"/.cbe";
-#else // Windows
-    prefsFile = "cbe.cfg"; // Assume the file in the working directory
+#else
+  prefsFile = "cbe.cfg";
 #endif
-	
+  
   try {
     // Try reading the cbe preferences file
     pref::Preferences prefs(prefsFile);
-
+    
     // Try initializing the main Glut objects
     glutMaster = new GlutMaster(&argc, argv);  
-
+    
 #ifndef _WIN32
     driversWindow = new mainApp::mainAppWindow(glutMaster,
 					       &prefs,
@@ -106,14 +105,14 @@ int main(int argc, char *argv[]) {
 #else
     driversWindow = new mainApp::mainAppWindow(glutMaster,
 					       &prefs,
-					       WINDOW_WIDTH, WINDOW_HEIGHT,       // height, width
-					       10, 10,                           // initPosition (x,y)
-					       "Driver's Window" );              // title
+					       WINDOW_WIDTH, WINDOW_HEIGHT,                        // height, width
+					       10, 10,                                             // initPosition (x,y)
+					       "Driver's Window" );                                // title 
 #endif
     
     // Create street, plane and car
-    street = new Street(-50, 0, 0, 4);
-    plane = new Plane(x, y);
+    street = new Street( -50, 0, 0, 4 );
+    plane = new Plane( x, y );
     car1 = new TestCar( 0, 30 );
     car1->setPos( -20, 2, 10 );
     car1->rotate( -90 );
@@ -121,18 +120,18 @@ int main(int argc, char *argv[]) {
     car2->setPos( -3, 0, -5 );
     car2->rotate( -90 );
   }
-  catch (pref::IOException) {
+  catch(pref::IOException) {
     cerr << "ERROR: Could not read cbe preferences file." << endl;
     return -1;
   }
-  catch (...) {
-    cerr << "ERROR: Exception was thrown on program initialization. Not enough memory?!" << endl;
+  catch(...) {
+    cerr << "ERROR: Exception was thrown on program initialization. Not enough memory maybe?!" << endl;
     return -1;
   }
   
   // Init scenery
-  driversWindow->setStreet(street);
-  driversWindow->setPlane(plane);
+  driversWindow->setStreet( street );
+  driversWindow->setPlane( plane );
   driversWindow->addCar( car1 );
   driversWindow->addCar( car2 );
   atexit(cleanUp);
@@ -142,11 +141,11 @@ int main(int argc, char *argv[]) {
     driversWindow->StartSpinning(glutMaster);
     glutMaster->CallGlutMainLoop();
   }
-  catch (mainApp::ExitKeyPressed) {
+  catch(mainApp::ExitKeyPressed) {
     cout << "Exit key was pressed. CBE now cleans up and waves good-bye." << endl;  // Can this ever happen?
   }
-  catch (...) {
-    cout << "Exception was thrown during the event loop. CBE aborted." << endl;     // Can this ever happen? Suppose not, mainLoop just crashes instead..
+  catch(...) {
+    cerr << "Exception was thrown during the event loop. CBE aborted." << endl;     // Can this ever happen? Suppose not, mainLoop just crashes instead..
     return -1;
   }
 

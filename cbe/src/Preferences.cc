@@ -24,6 +24,9 @@
 #include <list>
 #include <fstream>
 #include <iostream>
+extern "C" {
+#include <stdlib.h>
+}
 #include "Preferences.h"
 #include "config.h"
 
@@ -33,7 +36,9 @@ namespace pref {
 
   Preferences::Preferences(string file) {
     ifstream prefsFile(file.c_str());
-    setBlending(true);
+    setBlending(true);            // Blending is on by default
+    framerate = 60;               // Some default frame rate if none was specified
+    joystick = "/dev/ttyS0";      // Default joystick device
     lineCount = 0;
     
     if (prefsFile) {
@@ -54,6 +59,10 @@ namespace pref {
 	      throw MalformedPrefsFile();	      
 	    }
 	  }
+	  else if (curLine.find("FRAMERATE=", 0) == 0)
+	    setFramerate( atoi( (*(getPrefValues(curLine)).begin()).c_str() ) );
+	  else if (curLine.find("JOYSTICK=", 0) == 0)
+	    setJoystick(*(getPrefValues(curLine)).begin());
 	  else if (curLine.length()) {
 	    cerr << PACKAGE << ": Invalid keyword in '" << file << "' (" << lineCount << "): ";
 	    cerr << "'" << curLine.substr(0, curLine.find("=")) << "'" << endl;
@@ -66,7 +75,6 @@ namespace pref {
 	throw;
       }
       
-      // Close preferences file
       prefsFile.close();
     }
     else
@@ -103,15 +111,11 @@ namespace pref {
       
       return parsedValues;
     }
-    else {
+    else
       throw MalformedPrefsFile();
-	  #ifdef _WIN32 // The VC compiler does not handle exceptions correctly
-	  return 0;
-      #endif
-	}
   }
-
-
+  
+  
   // Shows an error if a keyword got wrong arguments
   // (Method taken from mailfilter)
   void Preferences::showErrorParameter(string file, string keyword, string parameter) {
@@ -127,6 +131,26 @@ namespace pref {
   
   void Preferences::setBlending(bool newBlending) {
     blending = newBlending;
+  }
+
+
+  void Preferences::setFramerate(int newRate) {
+    framerate = newRate;
+  }
+  
+
+  int Preferences::getFramerate(void) {
+    return framerate;
+  }
+
+
+  void Preferences::setJoystick(string newJoy) {
+    joystick = newJoy;
+  }
+
+  
+  string Preferences::getJoystick(void) {
+    return joystick;
   }
 
 }

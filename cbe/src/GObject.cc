@@ -19,37 +19,41 @@
 
 #include "GObject.h"
 
+
 // This class is the basic class for graphic objects
 GObject::GObject() {
-  hidden = false; // Not hidden at the beginning
-  gl_list = glGenLists( 1 ); // Create a new list for the object
+  hidden = false;                     // Not hidden at the beginning
+  gl_list = glGenLists( 1 );          // Create a new list for the object
 }
+
 
 GObject::~GObject() {
-  glDeleteLists( gl_list, 1 ); // Delete the GL list corresponding to the object.
+  glDeleteLists( gl_list, 1 );        // Delete the GL list corresponding to the object.
 }
+
 
 void GObject::draw() {
-  if ( !hidden ) {
-	drawObjectLists();
-  }
+  if ( !hidden )
+    drawObjectLists();
 }
 
+
 void GObject::drawObjectLists() {
-  glCallList( gl_list ); // Draw the object
+  glCallList( gl_list );             // Draw the object
 }
+
 
 void GObject::makeList() {
   glNewList(getList(), GL_COMPILE); // Initialize the list
-  writeList(); // Save the GL operations to the list
-  glEndList(); // Finish the list
+  writeList();                      // Save the GL operations to the list
+  glEndList();                      // Finish the list
 }
+
 
 // The procedure is empty in this class, but this empty 
 // implementation may not be removed from here, because 
 // it would produce a link error.
 void GObject::writeList() {}
-
 void GObject::change( int changeNum ) {}
 void GObject::changeColor( int changeNum ) {}
 void GObject::changeShape( int changeNum ) {}

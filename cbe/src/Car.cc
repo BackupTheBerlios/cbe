@@ -28,20 +28,18 @@ extern "C" {
 #include <GL/glut.h>
 }
 #include "Point.h"
-
 #include "Car.h"
+
 
 const GLfloat Car::color0[] = { 0.75, 0.75, 0.75 };
 const GLfloat Car::color1[] = { 0.8, 0.4, 0.0 };
 const GLfloat* Car::colors[] = { Car::color0, Car::color1 };
-const GLfloat Car::brakeLightColors[2][3] = { 
-	{ 0.7, 0.0, 0.0 },
-	{ 1.0, 0.0, 0.0 } };
+const GLfloat Car::brakeLightColors[2][3] = { { 0.7, 0.0, 0.0 }, { 1.0, 0.0, 0.0 } };
 
 Car::Car() {
-  currColorNumber = 0; // Start with the first car color
-  currBrakeLightNumber = 0; // The brake lights are off at the beginning
-
+  currColorNumber = 0;         // Start with the first car color
+  currBrakeLightNumber = 0;    // The brake lights are off at the beginning
+  
   width = 1.8;
   length = 4.0;
   x1Back = -length / 2;
@@ -79,50 +77,54 @@ Car::Car() {
   makeList();
 }
 
+
 Car::~Car() {
   glDeleteLists( gl_wheelList, 1 );
   glDeleteLists( gl_brakeLightList, 1 );
 }
 
+
 void Car::change( int changeNum ) {
-	if ( ( changeNum >= change_minColor ) && ( changeNum <= change_nextColor ) ) {
-		changeColor( changeNum );
-	}
-	else {
-		switch ( changeNum ) {
-		case change_brakeLightOn:
-			currBrakeLightNumber = 1;
-			break;
-		case change_brakeLightOff:
-			currBrakeLightNumber = 0;
-			break;
-		case change_toggleBrakeLight:
-			currBrakeLightNumber = 1 - currBrakeLightNumber;
-		}
-	}
+  if ( ( changeNum >= change_minColor ) && ( changeNum <= change_nextColor ) ) {
+    changeColor( changeNum );
+  }
+  else {
+    switch ( changeNum ) {
+    case change_brakeLightOn:
+      currBrakeLightNumber = 1;
+      break;
+    case change_brakeLightOff:
+      currBrakeLightNumber = 0;
+      break;
+    case change_toggleBrakeLight:
+      currBrakeLightNumber = 1 - currBrakeLightNumber;
+    }
+  }
 }
 
 void Car::changeColor( int changeNum ) {
-	if ( ( changeNum >= change_minColor ) && ( changeNum <= change_maxColor ) ) {
-		currColorNumber = changeNum - change_minColor;
-	}
-	else if ( changeNum == change_nextColor ) {
-		++currColorNumber; // Next color
-		// From the last color we go again to the first color
-		if ( currColorNumber > change_maxColor - change_minColor )
-			currColorNumber = 0;
-	}
+  if ( ( changeNum >= change_minColor ) && ( changeNum <= change_maxColor ) )
+    currColorNumber = changeNum - change_minColor;
+  else if ( changeNum == change_nextColor ) {
+    ++currColorNumber;                   // Next color
+    
+    // From the last color we go again to the first color
+    if ( currColorNumber > change_maxColor - change_minColor )
+      currColorNumber = 0;
+  }
 }
+
 
 void Car::makeList() {
   glNewList( gl_wheelList, GL_COMPILE); // Initialize the wheel list
-  writeWheelList(); // Save the GL operations for a wheel to the list
-  glEndList(); // Finish the list
+  writeWheelList();                     // Save the GL operations for a wheel to the list
+  glEndList();                          // Finish the list
   glNewList( gl_brakeLightList, GL_COMPILE );
   writeBrakeLightList();
   glEndList();
-  GMovableObject::makeList(); // Call inherited function to write the list gl_list.
+  GMovableObject::makeList();           // Call inherited function to write the list gl_list.
 }
+
 
 void Car::writeList() {
   glPushMatrix();
@@ -130,21 +132,20 @@ void Car::writeList() {
   glPopMatrix();
 }
 
+
 void Car::drawObjectLists() {
   glColor3fv( brakeLightColors[ currBrakeLightNumber ] );
   glCallList( gl_brakeLightList );
   glColor3fv( colors[ currColorNumber ] );
-  glCallList( getList() ); // Draw the object
+  glCallList( getList() );         // Draw the object
 }
 
-void Car::drawCoachwork() { // zeichneKarosserie
-  // Coachwork
-  int i;
 
+void Car::drawCoachwork() {
   glBegin( GL_QUADS );
 
   // The left and the right side of the car
-  for( i = 0; i <= 1; i++ ) {
+  for(int i = 0; i <= 1; i++ ) {
     // i == 0: left side, i == 1: right side
     glVertex3f( (i-0.5)*width, h1Back, x1Back );
     glVertex3f( (i-0.5)*width, h2Back, x2Back );
@@ -182,7 +183,7 @@ void Car::drawCoachwork() { // zeichneKarosserie
   glVertex3f( 0.5*width, h4Back, x4Back );
   glVertex3f( 0.5*width, h3Back, x3Back );
 
-  for( i = 0; i <= 1; i++ ) {
+  for(int i = 0; i <= 1; i++ ) {
     // i == 0: left side, i == 1: right side
     glVertex3f( (i-0.5)*width, h3Back, x3Back );
     glVertex3f( (i-0.5)*width, h4Back, x4Back );
@@ -221,7 +222,7 @@ void Car::drawCoachwork() { // zeichneKarosserie
     // j = 0: two front wheels, j = 1: twho back wheels
     GLdouble wheelX = ( j == 0 ) ? frontWheelx:backWheelx;
 
-    for( i = 0; i <= 1; i++ ) { 
+    for(int i = 0; i <= 1; i++ ) { 
       // i = 0: left wheel, i = 1: right wheel
       glPushMatrix();
       // ...+0.02 to move the wheel a little bit outside the car
@@ -234,70 +235,82 @@ void Car::drawCoachwork() { // zeichneKarosserie
   }
 }
 
+
 void Car::writeWheelList() {
+  int slices = 16;               // Number of slices approximating a circle
+
   glColor3f( 0.35, 0.35, 0.35 );
-  int slices = 16; // Number of slices approximating a circle
+  
   // The outer part of the wheel
   gluCylinder( gluNewQuadric(),
-	       wheelRadius1, // base radius
-	       wheelRadius1, // top radius
-	       wheelWidth1, // height
-	       slices, // slices
-	       1 ); // stacks
+	       wheelRadius1,     // base radius
+	       wheelRadius1,     // top radius
+	       wheelWidth1,      // height
+	       slices,           // slices
+	       1 );              // stacks
+  
   // Wheel sides
   for( int i = 0; i <= 1; i++ ) {	
     glPushMatrix();
+
     if ( i > 0 )
       glTranslatef( 0, 0, wheelWidth1 );
+
     // The tire
     glColor3f( 0.25, 0.25, 0.25 );
     gluDisk( gluNewQuadric(),
-	     wheelRadius2, // innerRadius
-	     wheelRadius1, // outerRadius
-	     slices, // slices
-	     1 );// loops
+	     wheelRadius2,       // innerRadius
+	     wheelRadius1,       // outerRadius
+	     slices,             // slices
+	     1 );                // loops
     glPopMatrix();
     glPushMatrix();
+
     if ( i > 0 )
       glTranslatef( 0, 0, wheelWidth2 );
+
     glColor3f( 0.2, 0.2, 0.2 );
     // The strip between the tire and the wheel rim ("und der Felge")
     gluCylinder( gluNewQuadric(),
-		 wheelRadius2, // base radius
-		 wheelRadius2, // top radius
+		 wheelRadius2,            // base radius
+		 wheelRadius2,            // top radius
 		 wheelWidth1-wheelWidth2, // height
-		 slices, // slices
-		 1 ); // stacks
+		 slices,                  // slices
+		 1 );                     // stacks
     glPopMatrix();
     glPushMatrix();
     glTranslatef( 0, 0, (wheelWidth1 - wheelWidth2)/2 + i*wheelWidth2);
     // The wheel rim (Die Felge zeichnen)
     glColor3f( 0.4, 0.4, 0.4 );
     gluDisk( gluNewQuadric(),
-	     0, // innerRadius
-	     wheelRadius2, // outerRadius
-	     slices, // slices
-	     1 );// loops
+	     0,             // innerRadius
+	     wheelRadius2,  // outerRadius
+	     slices,        // slices
+	     1 );           // loops
     glPopMatrix();
   }
 }
 
+
 void Car::writeBrakeLightList() {
   GLfloat w = brakeLightWidth,
-		  h = brakeLightHeight,
-		  x = brakeLightx,
-		  y = brakeLighty;
+    h = brakeLightHeight,
+    x = brakeLightx,
+    y = brakeLighty;
+  
   glBegin( GL_QUADS );
-  int i;
-  for( i = 0; i <= 1; ++i ) {
-	int f = 2*i-1; // -1, if i==0, 1 if i==1
+
+  for(int i = 0; i <= 1; ++i ) {
+    int f = 2 * i-1; // -1, if i==0, 1 if i==1
     glVertex3f( f*x + w/2, y + h/2, x1Back );
     glVertex3f( f*x + w/2, y - h/2, x1Back );
     glVertex3f( f*x - w/2, y - h/2, x1Back );
     glVertex3f( f*x - w/2, y + h/2, x1Back );
   }
+
   glEnd();
 }
+
 
 TestCar::TestCar() {
   oldTime = clock();
@@ -306,6 +319,7 @@ TestCar::TestCar() {
   deltaAngle = 0;
 }
 
+
 TestCar::TestCar( double dx, double dr ) {
   oldTime = clock();
   makeList();
@@ -313,11 +327,14 @@ TestCar::TestCar( double dx, double dr ) {
   deltaAngle = dr;
 }
 
+
 TestCar::~TestCar() {}
 
+
 void TestCar::draw() {
-  // Just for test
+  // Just for testing
   double timePassed = (clock() - oldTime)/(double)CLOCKS_PER_SEC;
+
   oldTime = clock();
   rotate( deltaAngle * timePassed );
   move( deltaX * timePassed, 0, 0 );
