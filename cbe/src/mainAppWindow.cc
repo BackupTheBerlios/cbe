@@ -53,16 +53,26 @@ mainAppWindow::mainAppWindow(GlutMaster * glutMaster, int setWidth, int setHeigh
   glutMaster->CallGlutCreateWindow(title.c_str(), this);
   
   glEnable(GL_DEPTH_TEST);
-
+  
+	
   glMatrixMode(GL_PROJECTION);
-  glOrtho(-80.0, 80.0, -80.0, 80.0, -500.0, 500.0);
-  
-  glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  
-  glRotatef(60, 1, 1, 1);
-  glColor4f(1.0, 0.0, 0.0, 1.0);
 
+	//old Version
+  //glOrtho(-80.0, 80.0, -80.0, 80.0, -500.0, 500.0);
+ 	//glRotatef(60.0,1.0,1.0,1.0);
+	
+	//perspective
+	gluPerspective(120.0,1.0,0.1,100.0);
+	
+	//viewing direction
+	glRotatef(90.0, 0.0, 1.0, 0.0);
+	
+	//point of view
+	glTranslatef(5.0,-2.0,0.0);
+
+	glMatrixMode(GL_MODELVIEW);
+	
 }
 
 
@@ -93,7 +103,8 @@ void mainAppWindow::CallBackReshapeFunc(int w, int h) {
 
 // Call back function for idle state
 void mainAppWindow::CallBackIdleFunc(void) {
-  glRotatef(xRotationSpeed, 1, 1, 2);
+  //glRotatef(xRotationSpeed, 1, 1, 2);
+	glTranslatef(-0.1,0.0,0.0);
   CallBackDisplayFunc();
 }
 
