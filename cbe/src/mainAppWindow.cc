@@ -168,7 +168,7 @@ namespace mainApp {
 
     // Make blink-detection (only if serialport is activated)
     if (isSerial) {
-      serialclient->requestNewData();
+      serialclient->requestData();
       if (serialclient->isBlink())
 	cout << "Blink" << endl;
     }

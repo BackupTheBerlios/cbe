@@ -64,6 +64,7 @@ int main(int argc, char *argv[]) {
   cout <<         "  s          Show moving objects" << endl;
   cout <<         "  f          Toggle fog (currently pretty useless)" << endl;
   cout <<         "  b          Toggle blending (blend function needs fixing!!)" << endl;
+  cout <<         "  e          Toggle eye-position-server communication" << endl;
   cout <<         "  q / ESC    Exits program" << endl << endl;
   
   try {

@@ -1,6 +1,16 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Wed Jun 27 17:12:20 CEST 2001 Holger Urbanek
+
+ * Changed SerialClient::requestNewData() to SerialClient::reuestData()
+
+ * Added SerialClient::onlyRequestData() and ::onlyGetData() to enable
+	code execution while waiting for data from server to speed up
+	operation.
+
+ * Changed blink-detection so that a blink is detected only once
+
 Die Jun 26 22:54:18 CEST 2001 Holger Urbanek
 
  * Kicked parallel port code

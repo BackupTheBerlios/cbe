@@ -9,9 +9,11 @@ public:
   SerialClient(const char * serial_device);
   ~SerialClient();
 
-  void requestNewData();  // Requests and reads new eye-position
+  void requestData();  // Requests and reads new eye-position
+  void onlyRequestData(); // only in conjuction with onlyGetData()
+  void onlyGetData(); // then the same semantics as requestData()
   bool isBlink(); // Checks for eye-blink
-
+ 
   // Position of eye (x and y values)
   int x;
   int y;
@@ -22,4 +24,5 @@ public:
 private:
   int devptr;
   struct termios newtio;  // for the new serialport settings
+  bool stillBlink;
 };
