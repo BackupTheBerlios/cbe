@@ -59,7 +59,11 @@ simple_material_t::submit()
    glEnable(GL_COLOR_MATERIAL);*/
  }
 
-
+void simple_material_t::set_color(
+	const GLfloat*			color )
+{
+	std::memcpy( m_color, color, 4 * sizeof( GLfloat ) );	
+}
 
 END_LINOTTE_NAMESPACE
 

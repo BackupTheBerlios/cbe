@@ -191,7 +191,7 @@ model_t::load_materials(
 
 		char				name[ 80 ];
 
-		GLfloat				color[ 3 ];
+		GLfloat				color[ 4 ];
 
 	
 		length = stream.read_u32();
@@ -212,6 +212,8 @@ model_t::load_materials(
 		color[ 1 ] = stream.read_f32();
 
 		color[ 2 ] = stream.read_f32();
+		
+		color[ 3 ] = 1;
 
 		
 

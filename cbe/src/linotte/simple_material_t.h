@@ -34,7 +34,8 @@ public:
 
 	virtual void		submit();
 
-	
+	void				set_color(
+							const GLfloat*			color );	
 
 protected:
 
