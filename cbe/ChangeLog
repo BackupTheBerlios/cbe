@@ -10,6 +10,8 @@ Fri Aug 17 09:02:23 CEST 2001  Andreas Bauer  <baueran@users.berlios.de>
 
  * Added joystick device ID to preferences (file)
 
+ * Removed src/mini.c
+
 Fri Jul 27 15:53:23 CEST 2001  Labor (all)	
 
  * Connected breaklights to signal '2'
