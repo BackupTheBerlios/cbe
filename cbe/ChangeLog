@@ -1,6 +1,10 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Thu Jul 26 21:37:16 CEST 2001  Holger Urbanek	
+
+ * AGAIN changed serial protocoll
+	
 Wed Jul 25 08:47:21 CEST 2001  Andreas Bauer
 
  * Changed cbe.spec to cbe.spec.in and added pixmaps/ to it

@@ -126,7 +126,7 @@ namespace mainApp {
     joystick = new JoystickDriver();
 
     // Initialize SerialPort
-    serialclient = new SerialClient("/dev/ttyS0"); // Open com2
+    serialclient = new SerialClient("random"); // to open com-port1 use /dev/ttyS0
     isSerial=false; // Disable serialport by default
   }
 
@@ -189,8 +189,10 @@ namespace mainApp {
     // Make blink-detection (only if serialport is activated)
     if (isSerial) {
       serialclient->requestData();
-      if (serialclient->isBlink()) {
-	cout << "blink" << endl;
+      if (serialclient->getChange()==CHANGE_HIDE_CAR) {
+#ifdef DEBUG
+	cout << "hide_car" << endl;
+#endif
 	GObjectList::iterator itr=graphicObjectsList.begin();
 	if ((*itr)->isHidden())
 	  for( itr = graphicObjectsList.begin(); itr != graphicObjectsList.end(); itr++ )
