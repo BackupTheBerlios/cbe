@@ -1,6 +1,15 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Wed Oct 31 15:32:04 GMT 2001   Andreas Bauer  <baueran@users.berlios.de>
+
+ * Added Bernhard's sources to src/linotte and fondled around with the
+   according automake/autoconf files
+
+Sat Oct 27 18:34:39 GMT 2001   Marco Loh      <loh@users.berlios.de>
+
+ * Extended street
+
 Mon Oct 29 12:06:00 GMT 2001   Bernhard Liebl <liebl@cccrww.com>
 
  * Added support to compile for MacOS 9

@@ -3,6 +3,10 @@ CBE NEWS
 
 cbe 0.0.2 (still in development)  [development release]
 
+ - (Indirect) support for 3D-Studio object files
+
+ - Slightly improved scenery and fullscreen mode
+
  - Added doc/ directory for additional information
 
  - A couple of program preferences are now stored in a seperate

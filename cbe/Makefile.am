@@ -48,6 +48,8 @@ EXTRA_DIST = TODO
 @MAINT@cvsclean: maintainer-clean
 @MAINT@	@-rm -f `find . -name Makefile.in`
 @MAINT@	@-rm -rf *~
+@MAINT@	@-rm -rf */*~
+@MAINT@	@-rm -rf src/*/*~
 @MAINT@	@-rm -f configure aclocal.m4 config.h.in stamp-h.in
 @MAINT@	@-rm -f mkinstalldirs missing install-sh COPYING
 @MAINT@	@-rm -rf @PACKAGE@-@VERSION@*
