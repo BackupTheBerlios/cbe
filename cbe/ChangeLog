@@ -1,6 +1,11 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Mon Apr 30 23:33:26 CEST 2001   Holger Urbanek, Andreas Bauer
+ 
+ * Initial version of a road is finished
+
+
 Fri Jan 19 22:46:27 GMT+1 2001  Andreas Bauer  <baueran@in.tum.de>
 
  * Created initial source files, autoconf/automake installation scripts
