@@ -17,13 +17,14 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 // USA.
 
-class Plane
+#include "GObject.h"
+
+class Plane : public GObject
 {
   Point a,b;
 
- public:
+public:
   Plane(Point,Point);
   ~Plane();
-
-  GLuint getPlane(); //returns a list describing the plane
+  virtual void makeList();
 };

@@ -83,8 +83,8 @@ mainAppWindow::~mainAppWindow() {
 
 void mainAppWindow::CallBackDisplayFunc(void) {
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-   glCallList(*plane);
-   glCallList(*street);
+   plane->draw();
+   street->draw();
    glutSwapBuffers();
 }
 
@@ -155,10 +155,10 @@ void mainAppWindow::StartSpinning(GlutMaster * glutMaster){
 }
 
    
-void mainAppWindow::setStreet(GLuint *list) {
-  street=list;
+void mainAppWindow::setStreet(GObject *s) {
+  street = s;
 }
 
-void mainAppWindow::setPlane(GLuint *list) {
-  plane=list;
+void mainAppWindow::setPlane(GObject *p) {
+  plane = p;
 }

@@ -34,16 +34,17 @@ Plane::Plane(Point p1, Point p2)
 {
   a.x=p1.x; a.y=p1.y; a.z=p1.z;
   b.x=p2.x; b.y=p2.y; b.z=p2.z;
+  makeList(); // Create the GL list for drawing the object
 }
 
 Plane::~Plane()
 {
 }
 
-GLuint Plane::getPlane()
+
+void Plane::makeList()
 {
-  GLuint list=glGenLists(1);
-  glNewList(list, GL_COMPILE);
+  glNewList(getList(), GL_COMPILE);
     glBegin(GL_QUADS);
       glColor3f(0,1,0);
       glVertex3f(a.x,a.y,a.z);
@@ -52,5 +53,4 @@ GLuint Plane::getPlane()
       glVertex3f(b.x,a.y,a.z);
     glEnd();
   glEndList();
-  return list;
 }

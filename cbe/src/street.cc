@@ -41,16 +41,16 @@ Street::Street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad)
   starty=y;
   startz=z;
   broadness=broad;
-  createStreet();
+  makeList();
 }
 
 Street::~Street()
 {
+	/* The destructor of the base class is called automatically
+	   as the destructors are declared virtual. */
 }
 
-// fills the points-Array which holds the points for the center of the street
-void Street::createStreet()
-{
+void Street::makeList() {
   points[0].x=startx;
   points[0].y=starty;
   points[0].z=startz;
@@ -88,13 +88,8 @@ void Street::createStreet()
 	    }
 	
     }
-}
 
-GLuint Street::getStreet()
-{
-  GLuint list=glGenLists(1);
-
-  glNewList(list, GL_COMPILE);
+  glNewList(getList(), GL_COMPILE);
   
   glBegin(GL_TRIANGLE_STRIP);
   glColor3f(.3,.3,.3);
@@ -132,8 +127,6 @@ GLuint Street::getStreet()
       createPoles(1,points[i].x-nx*broadness/2,points[i].y,points[i].z-nz*broadness/2-0.2);
     }
   glEndList();
-
-  return list;
 }
 
 

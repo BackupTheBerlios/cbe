@@ -30,11 +30,14 @@
   using namespace std;
 #endif
 #include "glutMaster.h"
+#include "GObject.h"
+
 
 class mainAppWindow : public GlutWindow{
  private:
-  GLuint *plane;          // holds the plane
-  GLuint *street;         // holds the street
+  GObject *plane;         // holds the plane
+  GObject *street;        // holds the street
+  float xRotationSpeed;   // Speed for the x-rotation
   GLfloat speed;          // Speed for the x-rotation
   bool isFog;             // Flag for fog
 
@@ -57,8 +60,8 @@ class mainAppWindow : public GlutWindow{
   
   // Window functionality functions
   void StartSpinning(GlutMaster * glutMaster);         // ???
-  void mainAppWindow::setStreet(GLuint * list);        // used to alter the polygonList
-  void mainAppWindow::setPlane(GLuint *list);          // ???
+  void mainAppWindow::setStreet(GObject *s);        // used to alter the polygonList
+  void mainAppWindow::setPlane(GObject *p);          // ???
 };
 
 #endif

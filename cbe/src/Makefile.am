@@ -30,4 +30,6 @@ cbe_SOURCES = 	cbe.cc glutMaster.cc glutWindow.cc mainAppWindow.cc \
 		cbe.hh glutMaster.h  glutWindow.h  mainAppWindow.h \
 		street.cc plane.cc \
 		street.h  plane.h \
+		GObject.cc \
+		GObject.h \
 		common.h

@@ -17,24 +17,28 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 // USA.
 
+#ifndef __STREET_H
+#define __STREET_H
 
+#include "GObject.h" // The base class for graphic objects
 
-class Street
+class Street : public GObject
 {
+private:
   Point points[1010];
   long length;
   GLfloat step;
-  void createStreet();
-
- public:
+public:
   GLfloat startx, starty, startz;
   GLfloat broadness;
   
-  GLuint getStreet(); // Gets list of polygons which describes the street
   Point getPointOfStreet(GLfloat); // Gets Point near location (0<=location<=1)
   Point getNormalOfStreet(GLfloat); // Gets the normal near location
+  virtual void makeList();
   void createPoles(GLfloat size, GLfloat x, GLfloat y, GLfloat z);
 
   Street(GLfloat x, GLfloat y, GLfloat z, GLfloat broad);
-  ~Street();
+  virtual ~Street();
 };
+
+#endif

@@ -71,8 +71,8 @@ int main(int argc, char *argv[]) {
     return -1;
   }
   
-  GLuint streetList=s->getStreet();
-  secondWindow->setStreet(&streetList);
+  //GLuint streetList=s->getList();
+  secondWindow->setStreet( s );
   Point a,b;
 
   a.x=-60; a.y=-0.1; a.z=-60;
@@ -84,8 +84,7 @@ int main(int argc, char *argv[]) {
     return -1;
   }
   
-  GLuint Planelist=p->getPlane();
-  secondWindow->setPlane(&Planelist);
+  secondWindow->setPlane( p );
   
   secondWindow->StartSpinning(glutMaster);        // enable idle function
   glutMaster->CallGlutMainLoop();
