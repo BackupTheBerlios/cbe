@@ -29,12 +29,12 @@ extern "C" {
 // Constructor
 JoystickDriver::JoystickDriver() {
   // Initialize Values
-  xAxis=0;
-  yAxis=0;
+  xAxis=128;
+  yAxis=128;
   buttons=0;
   joystickAvailable=false;
 
-  joydev=open("/dev/input/js0", O_RDONLY); // open the first joystick-device
+  joydev=open("/dev/js0", O_RDONLY); // open the first joystick-device
   if (joydev != -1) {  // ok, joystick available
     joystickAvailable=true;
     refreshJoystick();
@@ -50,12 +50,13 @@ JoystickDriver::~JoystickDriver() {
 // View /usr/src/linux/Documentation/joystick-api.txt on linux-systems for explanation
 void JoystickDriver::refreshJoystick() {
   struct JS_DATA_TYPE js;
-  if (joystickAvailable) {
+  if (joystickAvailable==true) {
     if (read(joydev, &js, JS_RETURN)!=JS_RETURN)
       cout << "Problem reading joystick device!" << endl;
     buttons=js.buttons;
     xAxis=js.x;
     yAxis=js.y;
+
   }
 }
 
