@@ -442,7 +442,7 @@ namespace mainApp {
   void mainAppWindow::setstreet(GObject* s) {
     curStreet = s;
     GLfloat loc[ 3 ];
-    ((street*)s)->getstreetLocation( 0, loc );
+    ((street*)s)->getstreetLocation( 0.05, loc );
     
     glLoadIdentity();
   	glTranslatef( -loc[ 0 ], -loc[ 1 ], -loc[ 2 ] );

@@ -179,7 +179,7 @@ int main(int argc, char *argv[]) {
     car2->setPos( -3, 0, -5 );
     car2->rotate( 180 );
     car2->setSpeed( -0.008 );
-  	car2->setOffset( 0.1 );
+  	car2->setOffset( 0.4 );
   }
   catch(pref::IOException) {
     cerr << "ERROR: Could not read cbe preferences file." << endl;
