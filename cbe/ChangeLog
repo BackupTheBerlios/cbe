@@ -1,6 +1,9 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
+Wed May  8 03:14:00 CEST 2001   Holger Urbanek
 
+ * Creating of the street and plane now in seperate classes
+	
 Tue May  8 20:54:12 CEST 2001   Andreas Bauer  <baueran@in.tum.de>
 
  * Added <cmath> to cbe.cc

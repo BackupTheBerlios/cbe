@@ -29,13 +29,23 @@ DemoWindow::DemoWindow(GlutMaster * glutMaster, int setWidth, int setHeight, int
   width  = setWidth;               
   height = setHeight;
   
-  polygonList = new GLuint();
-  *polygonList = glGenLists(1);
-  glNewList(*polygonList, GL_COMPILE);
+  //create almost empty lists to make shure, that a window can be created
+  plane = new GLuint();
+  *plane=glGenLists(1);
+  glNewList(*plane, GL_COMPILE);
   glBegin(GL_QUAD_STRIP);
   glVertex3f(1,1,1);
   glEnd();
   glEndList();
+
+  street = new GLuint();
+  *plane=glGenLists(1);
+  glNewList(*street, GL_COMPILE);
+  glBegin(GL_QUAD_STRIP);
+  glVertex3f(1,1,1);
+  glEnd();
+  glEndList();
+
 
   initPositionX = setInitPositionX;
   initPositionY = setInitPositionY;
@@ -80,7 +90,8 @@ void DemoWindow::CallBackDisplayFunc(void){
 
    glColor4f(1.0, 1.0, 0.0, 1.0);
 
-   glCallList(*polygonList);
+   glCallList(*plane);
+   glCallList(*street);
  
    glutSwapBuffers();
 }
@@ -107,11 +118,13 @@ void DemoWindow::StartSpinning(GlutMaster * glutMaster){
 }
 
    
-void DemoWindow::SetPolygonList(GLuint *list) {
-  polygonList=list;
+void DemoWindow::setStreet(GLuint *list) {
+  street=list;
 }
 
-
+void DemoWindow::setPlane(GLuint *list) {
+  plane=list;
+}
 
 
 

@@ -46,10 +46,12 @@ public:
 
    void StartSpinning(GlutMaster * glutMaster);
 
-   void DemoWindow::SetPolygonList(GLuint * list); // used to alter the polygonList
+   void DemoWindow::setStreet(GLuint * list); // used to alter the polygonList
+   void DemoWindow::setPlane(GLuint *list);
 
  private:
-   GLuint *polygonList; // holds the complete scene described as polygons
+   GLuint *plane; // holds the plane
+   GLuint *street; // holds the street
 };
 
 #endif
