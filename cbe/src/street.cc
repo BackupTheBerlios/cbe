@@ -81,6 +81,11 @@ void Street::writeList() {
 	a++;
       }
   }
+
+  GLfloat dy0 = 0.02;
+  // introduced this parameter to elevate the
+  // street over the landscape due to Z buffer
+  // precision problems on my ATI rage (BL101901)
   
   glBegin(GL_QUAD_STRIP);
   glColor3f(.3,.3,.3);
@@ -94,10 +99,10 @@ void Street::writeList() {
     nz=vx/sqrt(vx*vx+vz*vz);
     //draw street out of triangles
     glVertex3f(points[i].x,
-	       points[i].y,
+	       points[i].y+dy0,
 	       points[i].z+broadness/2);
     glVertex3f(points[i].x,
-	       points[i].y,
+	       points[i].y+dy0,
 	       points[i].z-broadness/2);
   }
   glEnd();
@@ -121,16 +126,16 @@ void Street::writeList() {
   for (i=1;i<2449;i+=10){
     glBegin(GL_POLYGON);
     glVertex3f(points[i].x,
-	       points[i].y+.01,
+	       points[i].y+dy0+.01,
 	       points[i].z+broadness/30);
     glVertex3f(points[i].x,
-	       points[i].y+.01,
+	       points[i].y+dy0+.01,
 	       points[i].z-broadness/30);
     glVertex3f(points[i+6].x,
-	       points[i+6].y+.01,
+	       points[i+6].y+dy0+.01,
 	       points[i+6].z-broadness/30);
     glVertex3f(points[i+6].x,
-	       points[i+6].y+.01,
+	       points[i+6].y+dy0+.01,
 	       points[i+6].z+broadness/30);
     glEnd();
   } 
