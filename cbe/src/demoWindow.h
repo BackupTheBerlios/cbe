@@ -45,6 +45,11 @@ public:
    void CallBackIdleFunc(void);
 
    void StartSpinning(GlutMaster * glutMaster);
+
+   void DemoWindow::SetPolygonList(GLuint * list); // used to alter the polygonList
+
+ private:
+   GLuint *polygonList; // holds the complete scene described as polygons
 };
 
 #endif

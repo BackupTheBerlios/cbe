@@ -25,16 +25,29 @@
 #include "demoWindow.h"
 
 DemoWindow::DemoWindow(GlutMaster * glutMaster, int setWidth, int setHeight, int setInitPositionX, int setInitPositionY, string title) {
+  cout << "Entered DemoWindow::DemoWindow in demoWindow.cc\n";
   width  = setWidth;               
   height = setHeight;
   
+  polygonList = new GLuint();
+  *polygonList = glGenLists(1);
+  glNewList(*polygonList, GL_COMPILE);
+  glBegin(GL_QUAD_STRIP);
+  glVertex3f(1,1,1);
+  glEnd();
+  glEndList();
+
   initPositionX = setInitPositionX;
   initPositionY = setInitPositionY;
   
-  glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE);
+  glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
+  cout << "  InitDisplayMode\n";
   glutInitWindowSize(width, height);
+  cout << "  InitWindowSize\n";
   glutInitWindowPosition(initPositionX, initPositionY);
-  glViewport(0, 0, width, height); 
+  cout << "  InitWindowPosition\n";
+  glViewport(0, 0,(GLint) width,(GLint) height); 
+  cout << "  glViewport\n";
   
   glutMaster->CallGlutCreateWindow(title.c_str(), this);
   
@@ -48,25 +61,32 @@ DemoWindow::DemoWindow(GlutMaster * glutMaster, int setWidth, int setHeight, int
   
   glRotatef(60, 1, 1, 1);
   glColor4f(1.0, 0.0, 0.0, 1.0);
+
+  //glShadeModel(GL_FLAT);
 }
 
-DemoWindow::~DemoWindow(){
 
+DemoWindow::~DemoWindow(){
+  cout << "Destroying Demo-Window\n";
    glutDestroyWindow(windowID);
 }
 
-void DemoWindow::CallBackDisplayFunc(void){
 
+void DemoWindow::CallBackDisplayFunc(void){
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-   glColor4f(1.0, 0.0, 0.0, 1.0);
-   glutWireSphere(50, 10, 10);
+   //glColor4f(1.0, 0.0, 0.0, 1.0);
+   //glutWireTeapot(50);
 
+   glColor4f(1.0, 1.0, 0.0, 1.0);
+
+   glCallList(*polygonList);
+ 
    glutSwapBuffers();
 }
 
-void DemoWindow::CallBackReshapeFunc(int w, int h){
 
+void DemoWindow::CallBackReshapeFunc(int w, int h){
    width = w;
    height= h;
 
@@ -74,19 +94,22 @@ void DemoWindow::CallBackReshapeFunc(int w, int h){
    CallBackDisplayFunc();
 }
 
-void DemoWindow::CallBackIdleFunc(void){
 
+void DemoWindow::CallBackIdleFunc(void){
    glRotatef(0.25, 1, 1, 2);
    CallBackDisplayFunc();
 }
 
-void DemoWindow::StartSpinning(GlutMaster * glutMaster){
 
+void DemoWindow::StartSpinning(GlutMaster * glutMaster){
    glutMaster->SetIdleToCurrentWindow();
    glutMaster->EnableIdleFunction();
 }
-   
 
+   
+void DemoWindow::SetPolygonList(GLuint *list) {
+  polygonList=list;
+}
 
 
 
