@@ -92,3 +92,11 @@ void Bitmap::setPath(string newPath) {
 uint32* Bitmap::getData(void) {
   return data;
 }
+
+uint32 Bitmap::getWidth() {
+  return sizeX;
+}
+
+uint32 Bitmap::getHeight() {
+  return sizeY;
+}

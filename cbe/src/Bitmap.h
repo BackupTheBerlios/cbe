@@ -46,6 +46,8 @@ class Bitmap {
   bool load(void);
   void setPath(string);
   uint32* getData(void);
+  uint32 getWidth();
+  uint32 getHeight();
 };
 
 #endif
