@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 # USA.
 
-EXTRA_DIST = cockpit.tif tree.tif
+EXTRA_DIST = cockpit.tif grass.tif tree.tif
 
 pixmapdir = $(datadir)/pixmaps/cbe
-pixmap_DATA = cockpit.tif tree.tif
+pixmap_DATA = cockpit.tif grass.tif tree.tif
