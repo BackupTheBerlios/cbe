@@ -23,7 +23,7 @@ SUBDIRS = linotte
 
 bin_PROGRAMS = cbe 
 
-INCLUDES = -I$(includedir) -I$(top_srcdir)/src/linotte -I$(top_srcdir)/src @X_CFLAGS@ @GLUT_CFLAGS@ @GL_CFLAGS@
+INCLUDES = -I$(includedir) -I$(top_srcdir)/src -I$(top_srcdir)/src/linotte @X_CFLAGS@ @GLUT_CFLAGS@ @GL_CFLAGS@
 
 cbe_LDADD = linotte/liblinotte.a @LIBTIFF@ @X_LDFLAGS@ @LIBLINOTTE@ @GLUT_LDFLAGS@ @GL_LDFLAGS@ @X_LIBS@ @GLUT_LIBS@ @GL_LIBS@
 
