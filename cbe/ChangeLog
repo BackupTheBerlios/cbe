@@ -1,6 +1,11 @@
 CBE ChangeLog
 -=-=-=-=-=-=-
 
+Tue May  8 20:54:12 CEST 2001   Andreas Bauer  <baueran@in.tum.de>
+
+ * Added <cmath> to cbe.cc
+
+
 Mon Apr 30 23:33:26 CEST 2001   Holger Urbanek, Andreas Bauer
  
  * Initial version of a road is finished

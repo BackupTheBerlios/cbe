@@ -19,6 +19,7 @@
 
 
 #include <iostream>
+#include <cmath>
 extern "C" {
 #include <GL/gl.h>    // OpenGL
 #include <GL/glut.h>  // GLUT
