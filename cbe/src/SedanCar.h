@@ -27,6 +27,15 @@ public:
   SedanCar();
   
   virtual void submit();
+
+protected:
+	virtual void change( int changeNum );
+	
+	void update_brake_lights();
+	void update_car_color();
+	
+	bool m_brake_lights;
+	int m_car_color;
 };
 
 #endif

@@ -32,6 +32,7 @@ class GLinotteObject : public GMovableObject {
  protected:
   void load( const char* path );
   void add_material( linotte::material_t* material );
+  linotte::material_t* get_material( const char* name );
 
  public:
   GLinotteObject();

@@ -55,3 +55,8 @@ void GLinotteObject::add_material( linotte::material_t* material )
 {
 	m_matmgr->add_material( material );
 }
+
+linotte::material_t* GLinotteObject::get_material( const char* name )
+{
+	return m_matmgr->material_by_name( name );
+}

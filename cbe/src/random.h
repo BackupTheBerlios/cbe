@@ -28,5 +28,5 @@ double inline rnd() {
 }
 
 int inline rndInt( int a ) {
-  return (int)(rnd()*a);
+  return (int)(rand()%a);
 }

@@ -400,7 +400,7 @@ namespace mainApp {
       }
       break;
     case '1':
-      carVector[ rndInt( carVector.size() ) ]->changeColor( Car::change_nextColor );
+      carVector[ rndInt( carVector.size() ) ]->change( Car::change_nextColor );
       break;
     case '2':
       carVector[ rndInt( carVector.size() ) ]->change( Car::change_toggleBrakeLight );

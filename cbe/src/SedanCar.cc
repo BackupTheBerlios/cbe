@@ -20,6 +20,9 @@
 #include <GL/glu.h>
 #include "config.h"
 #include "SedanCar.h"
+#include "linotte/simple_material_t.h"
+
+using namespace linotte;
 
 SedanCar::SedanCar()
 {
@@ -27,6 +30,11 @@ SedanCar::SedanCar()
 
   load( datadirectory.c_str() );
 
+  m_car_color = 0;
+  update_car_color();
+
+  m_brake_lights = false;
+  update_brake_lights();
 }
 
 void
@@ -49,3 +57,55 @@ SedanCar::submit()
     gluSphere( q, 1, 8, 8 );*/
 }
 
+void
+SedanCar::change( int changeNum )
+{
+	switch( changeNum )
+	{
+		case Car::change_toggleBrakeLight:
+		{
+			m_brake_lights = not m_brake_lights;
+			update_brake_lights();
+			break;
+		}
+	
+		case Car::change_nextColor:
+		{
+			m_car_color += 1;
+			update_car_color();
+			break;
+		}
+	}
+}
+
+void
+SedanCar::update_brake_lights()
+{
+	simple_material_t* mat;
+	mat = dynamic_cast<simple_material_t*>(
+		get_material( "BRAKELIGHTS" ) );
+	if( mat )
+	{
+		GLfloat col[ 4 ] = { 0, 0, 0, 1 };
+		if( m_brake_lights )
+			col[ 0 ] = 1;
+		mat->set_color( col );
+	}
+}
+
+void
+SedanCar::update_car_color()
+{
+	static GLfloat s_car_color[ 3 ][ 4 ] = {
+		{ 0, 0, 0, 0 },
+		{ 0, 1, 0, 0 },
+		{ 0.5, 0, 0.5, 0 } };
+
+	simple_material_t* mat;
+	mat = dynamic_cast<simple_material_t*>(
+		get_material( "BODY_black_32" ) );
+	if( mat )
+	{
+		mat->set_color( s_car_color[ m_car_color % 3 ] );
+	}
+}
