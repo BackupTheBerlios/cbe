@@ -1,6 +1,10 @@
 CBE TODO
 -=-=-=-=
 
-- Fix blend function for the cockpit
+- David: fix brake lights
 
-- Use newer Joystick interface
+- All: connect 'blink'-signal to brake lights
+
+- Andi: Fix blend function for the cockpit
+
+- Holger: Use newer joystick interface

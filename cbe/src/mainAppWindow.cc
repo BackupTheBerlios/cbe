@@ -27,7 +27,7 @@
 #include <cmath>
 extern "C" {
 #ifdef _WIN32
-  #include <GL/glaux.h>
+#include <GL/glaux.h>
 #endif
 #include <GL/glut.h>
 #include <time.h>
@@ -39,7 +39,9 @@ extern "C" {
 #include "Point.h"
 #include "Bitmap.h"
 
+#ifndef M_PI
 #define M_PI 3.1415926535
+#endif
 
 using namespace std;
 
@@ -54,7 +56,7 @@ namespace mainApp {
       cout << "Cockpit image loaded." << endl;
     else
       cout << "ERROR: Cockpit image not loaded. Did you forget 'make install'?" << endl;
-
+    
     // Set default viewing and movement vectors
     movementVector = new Point(1,0,0);
     
@@ -108,9 +110,10 @@ namespace mainApp {
     glMatrixMode(GL_MODELVIEW);
 
     // Initialize Joystick
-    joystick=new JoystickDriver();
+    joystick = new JoystickDriver();
+
     // Initialize Parallelport
-    pport=new PPortDriver("random");
+    pport = new PPortDriver("random");
   }
 
 
@@ -136,6 +139,7 @@ namespace mainApp {
     glBlendColor(1.0f, 1.0f, 1.0f, 0.0);
     glBlendFunc(GL_ZERO, GL_SRC_COLOR);
     glBlendFunc(GL_SRC_COLOR,GL_SRC_COLOR);
+    
     // Draw cockpit
     glDrawPixels(717, 538, GL_RGB, GL_UNSIGNED_BYTE, cockpitIMG.getData());
     
@@ -176,7 +180,7 @@ namespace mainApp {
     if (viewingAngle>=180)
       viewingAngle-=360;
   
-    speed-= joystick->getYaxis() * 200 * latenz;
+    speed -= joystick->getYaxis() * 200 * latenz;
   
     // recalculate the new movementVector
     movementVector->x=cos(viewingAngle*M_PI/180);
